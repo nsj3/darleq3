@@ -80,7 +80,7 @@ read_DARLEQ <- function(fn, sheet=NULL, verbose=FALSE) {
   nM2 <- sum(!is.na(mt2))
   if (sum(nM1 + nM2) < 1)
     simpleError("No taxon codes found, are you sure this is a DARLEQ data file?")
-  res <- list(header=header, diatom_data=d2)
+  res <- list(header=header, diatom_data=d2, filename=basename(fn), sheet=sheet)
   class(res) <- "DARLEQ_DATA"
   if (nM1 > nM2)
     class(res) <- "NBSCode"
@@ -122,3 +122,9 @@ get_file_sheet_name <- function(fn=NULL, sheet=NULL) {
   }
 }
 
+print.DARLEQ_DATA <- function(x, ...) {
+        cat("File name  :", x$filename, "\n")
+  cat(paste("Sheet name :", x$sheet, "\n"))
+  cat(paste("No. samples:", ncol(x$diatom_data), "\n"))
+  cat(paste("No. species:", nrow(x$diatom_data), "\n"))
+}

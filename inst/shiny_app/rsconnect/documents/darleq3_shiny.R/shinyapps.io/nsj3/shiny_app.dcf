@@ -1,0 +1,10 @@
+name: shiny_app
+title:
+account: nsj3
+server: shinyapps.io
+appId: 187605
+bundleId: 860302
+url: https://nsj3.shinyapps.io/shiny_app/
+when: 1497028720.03898
+asMultiple: FALSE
+asStatic: FALSE

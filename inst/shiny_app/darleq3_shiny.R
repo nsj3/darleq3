@@ -36,7 +36,9 @@ summarise_data <- function(fn, sheet, data) {
   if (nchar(fn_display) > 0) {
     nsam <- nrow(darleq_data$diatom_data)
     nsp <- ncol(darleq_data$diatom_data)
-    paste("File name: ", fn, "\n\rSheet:", sheet, "\n\nNumber of samples: ", nsam, "\nNumber of taxa: ", nsp )
+    p <- capture.output(print(darleq_data))
+    paste(p, collapse="\n")
+#    paste("File name: ", fn, "\n\rSheet:", sheet, "\n\nNumber of samples: ", nsam, "\nNumber of taxa: ", nsp )
   } else {
     paste("Select worksheet and click import data...")
   }

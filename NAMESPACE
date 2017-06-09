@@ -13,3 +13,7 @@ importFrom(vegan, renyi)
 
 ## stringr
 importFrom(stringr, str_trim)
+
+## S3 methods
+
+S3method(print, DARLEQ_DATA)
