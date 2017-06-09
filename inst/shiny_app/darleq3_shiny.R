@@ -1,8 +1,7 @@
 suppressPackageStartupMessages(library(shiny))
 suppressPackageStartupMessages(library(shinyjs))
 suppressPackageStartupMessages(library(shinydashboard))
-#if (interactive())
-#  library(darleq3)
+suppressPackageStartupMessages(library(darleq3))
 
 D_ui <- dashboardPage(
   dashboardHeader(title = "DARLEQ3 for diatom-based water quality assessment", titleWidth=600),
@@ -10,18 +9,18 @@ D_ui <- dashboardPage(
   dashboardBody(
     # Boxes need to be put in a row (or column)
     fluidRow(shinyjs::useShinyjs(),
-      column(width=4,
-         box(fileInput("fn", "Select input file:", accept=c(".xlsx"), width="100%"), width=200),
-         box(selectInput("sheet", "Select worksheet:", ""), width=200),
-         box(disabled(actionButton("importButton", "Import data")), width="80%"),
-         box(radioButtons("metric", "Select metric:", c(`TDI for LM`="TDILM", `TDI for NGS`="TDINGS", LTDI="LTDILM", DAM="DAMLM")), width=100),
-         box(disabled(actionButton("calculateButton", "Calculate!")), width="80%")
-      ),
-      column(width=8,
-         box(verbatimTextOutput("table1"), width=900, title="Data summary", status="primary"),
-         box(verbatimTextOutput("output1"), width=900, title="Results summary", status="primary"),
-         box(disabled(downloadButton("downloadResults", "Download results")), width="80%")
-      )
+             column(width=4,
+                    box(fileInput("fn", "Select input file:", accept=c(".xlsx"), width="100%"), width=200),
+                    box(selectInput("sheet", "Select worksheet:", ""), width=200),
+                    box(disabled(actionButton("importButton", "Import data")), width="80%"),
+                    box(radioButtons("metric", "Select metric:", c(`TDI for LM`="TDILM", `TDI for NGS`="TDINGS", LTDI="LTDILM", DAM="DAMLM")), width=100),
+                    box(disabled(actionButton("calculateButton", "Calculate!")), width="80%")
+             ),
+             column(width=8,
+                    box(verbatimTextOutput("table1"), width=900, title="Data summary", status="primary"),
+                    box(verbatimTextOutput("output1"), width=900, title="Results summary", status="primary"),
+                    box(disabled(downloadButton("downloadResults", "Download results")), width="80%")
+             )
     )
   )
 )
@@ -44,23 +43,20 @@ summarise_data <- function(fn, sheet, data) {
 }
 
 D_server <- function(input, output, session) {
-    output$table1 <- renderText({
-    summarise_data(fn, sheet, darleq_data)
-  })
-
+  output$table1 <- renderText(summarise_data(fn, sheet, darleq_data))
   observeEvent(input$sheet, {
-        darleq_data <<- NULL
-        sheet <<- ""
-        fn_display <<- ""
-        output$table1 <- renderText(summarise_data(fn, sheet, darleq_data))
-        if (nchar(input$sheet) > 0) {
-          shinyjs::enable("importButton")
-        } else {
-          shinyjs::disable("importButton")
-        }
-        shinyjs::disable("downloadResults")
-        shinyjs::disable("calculateButton")
-        output$output1 <- renderText("")
+    darleq_data <<- NULL
+    sheet <<- ""
+    fn_display <<- ""
+    output$table1 <- renderText(summarise_data(fn, sheet, darleq_data))
+    if (nchar(input$sheet) > 0) {
+      shinyjs::enable("importButton")
+    } else {
+      shinyjs::disable("importButton")
+    }
+    shinyjs::disable("downloadResults")
+    shinyjs::disable("calculateButton")
+    output$output1 <- renderText("")
   }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
   observeEvent(input$fn$name, {
@@ -102,14 +98,13 @@ D_server <- function(input, output, session) {
       fn_display <<- fn
       darleq_data <<- tryCatch(read_DARLEQ(fn2, sheet=sheet), error=function(e) return(e))
       if (any(class(darleq_data) == "error")) {
-         output$table1 <- renderText(darleq_data$message)
-         darleq_data <<- NULL
-         outFile <<- ""
-         sheet <<- ""
+#        output$table1 <- renderText(darleq_data$message)
+        output$table1 <- renderText("darleq_data$message")
+        darleq_data <<- NULL
+        outFile <<- ""
+        sheet <<- ""
       } else {
-      output$table1 <- renderText({
-         summarise_data(fn, sheet, darleq_data)
-         })
+        output$table1 <- renderText(summarise_data(fn, sheet, darleq_data))
       }
       if(!is.null(darleq_data)) {
         shinyjs::enable("calculateButton")
@@ -141,14 +136,14 @@ D_server <- function(input, output, session) {
     output$output1 <- renderText("Results are ready to download")
   })
   output$downloadResults <- downloadHandler(
-     filename <- function() {
-       paste("Results", ".xlsx", sep="")
-     },
-     content <- function(file) {
-       file.copy(outFile, file)
-     },
-     contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-   )
+    filename <- function() {
+      paste("Results", ".xlsx", sep="")
+    },
+    content <- function(file) {
+      file.copy(outFile, file)
+    },
+    contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  )
 }
 
 shinyApp(D_ui, D_server)
