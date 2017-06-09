@@ -1,0 +1,13 @@
+exportPattern("^[[:alpha:]]+")
+
+## Imports
+
+## readxl
+importFrom(readxl, read_excel)
+
+## openxlsx
+importFrom(openxlsx, write.xlsx)
+
+## vegan
+importFrom(vegan, renyi)
+
