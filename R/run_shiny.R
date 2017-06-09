@@ -12,3 +12,4 @@ runDARLEQ3 <- function() {
 
   shiny::runApp(appDir, display.mode = "normal")
 }
+

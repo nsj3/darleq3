@@ -10,9 +10,9 @@ calc_EQR <- function(x) {
   comments$comment <- ""
   ddd <- darleq3_data$defaults
   if (metric2 == "TDI") {
-    minAlk <- switch(metric, TDI3=ddd$minAlkTDI3, TDI4=ddd$minAlkTDI4, TDI5LM=ddd$minAlkTDI5LM, TDI5LM=ddd$minAlkTDI5NGS)
-    maxAlk <- switch(metric, TDI3=ddd$maxAlkTDI3, TDI4=ddd$maxAlkTDI4, TDI5LM=ddd$maxAlkTDI5LM, TDI5LM=ddd$minAlkTDI5NGS)
-    boundaries <- switch(metric, TDI3=ddd$boundariesTDI3, TDI4=ddd$boundariesTDI4, TDI5LM=ddd$boundariesTDI5LM, TDI5LM=ddd$boundariesTDI5NGS)
+    minAlk <- switch(metric, TDI3=ddd$minAlkTDI3, TDI4=ddd$minAlkTDI4, TDI5LM=ddd$minAlkTDI5LM, TDI5NGS=ddd$minAlkTDI5NGS)
+    maxAlk <- switch(metric, TDI3=ddd$maxAlkTDI3, TDI4=ddd$maxAlkTDI4, TDI5LM=ddd$maxAlkTDI5LM, TDI5NGS=ddd$minAlkTDI5NGS)
+    boundaries <- switch(metric, TDI3=ddd$boundariesTDI3, TDI4=ddd$boundariesTDI4, TDI5LM=ddd$boundariesTDI5LM, TDI5NGS=ddd$boundariesTDI5NGS)
     if (!("ALKALINITY" %in% toupper(colnames(x$header))))
       x$header$Alkalinity <- NA
     if (!("SAMPLEDATE" %in% toupper(colnames(x$header))))
@@ -47,6 +47,9 @@ calc_EQR <- function(x) {
     EQR <- (100 - x$metric) / (100 - eTDI)
     EQR <- ifelse(EQR[, 1] > 1.25, 1.25, EQR[, 1])
     class <- cut(EQR, c(10, boundaries, 0), labels=rev(WFD.classes))
+
+    cut(EQR, c(10, boundaries, 0))
+
   } else if (metric2 == "LTD") {
     HA_boundaries <- switch(metric, LTDI1=ddd$boundariesLTDI1_HA, LTDI2=ddd$boundariesLTDI2_HA)
     MA_boundaries <- switch(metric, LTDI1=ddd$boundariesLTDI1_MA, LTDI2=ddd$boundariesLTDI2_MA)

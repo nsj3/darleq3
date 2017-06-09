@@ -1,7 +1,8 @@
-suppressPackageStartupMessages(library(darleq3))
 suppressPackageStartupMessages(library(shiny))
 suppressPackageStartupMessages(library(shinyjs))
 suppressPackageStartupMessages(library(shinydashboard))
+#if (interactive())
+#  library(darleq3)
 
 D_ui <- dashboardPage(
   dashboardHeader(title = "DARLEQ3 for diatom-based water quality assessment", titleWidth=600),
@@ -43,7 +44,7 @@ summarise_data <- function(fn, sheet, data) {
 }
 
 D_server <- function(input, output, session) {
-  output$table1 <- renderText({
+    output$table1 <- renderText({
     summarise_data(fn, sheet, darleq_data)
   })
 
@@ -51,18 +52,15 @@ D_server <- function(input, output, session) {
         darleq_data <<- NULL
         sheet <<- ""
         fn_display <<- ""
-        output$table1 <- renderText({
-          summarise_data(fn, sheet, darleq_data)
-        })
+        output$table1 <- renderText(summarise_data(fn, sheet, darleq_data))
         if (nchar(input$sheet) > 0) {
           shinyjs::enable("importButton")
         } else {
           shinyjs::disable("importButton")
-          shinyjs::disable("downloadResults")
-          output$output1 <- renderText({
-            ""
-          })
         }
+        shinyjs::disable("downloadResults")
+        shinyjs::disable("calculateButton")
+        output$output1 <- renderText("")
   }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
   observeEvent(input$fn$name, {
@@ -127,6 +125,10 @@ D_server <- function(input, output, session) {
       output$table1 <- renderText("This function needs the package openxlsx, please install it")
     }
     metric <- input$metric
+    if (is.null(darleq_data)) {
+      shinyjs::disable("downloadResults")
+      shinyjs::disable("calculateButton")
+    }
     res <- calc_all(darleq_data, metric)
     wb <- openxlsx::createWorkbook("Temp")
     outFile <<- file.path(tempdir(), "Results.xlsx")
