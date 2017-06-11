@@ -72,15 +72,15 @@ D_server <- function(input, output, session) {
         file.remove(fn2)
       file.rename(input$fn$datapath, fn2)
       fn <<- fn1
-      sheets <<- tryCatch(get_sheets(fn2), error=function(e) return (e))
-      if (any(class(sheets) == "error")) {
-        output$table1 <- renderText(sheets$message)
+      sheets.nms <<- tryCatch(get_sheets(fn2), error=function(e) return (e))
+      if ("error" %in% class(sheets.nms)) {
+        output$table1 <- renderText(sheets.nms$message)
         sheet <<- ""
-        sheets <<- ""
         darleq_data <<- NULL
         fn1 <- input$fn$name
+        return()
       }
-      updateSelectInput(session, "sheet", choices=sheets)
+      updateSelectInput(session, "sheet", choices=sheets.nms)
       sheet <<- input$sheet
       if (nchar(input$sheet) > 0) {
         shinyjs::enable("importButton")

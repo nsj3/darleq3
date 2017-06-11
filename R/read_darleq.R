@@ -100,9 +100,18 @@ get_file_sheet_name <- function(fn=NULL, sheet=NULL) {
     simpleError("package readxl not installed - please install it.")
   }
   if (is.null(fn)) {
-     fn <- file.choose()
+     Fil <- matrix(c("Excel files (*.xls, *.xlsx)", "*.xls;*.xlsx"), nrow=1)
+     fn <- tryCatch(choose.files(multi=FALSE, filters=Fil))
+     if (length(fn) < 1) {
+       cat("Operation cancelled\n")
+       return(NULL)
+     }
   }
-  sheets <- excel_sheets(fn)
+  sheets <- tryCatch(excel_sheets(fn))
+  if ("error" %in% class(sheets)) {
+    cat(sheets$message)
+    return(NULL)
+  }
   if (length(sheets) == 1) {
     return(list(fn=fn, sheet=sheets[1]))
   } else {
@@ -116,8 +125,10 @@ get_file_sheet_name <- function(fn=NULL, sheet=NULL) {
     } else {
       if (sheet %in% sheets)
         return(list(fn=fn, sheet=sheet))
-      else
-        simpleError(paste0("Sheet ", sheet, " not found in file ", basename(fn)))
+      else {
+        paste0("Sheet ", sheet, " not found in file ", basename(fn))
+        return(NULL)
+      }
     }
   }
 }

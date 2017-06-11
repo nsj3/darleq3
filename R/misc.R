@@ -23,34 +23,56 @@ calc_all <- function(d, metric) {
     res[[1]] <- calc_EQR(x.tdi)
     names(res) <- "TDI5NGS"
   }
+  class(res) <- "DARLEQ3_EQR"
   res
 }
 
-darleq3 <- function(inFile=NULL, sheet=NULL, metric.type="TDILM", outFile="Results.xlsx") {
+darleq3 <- function(inFile=NULL, sheet=NULL, metric.type=NULL, outFile=NULL) {
   if (!interactive() & (is.null(inFile) | is.null(sheet)))
-    return(NULL)
+    return()
   if (!require(openxlsx, quietly=TRUE))
     stop("This function needs the package openxlsx, please install it")
-  fn <- tryCatch(get_file_sheet_name(inFile, sheet), error=function(e) { cat(e); return(NULL) })
+  metric.types <- c("TDILM", "LTDILM", "DAMLM", "TDINGS")
+  metric <- ""
+  if (!is.null(metric.type)) {
+     res <- pmatch(metric.type, metric.types)
+     if(is.na(res))
+       stop("Invalid diatom metric")
+     if(res == -1)
+        stop("Ambiguous metric.type")
+     metric <- metric.types[res]
+  }
+
+  fn <- get_file_sheet_name(inFile, sheet)
   if (is.null(fn))
-    return(NULL)
+    stop("Operation cancelled")
   if (is.null(metric.type)) {
      opts <- c("River diatom TDI", "Lake diatom LTDI", "River Diatom Acidification Index", "River NGS TDI")
-     metric <- menu(opts)
-     if (tdi==0)
-        return(NULL)
-     metric <- c("TDILM", "LTDILM", "DAMLM", "TDINGS")[metric]
-  } else {
-     metric <- metric.type
+     metric.type <- menu(opts)
+     if (metric.type==0)
+        stop("Operation cancelled")
+     metric <- metric.types[metric.type]
   }
-  d <- tryCatch(read_DARLEQ(fn$fn, fn$sheet), error=function(e) { cat(e$message); return(NULL) })
-  if (is.null(d))
-    return(NULL)
+  d <- tryCatch(read_DARLEQ(fn$fn, fn$sheet), error=function(e) { e })
+  if ("error" %in% class(d))
+    stop(d$message)
   res <- calc_all(d, metric)
-  wb <- openxlsx::createWorkbook("Temp")
-  for (i in names(res)) {
-    addWorksheet(wb, i)
-    openxlsx::writeDataTable(wb, i, res[[i]], withFilter=FALSE, keepNA=FALSE)
-  }
-  saveWorkbook(wb, outFile, overwrite=TRUE)
+  save_darleq3(res, outFile)
+}
+
+save_darleq3 <- function(d, outFile) {
+   wb <- openxlsx::createWorkbook("Temp")
+   for (i in names(d)) {
+     addWorksheet(wb, i)
+     openxlsx::writeDataTable(wb, i, d[[i]], withFilter=FALSE, keepNA=FALSE)
+   }
+   if (is.null(outFile)) {
+      cat("Results are ready to save, please choose a file name\n")
+      Filt <- matrix(c("Excel (*.xls, *.xlsx)", "*.xsl;*.xlsx"), nrow=1)
+      outFile <- choose.files(multi=FALSE, filters=Filt)
+     if (length(outFile) < 1) {
+        stop("Operation cancelled")
+     }
+   }
+   saveWorkbook(wb, outFile, overwrite=TRUE)
 }
