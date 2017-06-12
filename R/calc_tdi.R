@@ -20,9 +20,9 @@ calc_TDI <- function(x, TDI.code, dict=darleq3_taxa) {
     stop("Ambiguous diatom metric")
 
   code <- "NBSCode"
-  if(!(class(x)=="DARLEQ_DATA"))
+  if(!("DARLEQ_DATA" %in% class(x)))
     simpleError("Data not of class DARLEQ_DATA in CalcTDILM")
-  if(!(class(x)=="NBSCode"))
+  if(!("NBSCode" %in% class(x)))
     code <- "TaxonId"
   diat <- x$diatom_data
   totals <- rowSums(diat)
@@ -44,11 +44,23 @@ calc_TDI <- function(x, TDI.code, dict=darleq3_taxa) {
   saline[is.na(saline)] <- FALSE
   motile[is.na(motile)] <- FALSE
   organic[is.na(organic)] <- FALSE
-
-  pc.planktic <- rowSums(diat.pc[, planktic])
-  pc.saline <- rowSums(diat.pc[, saline])
-  pc.motile <- rowSums(diat.pc[, motile])
-  pc.organic <- rowSums(diat.pc[, organic])
+  nsam <- nrow(diat.pc)
+  if (any(planktic))
+     pc.planktic <- rowSums(diat.pc[, planktic])
+  else
+    pc.planktic <- rep(0.0, nsam)
+  if (any(saline))
+    pc.saline <- rowSums(diat.pc[, saline])
+  else
+    pc.saline <- rep(0.0, nsam)
+  if (any(motile))
+     pc.motile <- rowSums(diat.pc[, motile])
+  else
+     pc.motile <- rep(0.0, nsam)
+  if (any(organic))
+    pc.organic <- rowSums(diat.pc[, organic])
+  else
+    pc.organic <- rep(0.0, nsam)
 
   tdi.sam <- apply(diat.pc2, 1, wm, x=tdi.sp)
   tdi.sam <- (tdi.sam * 25) - 25

@@ -44,8 +44,8 @@ darleq3 <- function(inFile=NULL, sheet=NULL, metric.type=NULL, outFile=NULL) {
   }
 
   fn <- get_file_sheet_name(inFile, sheet)
-  if (is.null(fn))
-    stop("Operation cancelled")
+  if (mode(fn) == "character")
+    stop(fn)
   if (is.null(metric.type)) {
      opts <- c("River diatom TDI", "Lake diatom LTDI", "River Diatom Acidification Index", "River NGS TDI")
      metric.type <- menu(opts)

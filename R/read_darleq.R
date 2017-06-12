@@ -34,12 +34,12 @@ read_DARLEQ <- function(fn, sheet=NULL, verbose=FALSE) {
       break
     }
   }
-  for (i in iStartRow:iEndRow) {
-    if (is_empty(d[i, 1])) {
-      iEndRow <- i-1
-      break
-    }
-  }
+#  for (i in iStartRow:iEndRow) {
+#    if (is_empty(d[i, 1])) {
+#      iEndRow <- i-1
+#      break
+#    }
+#  }
   header <- as.data.frame(d[1:(iStartRow-1), 1:iEndCol])
   iEndRowHeader <- nrow(header)
   for (i in 1:iEndRowHeader) {
@@ -54,25 +54,36 @@ read_DARLEQ <- function(fn, sheet=NULL, verbose=FALSE) {
   d2 <- as.data.frame(d[iStartRow:iEndRow, 1:iEndCol], stringsAsFactors=FALSE)
 
 #  deal with numeric columns
-  sel <- c("ALKALINITY", "CALCIUM", "DOC", "SAMPLEDATE")
+  sel <- c("ALKALINITY", "CALCIUM", "DOC", "SAMPLEDATE", "SAMPLE_DATE")
   mt <- toupper(colnames(header)) %in% sel
   suppressWarnings(header[, mt] <- sapply(header[, mt], as.numeric))
 
 # deal with dates
-  if (!is.null(header$SampleDate))
-     suppressWarnings(header$SampleDate <- as.Date(header$SampleDate, origin = "1899-12-30"))
-
+  mt <- match("SAMPLEDATE", toupper(colnames(header)))
+  if (is.na(mt))
+    mt <- match("SAMPLE_DATE", toupper(colnames(header)))
+  if (!is.na(mt)) {
+     suppressWarnings(header[, mt] <- as.Date(header[, mt], origin = "1899-12-30"))
+     colnames(header[mt]) <- "SAMPLE_DATE"
+  }
   header <- data.frame(SampleID=rownames(header), header)
 
 # check for errors
 
-  rownames(d2) <- d2[, 1]
-  d2 <- as.data.frame(t(d2[, -c(1:2)]), stringsAsFactors=FALSE)
-  rnms <- rownames(d2)
+  haveCode <- ifelse(is.na(d2[, 1]) | nchar(d2[, 1]) < 1, FALSE, TRUE)
+  if (any(!haveCode))
+    d2 <- d2[haveCode, ]
+
+# deal with duplicate row names
+
+  nms <- d2[, 1]
+  d2 <- d2[, -c(1:2)]
   d2[is.na(d2)] <- 0
-# check for errors
+  # check for errors
   suppressWarnings(d2 <- sapply(d2, as.numeric))
-  rownames(d2) <- rnms
+  d2 <- aggregate(d2, list(nms), sum)
+  rownames(d2) <- d2[, 1]
+  d2 <- as.data.frame(t(d2[, -1]), stringsAsFactors=FALSE)
   nms <- colnames(d2)
   mt1 <- match(nms, darleq3_taxa$NBSCode)
   nM1 <- sum(!is.na(mt1))
@@ -83,7 +94,7 @@ read_DARLEQ <- function(fn, sheet=NULL, verbose=FALSE) {
   res <- list(header=header, diatom_data=d2, filename=basename(fn), sheet=sheet)
   class(res) <- "DARLEQ_DATA"
   if (nM1 > nM2)
-    class(res) <- "NBSCode"
+    class(res) <- c(class(res), "NBSCode")
   res
 }
 
@@ -103,8 +114,7 @@ get_file_sheet_name <- function(fn=NULL, sheet=NULL) {
      Fil <- matrix(c("Excel files (*.xls, *.xlsx)", "*.xls;*.xlsx"), nrow=1)
      fn <- tryCatch(choose.files(multi=FALSE, filters=Fil))
      if (length(fn) < 1) {
-       cat("Operation cancelled\n")
-       return(NULL)
+       return("Operation cancelled")
      }
   }
   sheets <- tryCatch(excel_sheets(fn))
@@ -126,8 +136,7 @@ get_file_sheet_name <- function(fn=NULL, sheet=NULL) {
       if (sheet %in% sheets)
         return(list(fn=fn, sheet=sheet))
       else {
-        paste0("Sheet ", sheet, " not found in file ", basename(fn))
-        return(NULL)
+        return(paste0("Sheet ", sheet, " not found in file ", basename(fn)))
       }
     }
   }
@@ -139,3 +148,4 @@ print.DARLEQ_DATA <- function(x, ...) {
   cat(paste("No. samples:", ncol(x$diatom_data), "\n"))
   cat(paste("No. species:", nrow(x$diatom_data), "\n"))
 }
+
