@@ -145,7 +145,7 @@ get_file_sheet_name <- function(fn=NULL, sheet=NULL) {
 print.DARLEQ_DATA <- function(x, ...) {
         cat("File name  :", x$filename, "\n")
   cat(paste("Sheet name :", x$sheet, "\n"))
-  cat(paste("No. samples:", ncol(x$diatom_data), "\n"))
-  cat(paste("No. species:", nrow(x$diatom_data), "\n"))
+  cat(paste("No. samples:", nrow(x$diatom_data), "\n"))
+  cat(paste("No. species:", ncol(x$diatom_data), "\n"))
 }
 
