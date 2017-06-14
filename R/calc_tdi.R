@@ -1,13 +1,3 @@
-calc_N_N2_Max <- function(x) {
-  suppressPackageStartupMessages(require(vegan, quietly=TRUE))
-  N <- apply(x>0, 2, sum)
-  N2 <- renyi(t(x), scales=c(0, 2), hill=TRUE)
-  mx <- apply(x, 2, max)
-  res <- cbind(N2, max=mx)
-  colnames(res) <- c("N", "N2", "Max")
-  res
-}
-
 calc_TDI <- function(x, TDI.code, dict=darleq3_taxa) {
   wm <- function(w, x) {
     weighted.mean(x, w, na.rm=TRUE)

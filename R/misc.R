@@ -1,3 +1,12 @@
+calc_N_N2_Max <- function(x) {
+  N <- apply(x>0, 2, sum)
+  N2 <- exp(-log(apply(x^2, 1, sum)))
+  mx <- apply(x, 2, max)
+  res <- cbind(N2, max=mx)
+  colnames(res) <- c("N", "N2", "Max")
+  res
+}
+
 calc_all <- function(d, metric) {
   res <- list()
   if (metric=="TDILM") {
