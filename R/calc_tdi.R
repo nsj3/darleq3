@@ -59,7 +59,7 @@ calc_TDI <- function(x, TDI.code, dict=darleq3_taxa) {
   res <- list()
   res$metric <- data.frame(metric=tdi.sam)
   colnames(res$metric) <- TDI.code
-  res$Summary <- data.frame(Total.count=totals, total.TDI=rSum, calc_N_N2_Max(t(diat.pc2)))
+  res$Summary <- data.frame(Total.count=totals, total.TDI=rSum, calc_N_N2_Max(diat.pc2))
   colnames(res$Summary) <- c(paste0(c("Total_count_", "Percent_in_", "N_", "N2_", "Max_"), TDI.code))
   res$EcolGroup <- data.frame(Motile=pc.motile, OrganicTolerant=pc.organic, Planktic=pc.planktic, Saline=pc.saline)
   res$header <- x$header

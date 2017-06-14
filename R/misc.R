@@ -1,7 +1,8 @@
 calc_N_N2_Max <- function(x) {
-  N <- apply(x>0, 2, sum)
-  N2 <- exp(-log(apply(x^2, 2, sum)))
-  mx <- apply(x, 2, max)
+  N <- apply(x>0, 1, sum)
+  mx <- apply(x, 1, max)
+  x <- sweep(x, 1, rowSums(x), "/")
+  N2 <- exp(-log(apply(x^2, 1, sum)))
   res <- cbind(N, N2, max=mx)
   colnames(res) <- c("N", "N2", "Max")
   res

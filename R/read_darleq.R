@@ -84,6 +84,9 @@ read_DARLEQ <- function(fn, sheet=NULL, verbose=FALSE) {
   d2 <- aggregate(d2, list(nms), sum)
   rownames(d2) <- d2[, 1]
   d2 <- as.data.frame(t(d2[, -1]), stringsAsFactors=FALSE)
+
+# remove taxa with no occurrences
+  d2 <- d2[, apply(d2, 2, sum) > 0]
   nms <- colnames(d2)
   mt1 <- match(nms, darleq3_taxa$NBSCode)
   nM1 <- sum(!is.na(mt1))
