@@ -8,9 +8,6 @@ importFrom(readxl, read_excel)
 ## openxlsx
 importFrom(openxlsx, write.xlsx)
 
-## vegan
-importFrom(vegan, renyi)
-
 ## stringr
 importFrom(stringr, str_trim)
 
