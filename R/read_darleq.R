@@ -64,7 +64,7 @@ read_DARLEQ <- function(fn, sheet=NULL, verbose=FALSE) {
     mt <- match("SAMPLE_DATE", toupper(colnames(header)))
   if (!is.na(mt)) {
      suppressWarnings(header[, mt] <- as.Date(header[, mt], origin = "1899-12-30"))
-     colnames(header[mt]) <- "SAMPLE_DATE"
+     colnames(header)[mt] <- "SAMPLE_DATE"
   }
   header <- data.frame(SampleID=rownames(header), header)
 

@@ -29,8 +29,9 @@ calc_EQR <- function(x) {
     env$ALKALINITY[comments$maxAlk] <- maxAlk
     if (metric=="TDI3") {
       comments$missingDate <- is.na(env$SAMPLE_DATE)
-      season <- as.numeric(format(env$SAMPLE_DATE, "%m"))
-      season[is.na(season)] <- 1
+      SAMPLE_DATE <- rep(as.Date("01/01/2000", format="%d/%m/%Y"), nrow(env))
+      SAMPLE_DATE[!is.na(env$SAMPLE_DATE)] <- na.omit(env$SAMPLE_DATE)
+      season <- as.numeric(format(SAMPLE_DATE, "%m"))
       season <- ifelse(season > 6, 1, 0)
       lAlk <- log10(env$ALKALINITY)
       eTDI = -25.36 + 56.83 * lAlk - 12.96 * lAlk^2 + 3.21 * season
