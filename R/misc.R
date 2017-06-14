@@ -78,7 +78,7 @@ save_darleq3 <- function(d, outFile) {
    }
    if (is.null(outFile)) {
       cat("Results are ready to save, please choose a file name\n")
-      Filt <- matrix(c("Excel (*.xls, *.xlsx)", "*.xsl;*.xlsx"), nrow=1)
+      Filt <- matrix(c("Excel (*.xlsx)", "*.xlsx"), nrow=1)
       outFile <- choose.files(multi=FALSE, filters=Filt)
      if (length(outFile) < 1) {
         stop("Operation cancelled")
