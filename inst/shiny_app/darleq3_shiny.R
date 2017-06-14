@@ -10,7 +10,7 @@ D_ui <- dashboardPage(
     # Boxes need to be put in a row (or column)
     fluidRow(shinyjs::useShinyjs(),
              column(width=4,
-                    box(fileInput("fn", "Select input file:", accept=c(".xlsx"), width="100%"), width=200),
+                    box(fileInput("fn", "Select input file:", accept=c(".xlsx", ".xls"), width="100%"), width=200),
                     box(selectInput("sheet", "Select worksheet:", ""), width=200),
                     box(disabled(actionButton("importButton", "Import data")), width="80%"),
                     box(radioButtons("metric", "Select metric:", c(`TDI for LM`="TDILM", `TDI for NGS`="TDINGS", LTDI="LTDILM", DAM="DAMLM")), width=100),
@@ -36,7 +36,7 @@ summarise_data <- function(fn, sheet, data) {
   if (nchar(fn_display) > 0) {
     nsam <- nrow(darleq_data$diatom_data)
     nsp <- ncol(darleq_data$diatom_data)
-    p <- capture.output(print(darleq_data))
+    p <- capture.output(print.DARLEQ_DATA(darleq_data))
     paste(p, collapse="\n")
 #    paste("File name: ", fn, "\n\rSheet:", sheet, "\n\nNumber of samples: ", nsam, "\nNumber of taxa: ", nsp )
   } else {

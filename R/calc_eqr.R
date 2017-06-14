@@ -14,10 +14,10 @@ calc_EQR <- function(x) {
     maxAlk <- switch(metric, TDI3=ddd$maxAlkTDI3, TDI4=ddd$maxAlkTDI4, TDI5LM=ddd$maxAlkTDI5LM, TDI5NGS=ddd$minAlkTDI5NGS)
     boundaries <- switch(metric, TDI3=ddd$boundariesTDI3, TDI4=ddd$boundariesTDI4, TDI5LM=ddd$boundariesTDI5LM, TDI5NGS=ddd$boundariesTDI5NGS)
     if (!("ALKALINITY" %in% toupper(colnames(x$header))))
-      x$header$Alkalinity <- NA
-    if (!("SAMPLEDATE" %in% toupper(colnames(x$header))))
-      x$header$SampleDate <- NA
-    env.vars <- c("ALKALINITY", "SAMPLEDATE")
+      x$header$ALKALINITY <- NA
+    if (!("SAMPLE_DATE" %in% toupper(colnames(x$header))))
+      x$header$SAMPLE_DATE <- NA
+    env.vars <- c("ALKALINITY", "SAMPLE_DATE")
     mt <- match(env.vars, toupper(colnames(x$header)))
     env <- x$header[, mt]
     colnames(env) <- env.vars
@@ -28,9 +28,10 @@ calc_EQR <- function(x) {
     comments$maxAlk <- env$ALKALINITY > maxAlk
     env$ALKALINITY[comments$maxAlk] <- maxAlk
     if (metric=="TDI3") {
-      comments$missingDate <- is.na(env$SAMPLEDATE)
-      season <- as.numeric(format(env$SAMPLEDATE, "%m"))
-      season[is.na(season)] <- 1
+      comments$missingDate <- is.na(env$SAMPLE_DATE)
+      SAMPLE_DATE <- rep(as.Date("01/01/2000", format="%d/%m/%Y"), nrow(env))
+      SAMPLE_DATE[!is.na(env$SAMPLE_DATE)] <- na.omit(env$SAMPLE_DATE)
+      season <- as.numeric(format(SAMPLE_DATE, "%m"))
       season <- ifelse(season > 6, 1, 0)
       lAlk <- log10(env$ALKALINITY)
       eTDI = -25.36 + 56.83 * lAlk - 12.96 * lAlk^2 + 3.21 * season

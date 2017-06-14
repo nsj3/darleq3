@@ -1,13 +1,3 @@
-calc_N_N2_Max <- function(x) {
-  suppressPackageStartupMessages(require(vegan, quietly=TRUE))
-  N <- apply(x>0, 2, sum)
-  N2 <- renyi(t(x), scales=c(0, 2), hill=TRUE)
-  mx <- apply(x, 2, max)
-  res <- cbind(N2, max=mx)
-  colnames(res) <- c("N", "N2", "Max")
-  res
-}
-
 calc_TDI <- function(x, TDI.code, dict=darleq3_taxa) {
   wm <- function(w, x) {
     weighted.mean(x, w, na.rm=TRUE)
@@ -20,9 +10,9 @@ calc_TDI <- function(x, TDI.code, dict=darleq3_taxa) {
     stop("Ambiguous diatom metric")
 
   code <- "NBSCode"
-  if(!(class(x)=="DARLEQ_DATA"))
+  if(!("DARLEQ_DATA" %in% class(x)))
     simpleError("Data not of class DARLEQ_DATA in CalcTDILM")
-  if(!(class(x)=="NBSCode"))
+  if(!("NBSCode" %in% class(x)))
     code <- "TaxonId"
   diat <- x$diatom_data
   totals <- rowSums(diat)
@@ -44,11 +34,23 @@ calc_TDI <- function(x, TDI.code, dict=darleq3_taxa) {
   saline[is.na(saline)] <- FALSE
   motile[is.na(motile)] <- FALSE
   organic[is.na(organic)] <- FALSE
-
-  pc.planktic <- rowSums(diat.pc[, planktic])
-  pc.saline <- rowSums(diat.pc[, saline])
-  pc.motile <- rowSums(diat.pc[, motile])
-  pc.organic <- rowSums(diat.pc[, organic])
+  nsam <- nrow(diat.pc)
+  if (any(planktic))
+     pc.planktic <- rowSums(diat.pc[, planktic])
+  else
+    pc.planktic <- rep(0.0, nsam)
+  if (any(saline))
+    pc.saline <- rowSums(diat.pc[, saline])
+  else
+    pc.saline <- rep(0.0, nsam)
+  if (any(motile))
+     pc.motile <- rowSums(diat.pc[, motile])
+  else
+     pc.motile <- rep(0.0, nsam)
+  if (any(organic))
+    pc.organic <- rowSums(diat.pc[, organic])
+  else
+    pc.organic <- rep(0.0, nsam)
 
   tdi.sam <- apply(diat.pc2, 1, wm, x=tdi.sp)
   tdi.sam <- (tdi.sam * 25) - 25
@@ -57,7 +59,7 @@ calc_TDI <- function(x, TDI.code, dict=darleq3_taxa) {
   res <- list()
   res$metric <- data.frame(metric=tdi.sam)
   colnames(res$metric) <- TDI.code
-  res$Summary <- data.frame(Total.count=totals, total.TDI=rSum, calc_N_N2_Max(t(diat.pc2)))
+  res$Summary <- data.frame(Total.count=totals, total.TDI=rSum, calc_N_N2_Max(diat.pc2))
   colnames(res$Summary) <- c(paste0(c("Total_count_", "Percent_in_", "N_", "N2_", "Max_"), TDI.code))
   res$EcolGroup <- data.frame(Motile=pc.motile, OrganicTolerant=pc.organic, Planktic=pc.planktic, Saline=pc.saline)
   res$header <- x$header

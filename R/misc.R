@@ -1,3 +1,13 @@
+calc_N_N2_Max <- function(x) {
+  N <- apply(x>0, 1, sum)
+  mx <- apply(x, 1, max)
+  x <- sweep(x, 1, rowSums(x), "/")
+  N2 <- exp(-log(apply(x^2, 1, sum)))
+  res <- cbind(N, N2, max=mx)
+  colnames(res) <- c("N", "N2", "Max")
+  res
+}
+
 calc_all <- function(d, metric) {
   res <- list()
   if (metric=="TDILM") {
@@ -44,8 +54,8 @@ darleq3 <- function(inFile=NULL, sheet=NULL, metric.type=NULL, outFile=NULL) {
   }
 
   fn <- get_file_sheet_name(inFile, sheet)
-  if (is.null(fn))
-    stop("Operation cancelled")
+  if (mode(fn) == "character")
+    stop(fn)
   if (is.null(metric.type)) {
      opts <- c("River diatom TDI", "Lake diatom LTDI", "River Diatom Acidification Index", "River NGS TDI")
      metric.type <- menu(opts)
@@ -68,11 +78,12 @@ save_darleq3 <- function(d, outFile) {
    }
    if (is.null(outFile)) {
       cat("Results are ready to save, please choose a file name\n")
-      Filt <- matrix(c("Excel (*.xls, *.xlsx)", "*.xsl;*.xlsx"), nrow=1)
+      Filt <- matrix(c("Excel (*.xlsx)", "*.xlsx"), nrow=1)
       outFile <- choose.files(multi=FALSE, filters=Filt)
      if (length(outFile) < 1) {
         stop("Operation cancelled")
      }
    }
    saveWorkbook(wb, outFile, overwrite=TRUE)
+
 }

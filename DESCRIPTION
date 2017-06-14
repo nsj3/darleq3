@@ -1,11 +1,13 @@
 Package: darleq3
 Type: Package
 Title: Diatom-based water quality indices
-Version: 0.1.0
+Version: 0.1.3
 Author: Steve Juggins
 Maintainer: Steve Juggins <Stephen.Juggins@ncl.ac.uk>
 Description: Diatom-based water quality indices.
-Imports: readxl, openxlsx, vegan, shiny, shinyjs, shinydashboard, stringr
+Imports: readxl, openxlsx, shiny, shinyjs, shinydashboard, stringr
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
+BinaryFiles: zip.exe
+
