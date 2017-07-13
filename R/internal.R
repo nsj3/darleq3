@@ -20,8 +20,7 @@
 
 .mono_predict <- function(mod, newdata)
 {
-  require(mgcv, quietly=TRUE)
-  Predict.matrix(mod$sm, data.frame(x = newdata)) %*% mod$p
+  mgcv::Predict.matrix(mod$sm, data.frame(x = newdata)) %*% mod$p
 }
 
 .errMessage <- function(txt, verbose) {

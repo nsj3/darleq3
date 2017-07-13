@@ -2,8 +2,10 @@ suppressPackageStartupMessages(library(shiny))
 suppressPackageStartupMessages(library(shinyjs))
 suppressPackageStartupMessages(library(shinydashboard))
 suppressPackageStartupMessages(library(darleq3))
-suppressPackageStartupMessages(library(mgcv))
-
+library(mgcv)
+library(nlme)
+library(lattice)
+library(Matrix)
 
 header <- dashboardHeader(title = paste0("DARLEQ3 for diatom-based water quality assessment, version ", utils::packageDescription("darleq3", fields="Version")), titleWidth=750)
 
