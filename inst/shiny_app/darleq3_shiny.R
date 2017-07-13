@@ -2,7 +2,7 @@ suppressPackageStartupMessages(library(shiny))
 suppressPackageStartupMessages(library(shinyjs))
 suppressPackageStartupMessages(library(shinydashboard))
 suppressPackageStartupMessages(library(darleq3))
-library(mgcv)
+suppressPackageStartupMessages(library(mgcv))
 
 header <- dashboardHeader(title = paste0("DARLEQ3 for diatom-based water quality assessment, version ", utils::packageDescription("darleq3", fields="Version")), titleWidth=750)
 
@@ -20,7 +20,7 @@ D_ui <- dashboardPage(header, dashboardSidebar(disable = TRUE),
       column(width=8,
         box(verbatimTextOutput("table1"), width=900, title="Data summary", status="primary"),
         box(verbatimTextOutput("table2"), width=900, title="Results summary", status="primary"),
-        box(disabled(downloadButton("downloadResults", "Download results")), width="80%")
+        box(downloadButton("downloadResults", "Download results"), width="80%")
       )
     )
   )
@@ -61,6 +61,7 @@ D_server <- function(input, output, session) {
     }
     shinyjs::disable("downloadResults")
     shinyjs::disable("calculateButton")
+    res <<- NULL
     output$table2 <- renderText("")
   }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
@@ -90,6 +91,7 @@ D_server <- function(input, output, session) {
       } else {
         shinyjs::disable("importButton")
         shinyjs::disable("downloadResults")
+        res <<- NULL
         output$table2 <- renderText("")
       }
     }
@@ -115,6 +117,7 @@ D_server <- function(input, output, session) {
       } else {
         shinyjs::disable("calculateButton")
         shinyjs::disable("downloadResults")
+        res <<- NULL
         output$table2 <- renderText("")
       }
     }
@@ -143,9 +146,11 @@ D_server <- function(input, output, session) {
       output$table2 <- renderText(paste0("Error calculating metrics: \n", res$message), quoted=TRUE)
       res <<- NULL
       return()
+    } else {
+      mm <- paste(names(res), collapse=", ")
+      output$table2 <- renderText(paste0("Results ready for ", mm, ".\nClick button below to download."))
     }
     shinyjs::enable("downloadResults")
-    output$table2 <- renderText("Results are ready to download")
   })
   output$downloadResults <- downloadHandler(
     filename = function() {
@@ -161,7 +166,6 @@ D_server <- function(input, output, session) {
       retval <- tryCatch(save_darleq3(res, file, fn=fn, sheet=sheet, FALSE))
       if (inherits(retval, "error")) {
         output$table1 <- renderText(res$message)
-        shinyjs::disable("downloadResults")
         return()
       }
     },
