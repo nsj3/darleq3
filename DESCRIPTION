@@ -5,7 +5,7 @@ Version: 0.5.1
 Author: Steve Juggins
 Maintainer: Steve Juggins <Stephen.Juggins@ncl.ac.uk>
 Description: Diatom-based water quality indices.
-Imports: readxl, openxlsx, shiny, shinyjs, shinydashboard, stringr
+Imports: readxl, openxlsx, shiny, shinyjs, shinydashboard, stringr, mgcv
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
