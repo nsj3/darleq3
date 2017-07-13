@@ -20,8 +20,25 @@
 
 .mono_predict <- function(mod, newdata)
 {
-  require(mgcv, quietly=TRUE)
-  Predict.matrix(mod$sm, data.frame(x = newdata)) %*% mod$p
+  .Predict.matrix <- function (object, data)
+  {
+    x <- data[[object$term]]
+    if (length(x) < 1)
+      stop("no data to predict at")
+    nx <- length(x)
+    nk <- object$bs.dim
+    X <- rep(0, nx * nk)
+    S <- 1
+    F.supplied <- 1
+    if (is.null(object$F))
+      stop("F is missing from cr smooth - refit model with current mgcv")
+    oo <- .C(C_crspl, x = as.double(x), n = as.integer(nx), xk = as.double(object$xp),
+             nk = as.integer(nk), X = as.double(X), S = as.double(S),
+             F = as.double(object$F), Fsupplied = as.integer(F.supplied))
+    X <- matrix(oo$X, nx, nk)
+    X
+  }
+  .Predict.matrix(mod$sm, data.frame(x = newdata)) %*% mod$p
 }
 
 .errMessage <- function(txt, verbose) {
@@ -30,3 +47,6 @@
   else
     simpleError(txt)
 }
+
+## Function copied Predict.matrix.cr.smooth in package mgcv, for running in shiny app on computer that doesn't have mgcv installed
+

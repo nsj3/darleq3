@@ -20,9 +20,6 @@ importFrom("stats", "aggregate", "na.omit", "weighted.mean", "pnorm")
 ## utils
 importFrom("utils", "choose.files", "menu")
 
-## mgcv
-importFrom("mgcv", "Predict.matrix")
-
 ## S3 methods
 S3method(print, DARLEQ_DATA)
 
