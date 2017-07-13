@@ -3,14 +3,26 @@ exportPattern("^[[:alpha:]]+")
 ## Imports
 
 ## readxl
-importFrom(readxl, read_excel)
+importFrom(readxl, read_excel, excel_sheets)
 
 ## openxlsx
-importFrom(openxlsx, write.xlsx)
+importFrom(openxlsx, write.xlsx, addWorksheet, writeDataTable)
 
 ## stringr
 importFrom(stringr, str_trim)
 
-## S3 methods
+## shiny
+importFrom(shiny, runApp)
 
+## stats
+importFrom("stats", "aggregate", "na.omit", "weighted.mean", "pnorm")
+
+## utils
+importFrom("utils", "choose.files", "menu")
+
+## mgcv
+importFrom("mgcv", "Predict.matrix")
+
+## S3 methods
 S3method(print, DARLEQ_DATA)
+

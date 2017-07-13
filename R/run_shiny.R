@@ -1,6 +1,6 @@
 runDARLEQ3 <- function() {
-  if (!require(shiny, quietly=TRUE))
-    stop("This function needs the package shiny, please install it.")
+#  if (!require(shiny, quietly=TRUE))
+#    stop("This function needs the package shiny, please install it.")
 #  if (!require(shinyjs, quietly=TRUE))
 #    stop("This function needs the package shinyjs, please install it.")
 #  if (!require(shinydashboard, quietly=TRUE))

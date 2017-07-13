@@ -1,45 +1,42 @@
-# Functions to read DARLEQ data in excel format
+#' Read diatom data from an Excel file in DARLEQ2 format
+#'
+#' @param filename NAme of Excel file.
+#' @param sheet Name of sheet within Excel file.
+#' @return A list with the following named elements:
+#'
+#' @author Steve Juggins \email{Stephen.Juggins@@ncl.ac.uk}
 
-read_DARLEQ <- function(fn, sheet=NULL, verbose=FALSE) {
-#
+read_DARLEQ <- function(filename, sheet=NULL, verbose=TRUE) {
   is_empty <- function(x) {
-    ifelse (!is.na(x) & length(str_trim(d[i, 2])) > 0, FALSE, TRUE)
+    ifelse (!is.na(x) & length(stringr::str_trim(d[i, 2])) > 0, FALSE, TRUE)
   }
 
-  if (!require(readxl, quietly=TRUE)) {
-    simpleError("Package readxl not installed - please install it.")
-  }
-  if (!require(stringr, quietly=TRUE)) {
-    simpleError("Package stringr not installed - please install it.")
+# if sheet is null we just read the first sheet
+  if (is.null(sheet)) {
+     d <- readxl::read_excel(filename, col_types = "text")
+     sheet <- get_Sheets(filename)[1]
+  } else {
+     d <- readxl::read_excel(filename, col_types = "text", sheet=sheet)
   }
 
-  # to do - deal with multiple sheets and sheet names
-  if (is.null(sheet))
-    d <- read_excel(fn, col_types = "text")
-  else
-    d <- read_excel(fn, col_types = "text", sheet=sheet)
-  iEndCol <- ncol(d)
-  iEndRow <- nrow(d)
-  # find start of data
+# Now split data into header with site and water chemistry information, and diatom data
+# find start of data.  Column 2 should be empty in header but have taxon names in block of diatom data
+  iEndCol <- ncol(d); iEndRow <- nrow(d)
   for (i in 1:20) {
     if (!is_empty(d[i, 2]))
         break
   }
-  iStartRow <- i
-  iStartCol <- 3
 
+# find rightmost column of data.  It should have a sample ID in row 1.
+  iStartRow <- i; iStartCol <- 3
   for (i in iStartCol:iEndCol) {
     if (is_empty(d[1, i])) {
       iEndCol <- i-1
       break
     }
   }
-#  for (i in iStartRow:iEndRow) {
-#    if (is_empty(d[i, 1])) {
-#      iEndRow <- i-1
-#      break
-#    }
-#  }
+
+# Extract header and remove any rows with no variable ID in column 1.
   header <- as.data.frame(d[1:(iStartRow-1), 1:iEndCol])
   iEndRowHeader <- nrow(header)
   for (i in 1:iEndRowHeader) {
@@ -51,104 +48,77 @@ read_DARLEQ <- function(fn, sheet=NULL, verbose=FALSE) {
   header <- header[1:iEndRowHeader, ]
   rownames(header) <- header[, 1]
   header <- as.data.frame(t(header[, -c(1:2)]), stringsAsFactors=FALSE)
-  d2 <- as.data.frame(d[iStartRow:iEndRow, 1:iEndCol], stringsAsFactors=FALSE)
 
-#  deal with numeric columns
-  sel <- c("ALKALINITY", "CALCIUM", "DOC", "SAMPLEDATE", "SAMPLE_DATE")
+#  Convert any columns with date or chemistry data to numeric
+  sel <- c("ALKALINITY", "CALCIUM", "DOC")
   mt <- toupper(colnames(header)) %in% sel
   suppressWarnings(header[, mt] <- sapply(header[, mt], as.numeric))
 
-# deal with dates
-  mt <- match("SAMPLEDATE", toupper(colnames(header)))
-  if (is.na(mt))
-    mt <- match("SAMPLE_DATE", toupper(colnames(header)))
-  if (!is.na(mt)) {
-     suppressWarnings(header[, mt] <- as.Date(header[, mt], origin = "1899-12-30"))
-     colnames(header)[mt] <- "SAMPLE_DATE"
+# Convert SAMPLEDATE field to dates
+  mt <- grep("DATE", toupper(colnames(header)))
+  if (length(mt) > 0) {
+    for (i in 1:length(mt)) {
+      suppressWarnings(dt <- sapply(header[, mt], as.numeric))
+      suppressWarnings(header[, mt[i]] <- as.Date(dt, origin = "1899-12-30"))
+      if (any(nchar(dt)<5, na.rm=TRUE)) {
+         sel <- which(nchar(dt)<5)
+         suppressWarnings(header[sel, mt[i]] <- as.Date(paste0(dt[sel < 5], "-01-01"), format="%Y-%d-%xx <- c(", origin = "1899-12-30"))
+      }
+    }
+    colnames(header)[mt[1]] <- "SAMPLE_DATE"
   }
   header <- data.frame(SampleID=rownames(header), header)
 
-# check for errors
+# Extract diatom data and remove any rows without taxon code in column 1
 
-  haveCode <- ifelse(is.na(d2[, 1]) | nchar(d2[, 1]) < 1, FALSE, TRUE)
-  if (any(!haveCode))
-    d2 <- d2[haveCode, ]
+  d2 <- as.data.frame(d[iStartRow:iEndRow, 1:iEndCol], stringsAsFactors=FALSE)
 
-# deal with duplicate row names
+  haveCode <- is_empty(d2[, 1])
+  if (any(haveCode))
+    d2 <- d2[!haveCode, ]
+  if (nrow(d2) < 1) {
+    .errMessage("No diatom data found, are you sure this is a DARLEQ data file?", verbose)
+  }
 
+# Merge duplicate rows and replace missing values with zero
   nms <- d2[, 1]
   d2 <- d2[, -c(1:2)]
   d2[is.na(d2)] <- 0
   # check for errors
+
   suppressWarnings(d2 <- sapply(d2, as.numeric))
+  non_numeric <- sum(is.na(d2))
+  if (non_numeric > 0) {
+    .errMessage(paste0(non_numeric, " non-numeric values found in diatom data. Please correct and try again."), verbose)
+  }
   d2 <- aggregate(d2, list(nms), sum)
   rownames(d2) <- d2[, 1]
   d2 <- as.data.frame(t(d2[, -1]), stringsAsFactors=FALSE)
+  d2[is.na(d2)] <- 0
 
-# remove taxa with no occurrences
-  d2 <- d2[, apply(d2, 2, sum) > 0]
-  nms <- colnames(d2)
-  mt1 <- match(nms, darleq3_taxa$NBSCode)
-  nM1 <- sum(!is.na(mt1))
-  mt2 <- match(nms, darleq3_taxa$TaxonId)
-  nM2 <- sum(!is.na(mt2))
-  if (sum(nM1 + nM2) < 1)
-    simpleError("No taxon codes found, are you sure this is a DARLEQ data file?")
-  res <- list(header=header, diatom_data=d2, filename=basename(fn), sheet=sheet)
+#  d2 <- d2[, apply(d2, 2, sum) > 0]
+  if (sum(apply(d2, 2, sum) > 0) < 1) {
+    .errMessage("No taxa found or all taxa have zero abundance.", verbose)
+  }
+  coding <- .get_Taxon_Coding(d2)
+  if (is.null(coding)) {
+     .errMessage("No taxon codes found, are you sure this is a DARLEQ dirom data file?", verbose)
+  }
+  res <- list(header=header, diatom_data=d2, filename=basename(filename), filepath=filename, sheet=sheet, coding=coding)
   class(res) <- "DARLEQ_DATA"
-  if (nM1 > nM2)
-    class(res) <- c(class(res), "NBSCode")
   res
 }
 
-get_sheets <- function(fn) {
-  if (!require(readxl, quietly=TRUE)) {
-    simpleError("package readxl not installed - please install it.")
-  }
-  sheets <- excel_sheets(fn)
+get_Sheets <- function(filename) {
+  sheets <- readxl::excel_sheets(filename)
   sheets
 }
 
-get_file_sheet_name <- function(fn=NULL, sheet=NULL) {
-  if (!require(readxl, quietly=TRUE)) {
-    simpleError("package readxl not installed - please install it.")
-  }
-  if (is.null(fn)) {
-     Fil <- matrix(c("Excel files (*.xls, *.xlsx)", "*.xls;*.xlsx"), nrow=1)
-     fn <- tryCatch(choose.files(multi=FALSE, filters=Fil))
-     if (length(fn) < 1) {
-       return("Operation cancelled")
-     }
-  }
-  sheets <- tryCatch(excel_sheets(fn))
-  if ("error" %in% class(sheets)) {
-    cat(sheets$message)
-    return(NULL)
-  }
-  if (length(sheets) == 1) {
-    return(list(fn=fn, sheet=sheets[1]))
-  } else {
-    if (is.null(sheet)) {
-       n_sheet <- menu(sheets)
-       if (n_sheet > 0) {
-         return(list(fn=fn, sheet=sheets[n_sheet]))
-       } else {
-         return(NULL)
-       }
-    } else {
-      if (sheet %in% sheets)
-        return(list(fn=fn, sheet=sheet))
-      else {
-        return(paste0("Sheet ", sheet, " not found in file ", basename(fn)))
-      }
-    }
-  }
-}
-
 print.DARLEQ_DATA <- function(x, ...) {
-        cat("File name  :", x$filename, "\n")
+  cat("File name  :", x$filename, "\n")
   cat(paste("Sheet name :", x$sheet, "\n"))
   cat(paste("No. samples:", nrow(x$diatom_data), "\n"))
   cat(paste("No. species:", ncol(x$diatom_data), "\n"))
+  cat(paste("Coding:", x$coding, "\n"))
 }
 

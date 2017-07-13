@@ -3,24 +3,24 @@ suppressPackageStartupMessages(library(shinyjs))
 suppressPackageStartupMessages(library(shinydashboard))
 suppressPackageStartupMessages(library(darleq3))
 
-D_ui <- dashboardPage(
-  dashboardHeader(title = "DARLEQ3 for diatom-based water quality assessment", titleWidth=600),
-  dashboardSidebar(disable = TRUE),
+header <- dashboardHeader(title = paste0("DARLEQ3 for diatom-based water quality assessment, version ", utils::packageDescription("darleq3", fields="Version")), titleWidth=750)
+
+D_ui <- dashboardPage(header, dashboardSidebar(disable = TRUE),
   dashboardBody(
     # Boxes need to be put in a row (or column)
     fluidRow(shinyjs::useShinyjs(),
-             column(width=4,
-                    box(fileInput("fn", "Select input file:", accept=c(".xlsx", ".xls"), width="100%"), width=200),
-                    box(selectInput("sheet", "Select worksheet:", ""), width=200),
-                    box(disabled(actionButton("importButton", "Import data")), width="80%"),
-                    box(radioButtons("metric", "Select metric:", c(`TDI for LM`="TDILM", `TDI for NGS`="TDINGS", LTDI="LTDILM", DAM="DAMLM")), width=100),
-                    box(disabled(actionButton("calculateButton", "Calculate!")), width="80%")
-             ),
-             column(width=8,
-                    box(verbatimTextOutput("table1"), width=900, title="Data summary", status="primary"),
-                    box(verbatimTextOutput("output1"), width=900, title="Results summary", status="primary"),
-                    box(disabled(downloadButton("downloadResults", "Download results")), width="80%")
-             )
+      column(width=4,
+        box(fileInput("fn", "Select input file:", accept=c(".xlsx", ".xls"), width="100%"), width=200),
+        box(selectInput("sheet", "Select worksheet:", ""), width=200),
+        box(disabled(actionButton("importButton", "Import data")), width="80%"),
+        box(radioButtons("metric", "Select metric:", c(`TDI for LM`="TDILM", `TDI for NGS`="TDINGS", `LTDI for LM`="LTDILM", `DAM for LM`="DAMLM")), width=100),
+        box(disabled(actionButton("calculateButton", "Calculate!")), width="80%")
+      ),
+      column(width=8,
+        box(verbatimTextOutput("table1"), width=900, title="Data summary", status="primary"),
+        box(verbatimTextOutput("table2"), width=900, title="Results summary", status="primary"),
+        box(disabled(downloadButton("downloadResults", "Download results")), width="80%")
+      )
     )
   )
 )
@@ -30,7 +30,7 @@ fn2 <- ""
 fn_display <- ""
 darleq_data <- NULL
 sheet <- ""
-outFile <- ""
+#outFile <- ""
 
 summarise_data <- function(fn, sheet, data) {
   if (nchar(fn_display) > 0) {
@@ -45,7 +45,9 @@ summarise_data <- function(fn, sheet, data) {
 }
 
 D_server <- function(input, output, session) {
+  outFile <- ""
   output$table1 <- renderText(summarise_data(fn, sheet, darleq_data))
+  res <- NULL
   observeEvent(input$sheet, {
     darleq_data <<- NULL
     sheet <<- ""
@@ -58,7 +60,7 @@ D_server <- function(input, output, session) {
     }
     shinyjs::disable("downloadResults")
     shinyjs::disable("calculateButton")
-    output$output1 <- renderText("")
+    output$table2 <- renderText("")
   }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
   observeEvent(input$fn$name, {
@@ -72,9 +74,9 @@ D_server <- function(input, output, session) {
         file.remove(fn2)
       file.rename(input$fn$datapath, fn2)
       fn <<- fn1
-      sheets.nms <<- tryCatch(get_sheets(fn2), error=function(e) return (e))
-      if ("error" %in% class(sheets.nms)) {
-        output$table1 <- renderText(sheets.nms$message)
+      sheets.nms <<- tryCatch(get_Sheets(fn2), error=function(e) return (e))
+      if (inherits(sheets.nms, "error")) {
+        output$table1 <- renderText(sheets.nms$message, quoted=TRUE)
         sheet <<- ""
         darleq_data <<- NULL
         fn1 <- input$fn$name
@@ -87,7 +89,7 @@ D_server <- function(input, output, session) {
       } else {
         shinyjs::disable("importButton")
         shinyjs::disable("downloadResults")
-        output$output1 <- renderText("")
+        output$table2 <- renderText("")
       }
     }
   }, ignoreInit = TRUE, ignoreNULL = TRUE)
@@ -99,9 +101,8 @@ D_server <- function(input, output, session) {
         return(NULL)
       fn_display <<- fn
       darleq_data <<- tryCatch(read_DARLEQ(fn2, sheet=sheet), error=function(e) return(e))
-      if (any(class(darleq_data) == "error")) {
-#        output$table1 <- renderText(darleq_data$message)
-        output$table1 <- renderText("darleq_data$message")
+      if (inherits(darleq_data, "error")) {
+        output$table1 <- renderText(darleq_data$message, quoted=TRUE)
         darleq_data <<- NULL
         outFile <<- ""
         sheet <<- ""
@@ -113,7 +114,7 @@ D_server <- function(input, output, session) {
       } else {
         shinyjs::disable("calculateButton")
         shinyjs::disable("downloadResults")
-        output$output1 <- renderText("")
+        output$table2 <- renderText("")
       }
     }
   })
@@ -126,23 +127,42 @@ D_server <- function(input, output, session) {
       shinyjs::disable("downloadResults")
       shinyjs::disable("calculateButton")
     }
-    res <- calc_all(darleq_data, metric)
-    wb <- openxlsx::createWorkbook("Temp")
-    outFile <<- file.path(tempdir(), "Results.xlsx")
-    for (i in names(res)) {
-      addWorksheet(wb, i)
-      openxlsx::writeDataTable(wb, i, res[[i]], withFilter=FALSE, keepNA=FALSE)
+    metrics <- NULL
+    if (metric=="TDILM") {
+      metrics <- c("TDI3", "TDI4", "TDI5LM")
+    } else if (metric == "LTDILM") {
+      metrics <- c("LTDI1", "LTDI2")
+    } else if (metric == "TDINGS") {
+      metrics <- c("TDI5NGS")
+    } else if (metric == "DAMLM") {
+      metrics <- c("DAM")
     }
-    saveWorkbook(wb, outFile, overwrite=TRUE)
+    res <<- tryCatch(calc_Metric_EQR(darleq_data, metrics, verbose=FALSE), error=function(e) return(e))
+    if (inherits(res, "error")) {
+      output$table2 <- renderText(paste0("Error calculating metrics: \n", res$message), quoted=TRUE)
+      res <<- NULL
+      return()
+    }
     shinyjs::enable("downloadResults")
-    output$output1 <- renderText("Results are ready to download")
+    output$table2 <- renderText("Results are ready to download")
   })
   output$downloadResults <- downloadHandler(
-    filename <- function() {
-      paste("Results", ".xlsx", sep="")
+    filename = function() {
+      tmp <- basename(fn)
+      tmp <- strsplit(tmp, "\\.")[[1]][1]
+      if (is.null(sheet))
+        sheet <- d$sheet
+      outFile <- paste0("DARLEQ3_Results_", tmp, "_", sheet, "_", Sys.Date(), ".xlsx")
+      outFile <- gsub(" ", "_", outFile)
+      outFile
     },
     content <- function(file) {
-      file.copy(outFile, file)
+      retval <- tryCatch(save_darleq3(res, file, fn=fn, sheet=sheet, FALSE))
+      if (inherits(retval, "error")) {
+        output$table1 <- renderText(res$message)
+        shinyjs::disable("downloadResults")
+        return()
+      }
     },
     contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   )
