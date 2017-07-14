@@ -36,7 +36,7 @@ calc_Metric <- function(x, metric, dictionary=darleq3::darleq3_taxa, verbose=TRU
   Job_Summary[[5]] <- metric
   names(Job_Summary) <- c("N_samples", "N_samples_gt_zero", "N_taxa", "N_taxa_gt_zero", "Metric")
 
-  nms <- colnames(x)
+  nms <- colnames(diat.pc)
   mt <- match(nms, dictionary[, codingID])
 
   tdi.sp.all <- dictionary[na.omit(mt), metric]

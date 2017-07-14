@@ -54,7 +54,7 @@ calc_Metric_EQR <- function(x, metrics="TDI5LM", verbose=TRUE) {
 
 save_darleq3 <- function(d, outFile=NULL, fn="", sheet="", verbose=TRUE) {
   if (is.null(outFile))
-    .errMessage("outfile missing with no default", verbose)
+    .errMessage("outFile missing with no default", verbose)
   save_Job <- function(x, i, fn, sheet) {
     nm <- paste0(i, "_Job_Summary")
     openxlsx::addWorksheet(wb, nm)
@@ -72,6 +72,7 @@ save_darleq3 <- function(d, outFile=NULL, fn="", sheet="", verbose=TRUE) {
   }
   wb <- openxlsx::createWorkbook("Temp")
   nms <- names(d)
+  cf <- createStyle(numFmt = "0.00")
   for (i in 1:length(nms)) {
     if (!is.null(d[[i]]$Job_Summary)) {
       save_Job(d[[i]]$Job_Summary, nms[i], fn, sheet)
@@ -79,18 +80,24 @@ save_darleq3 <- function(d, outFile=NULL, fn="", sheet="", verbose=TRUE) {
     if (!is.null(d[[i]]$EQR)) {
       nm <- paste0(nms[i], "_Sample Summary")
       openxlsx::addWorksheet(wb, nm)
+      mt <- match("Total_count", colnames(d[[i]]$EQR))
       openxlsx::writeDataTable(wb, nm, d[[i]]$EQR, withFilter=FALSE, keepNA=FALSE)
+      if (!is.na(mt[1])) {
+        cc <- c(1, 2, 4:6, 8:12)
+        addStyle(wb, sheet=nm, cf, cols=mt+cc, rows=2:(1+nrow(d[[i]]$EQR)), gridExpand=TRUE)
+      }
     }
     if (!is.null(d[[i]]$Uncertainty)) {
       nm <- paste0(nms[i], "_Uncertainty")
       openxlsx::addWorksheet(wb, nm)
       openxlsx::writeDataTable(wb, nm, d[[i]]$Uncertainty, withFilter=FALSE, keepNA=FALSE)
+      addStyle(wb, sheet=nm, cf, cols=3:13, rows=2:(1+nrow(d[[i]]$Uncertainty)), gridExpand=TRUE)
     }
   }
   openxlsx::saveWorkbook(wb, outFile, overwrite=TRUE)
 }
 
-darleq3 <- function(inFile, sheet=NULL, metrics=c("TDI3", "TDI4", "TDI5LM"), outfile=NULL, verbose=TRUE) {
+darleq3 <- function(inFile, sheet=NULL, metrics=c("TDI3", "TDI4", "TDI5LM"), outFile=NULL, verbose=TRUE) {
   metrics2 <- darleq3_data$metric.codes
   if (!is.null(metrics)) {
     mt <- metrics %in% metrics2
@@ -107,17 +114,17 @@ darleq3 <- function(inFile, sheet=NULL, metrics=c("TDI3", "TDI4", "TDI5LM"), out
   if (inherits(res, "error"))
     .errMessage(res$message, verbose)
 
-  if (is.null(outfile)) {
+  if (is.null(outFile)) {
     tmp <- basename(inFile)
     pth <- dirname(inFile)
     fn <- strsplit(tmp, "\\.")[[1]][1]
     if (is.null(sheet))
       sheet <- d$sheet
     fn <- paste0("DARLEQ3_Results_", fn, "_", sheet, "_", Sys.Date(), ".xlsx")
-    outfile <- file.path(pth, fn)
-    outfile <- gsub(" ", "_", outfile)
+    outFile <- file.path(pth, fn)
+    outFile <- gsub(" ", "_", outFile)
   }
-  retval <- tryCatch(save_darleq3(res, outfile, fn=inFile, sheet=sheet, FALSE))
+  retval <- tryCatch(save_darleq3(res, outFile, fn=inFile, sheet=sheet, FALSE))
   if (inherits(retval, "error"))
     .errMessage(retval$message, verbose)
 }

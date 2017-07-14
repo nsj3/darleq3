@@ -30,7 +30,7 @@ calc_EQR <- function(x, header) {
 
   if (metric2 == "TDI") {
     minAlk <- switch(metric, TDI3=ddd$minAlkTDI3, TDI4=ddd$minAlkTDI4, TDI5LM=ddd$minAlkTDI5LM, TDI5NGS=ddd$minAlkTDI5NGS)
-    maxAlk <- switch(metric, TDI3=ddd$maxAlkTDI3, TDI4=ddd$maxAlkTDI4, TDI5LM=ddd$maxAlkTDI5LM, TDI5NGS=ddd$minAlkTDI5NGS)
+    maxAlk <- switch(metric, TDI3=ddd$maxAlkTDI3, TDI4=ddd$maxAlkTDI4, TDI5LM=ddd$maxAlkTDI5LM, TDI5NGS=ddd$maxAlkTDI5NGS)
     mult_Factor <- ddd$TDI_Norm_Factor[metric]
     if (!("ALKALINITY" %in% toupper(colnames(header))))
       header$ALKALINITY <- NA

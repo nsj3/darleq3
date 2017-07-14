@@ -17,7 +17,7 @@
 
 .errMessage <- function(txt, verbose) {
   if (verbose)
-    stop(txt, call.=FALSE)
+    stop(txt, cll.=FALSE)
   else
     simpleError(txt)
 }

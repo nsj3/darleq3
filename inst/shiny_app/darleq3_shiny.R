@@ -6,13 +6,22 @@ suppressPackageStartupMessages(library(mgcv))
 
 header <- dashboardHeader(title = paste0("DARLEQ3 for diatom-based water quality assessment, version ", utils::packageDescription("darleq3", fields="Version")), titleWidth=750)
 
+email <- tags$html( tags$body( a(href="mailto:Stephen.Juggins@ncl.ac.uk")))
+
 D_ui <- dashboardPage(header, dashboardSidebar(disable = TRUE),
   dashboardBody(
+    tags$head(tags$style(HTML('.skin-blue .main-header .logo {
+                              background-color: #3c8dbc;
+                              text-align: left; }
+                              .skin-blue .main-header .logo:hover {
+                              background-color: #3c8dbc; } '))),
+
     # Boxes need to be put in a row (or column)
     fluidRow(shinyjs::useShinyjs(),
       column(width=4,
         box(fileInput("fn", "Select input file:", accept=c(".xlsx", ".xls"), width="100%"), width=200),
-        box(selectInput("sheet", "Select worksheet:", ""), width=200),
+        box(verbatimTextOutput("message1"),
+            selectInput("sheet", "Select worksheet:", ""), width=200),
         box(disabled(actionButton("importButton", "Import data")), width="80%"),
         box(radioButtons("metric", "Select metric:", c(`TDI for LM`="TDILM", `TDI for NGS`="TDINGS", `LTDI for LM`="LTDILM", `DAM for LM`="DAMLM")), width=100),
         box(disabled(actionButton("calculateButton", "Calculate!")), width="80%")
@@ -20,7 +29,8 @@ D_ui <- dashboardPage(header, dashboardSidebar(disable = TRUE),
       column(width=8,
         box(verbatimTextOutput("table1"), width=900, title="Data summary", status="primary"),
         box(verbatimTextOutput("table2"), width=900, title="Results summary", status="primary"),
-        box(downloadButton("downloadResults", "Download results"), width="80%")
+        box(downloadButton("downloadResults", "Download results"), width="80%"),
+        box(p("This is a test version of DARLEQ3"), "Please email comments, bug reports etc to ", a("Stephen.Juggins@ncl.ac.uk", href="mailto:Stephen.Juggins@ncl.ac.uk"), width="80%")
       )
     )
   )
@@ -38,16 +48,17 @@ summarise_data <- function(fn, sheet, data) {
     nsam <- nrow(darleq_data$diatom_data)
     nsp <- ncol(darleq_data$diatom_data)
     p <- capture.output(print.DARLEQ_DATA(darleq_data))
-    paste(p, collapse="\n")
+    return(paste(p, collapse="\n"))
 #    paste("File name: ", fn, "\n\rSheet:", sheet, "\n\nNumber of samples: ", nsam, "\nNumber of taxa: ", nsp )
   } else {
-    paste("Select worksheet and click import data...")
+    return("")
   }
 }
 
 D_server <- function(input, output, session) {
   outFile <- ""
   output$table1 <- renderText(summarise_data(fn, sheet, darleq_data))
+  output$messagebox <- renderText(paste0("This is a test version of DARLEQ3\nPlease send comments, bugs reports etc. to ", email))
   res <- NULL
   observeEvent(input$sheet, {
     darleq_data <<- NULL
@@ -76,24 +87,27 @@ D_server <- function(input, output, session) {
         file.remove(fn2)
       file.rename(input$fn$datapath, fn2)
       fn <<- fn1
+      output$table2 <- renderText("")
+      res <<- NULL
+      sheet <<- ""
+      darleq_data <<- NULL
       sheets.nms <<- tryCatch(get_Sheets(fn2), error=function(e) return (e))
       if (inherits(sheets.nms, "error")) {
-        output$table1 <- renderText(sheets.nms$message, quoted=TRUE)
-        sheet <<- ""
-        darleq_data <<- NULL
+        updateSelectInput(session, "sheet", choices="")
+        output$message1 <- renderText(paste0("Cannot open Excel file.\nReason: ", sheets.nms$message), quoted=TRUE)
         fn1 <- input$fn$name
+        sheets.nms <<- ""
+        output$table1 <- renderText("")
+        shinyjs::disable("importButton")
+        shinyjs::disable("downloadResults")
         return()
       }
-      updateSelectInput(session, "sheet", choices=sheets.nms)
       sheet <<- input$sheet
       if (nchar(input$sheet) > 0) {
         shinyjs::enable("importButton")
-      } else {
-        shinyjs::disable("importButton")
-        shinyjs::disable("downloadResults")
-        res <<- NULL
-        output$table2 <- renderText("")
       }
+      output$message1 <- renderText("Select worksheet and click import data...")
+      updateSelectInput(session, "sheet", choices=sheets.nms)
     }
   }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
@@ -105,7 +119,7 @@ D_server <- function(input, output, session) {
       fn_display <<- fn
       darleq_data <<- tryCatch(read_DARLEQ(fn2, sheet=sheet), error=function(e) return(e))
       if (inherits(darleq_data, "error")) {
-        output$table1 <- renderText(darleq_data$message, quoted=TRUE)
+        output$table1 <- renderText(paste0("Cannot import data\nReason: ", darleq_data$message), quoted=TRUE)
         darleq_data <<- NULL
         outFile <<- ""
         sheet <<- ""
@@ -165,7 +179,7 @@ D_server <- function(input, output, session) {
     content <- function(file) {
       retval <- tryCatch(save_darleq3(res, file, fn=fn, sheet=sheet, FALSE))
       if (inherits(retval, "error")) {
-        output$table1 <- renderText(res$message)
+        output$table2 <- renderText(res$message, quoted=TRUE)
         return()
       }
     },
