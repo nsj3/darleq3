@@ -22,15 +22,18 @@ D_ui <- dashboardPage(header, dashboardSidebar(disable = TRUE),
         box(fileInput("fn", "Select input file:", accept=c(".xlsx", ".xls"), width="100%"), width=200),
         box(verbatimTextOutput("message1"),
             selectInput("sheet", "Select worksheet:", ""), width=200),
-        box(disabled(actionButton("importButton", "Import data")), width="80%"),
+        box(actionButton("importButton", "Import data"), width="80%"),
         box(radioButtons("metric", "Select metric:", c(`TDI for LM`="TDILM", `TDI for NGS`="TDINGS", `LTDI for LM`="LTDILM", `DAM for LM`="DAMLM")), width=100),
-        box(disabled(actionButton("calculateButton", "Calculate!")), width="80%")
+        box(actionButton("calculateButton", "Calculate!"), width="80%")
       ),
       column(width=8,
         box(verbatimTextOutput("table1"), width=900, title="Data summary", status="primary"),
         box(verbatimTextOutput("table2"), width=900, title="Results summary", status="primary"),
         box(downloadButton("downloadResults", "Download results"), width="80%"),
-        box(p("This is a test version of DARLEQ3"), "Please email comments, bug reports etc to ", a("Stephen.Juggins@ncl.ac.uk", href="mailto:Stephen.Juggins@ncl.ac.uk"), width="80%")
+        box(p(paste0("This is a test version of DARLEQ3 (Version ",
+                     utils::packageDescription("darleq3", fields="Version"), "; Date ",
+                     utils::packageDescription("darleq3", fields="Date"),")")),
+            "Please email comments, bug reports etc to ", a("Stephen.Juggins@ncl.ac.uk", href="mailto:Stephen.Juggins@ncl.ac.uk"), width="80%")
       )
     )
   )
@@ -58,11 +61,10 @@ summarise_data <- function(fn, sheet, data) {
 D_server <- function(input, output, session) {
   outFile <- ""
   output$table1 <- renderText(summarise_data(fn, sheet, darleq_data))
-  output$messagebox <- renderText(paste0("This is a test version of DARLEQ3 (Version ",
-                                         utils::packageDescription("darleq3", fields="Version"), "; Date ",
-                                         utils::packageDescription("darleq3", fields="Date"),
-                                         ")\nPlease send comments, bugs reports etc. to ", email))
   res <- NULL
+  shinyjs::disable("downloadResults")
+  shinyjs::disable("calculateButton")
+  shinyjs::disable("importButton")
   observeEvent(input$sheet, {
     darleq_data <<- NULL
     sheet <<- ""
