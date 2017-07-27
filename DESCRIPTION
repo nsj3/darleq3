@@ -1,7 +1,8 @@
 Package: darleq3
 Type: Package
 Title: Diatom-based water quality indices
-Version: 0.5.1
+Version: 0.6.1
+Date: 2017-07-26
 Author: Steve Juggins
 Maintainer: Steve Juggins <Stephen.Juggins@ncl.ac.uk>
 Description: Diatom-based water quality indices.
@@ -11,3 +12,7 @@ Encoding: UTF-8
 LazyData: true
 BinaryFiles: zip.exe
 RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr

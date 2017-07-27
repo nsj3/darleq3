@@ -1,10 +1,27 @@
 #' Calculate EQRs and WFD status classes from diatom metric and sample environmental data
 #'
-#' @param x An object of class \code{DIATOM_METRIC}, usually the output from function \code{\link{calc_Metric}}.
-#' @param header Data frame containing sample and site environmental information for claculating the expected value of the metric.
+#' @param x an object of class \code{DIATOM_METRIC}, usually the output from function \code{\link{calc_Metric}}.
+#' @param header data frame containing sample and site environmental information for calculating the expected value of the metric.
 #' @return A object of class \code{DIATOM_EQR}, a list with the following named elements:
+#' \item{EQR}{data frame containing, for each sample, sample codes, water chemistry data and other columns from the header in original Excel file, metric and summary information from function \code{calc_Metric}, expected EQRs (eEQR), calculated EQRs, predicted WFD class, percentage diatoms in diagnostic ecological groups, and a flag to indicate missing or out of range environmental data.}
+#' \item{Uncertainty}{data frame containing, for each site, mean EQRS, predicted WFD class, and confidence of class (CoC) for each WFD class and HG/MPB boundary (CoCCHG, COCMPB), and risk of misclassification for the predicted class (ROM) and for the G/M boundary (ROM_GM)}.
 #'
 #' @author Steve Juggins \email{Stephen.Juggins@@ncl.ac.uk}
+#'
+#' @references Kelly, M., S. Juggins, R. Guthrie, S. Pritchard, J. Jamieson, B. Rippey, H. Hirst, and M. Yallop, Assessment of ecological status in UK rivers using diatoms. \emph{Freshwater Biology}, 2008. 403-422.
+#' @references Juggins, S., M. Kelly, T. Allott, M. Kelly-Quinn, and D. Monteith, A Water Framework Directive-compatible metric for assessing acidification in UK and Irish rivers using diatoms. \emph{Science of The Total Environment}, 2016. 671-678.
+#' @references Bennion, H., M.G. Kelly, S. Juggins, M.L. Yallop, A. Burgess, J. Jamieson, and J. Krokowski, Assessment of ecological status in UK lakes using benthic diatoms. \emph{Freshwater Science}, 2014. 639-654.
+#'
+#' @examples
+#' fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+#' d <- read_DARLEQ(fn, "Rivers TDI Test Data")
+#' x <- calc_Metric(d$diatom_data, metric="TDI4")
+#' eqr <- calc_EQR(x, d$header)
+#' head(eqr$EQR)
+#' head(eqr$Uncertainty)
+#'
+#' @export calc_EQR
+#'
 
 calc_EQR <- function(x, header) {
   metric.codes <- darleq3::darleq3_data$metric.codes
@@ -14,7 +31,7 @@ calc_EQR <- function(x, header) {
 
   if (nrow(x$Metric) != nrow(header))
     simpleError("Diatom and environmental data have different number of samples")
-  metric <- x$Metric_Name
+  metric <- x$Metric_Code
   method <- match(metric, metric.codes)
   if(is.na(method))
     stop("Invalid diatom metric")
@@ -52,7 +69,7 @@ calc_EQR <- function(x, header) {
     if (metric=="TDI3") {
       comments$missingDate <- is.na(env$SAMPLE_DATE)
       SAMPLE_DATE <- rep(as.Date("01/01/2000", format="%d/%m/%Y"), nrow(env))
-      SAMPLE_DATE[!is.na(env$SAMPLE_DATE)] <- na.omit(env$SAMPLE_DATE)
+      SAMPLE_DATE[!is.na(env$SAMPLE_DATE)] <- stats::na.omit(env$SAMPLE_DATE)
       season <- as.numeric(format(SAMPLE_DATE, "%m"))
       season <- ifelse(season > 6, 1, 0)
       lAlk <- log10(env$ALKALINITY)
@@ -80,22 +97,22 @@ calc_EQR <- function(x, header) {
     medians <- switch(metric, LTDI1=ddd$medianTDI_LTDI1, LTDI2=ddd$medianTDI_LTDI2)
     mt <- grep("TYPE", toupper(colnames(header)))
     if (length(mt)==0)
-      header$TYPE <- NA
-    mt <- grep("TYPE", toupper(colnames(header)))
+      header$lake_TYPE <- NA
+    mt <- grep("lake_TYPE", toupper(colnames(header)))
     env <- header[, mt[1], drop=FALSE]
-    colnames(env) <- "TYPE"
-    comments$missingType <- is.na(env$TYPE)
+    colnames(env) <- "lake_TYPE"
+    comments$missingType <- is.na(env$lake_TYPE)
     comments[comments$missingType, 2] <- paste0(comments[comments$missingType, 2], "Missing lake Type, value set to ", ddd$defaultsLakeType)
 
-    env$TYPE[is.na(env$TYPE)] <- ddd$defaultLakeType
-    eTDI <- apply(env[, "TYPE", drop=FALSE], 1, function(x) switch(x, HA=medians[1], MA=medians[2], LA=medians[3]))
+    env$lake_TYPE[is.na(env$lake_TYPE)] <- ddd$defaultLakeType
+    eTDI <- apply(env[, "lake_TYPE", drop=FALSE], 1, function(x) switch(x, HA=medians[1], MA=medians[2], LA=medians[3]))
     EQR <- (100 - x$Metric) / (100 - eTDI)
     EQR[EQR > 1.0] <- 1.0
-    class <- calc_WFDClass(EQR[, 1], metric, env$TYPE)
+    class <- calc_WFDClass(EQR[, 1], metric, env$lake_TYPE)
     if (!is.null(SiteID)) {
-      mean_EQR <- calc_SiteEQR(EQR, SiteID, env$TYPE)
-      class.site <- calc_WFDClass(mean_EQR$EQR, metric, mean_EQR$TYPE)
-      uncert <- calc_Uncertainty(mean_EQR, metric, mean_EQR$TYPE)
+      mean_EQR <- calc_SiteEQR(EQR, SiteID, env$lake_TYPE)
+      class.site <- calc_WFDClass(mean_EQR$EQR, metric, mean_EQR$lake_TYPE)
+      uncert <- calc_Uncertainty(mean_EQR, metric, mean_EQR$lake_TYPE)
     }
   } else if (metric2 == "DAM") {
     minCa <- ddd$minCa
@@ -154,109 +171,3 @@ calc_EQR <- function(x, header) {
   res
 }
 
-calc_WFDClass <- function(EQR, metric, lake.type=NA) {
-  ddd <- darleq3::darleq3_data$defaults
-  WFD.classes <- c("High", "Good", "Moderate", "Poor", "Bad")
-  metric2 <- substring(metric, 1, 3)
-  if (metric2 == "TDI") {
-    boundaries <- switch(metric, TDI3=ddd$boundariesTDI3, TDI4=ddd$boundariesTDI4, TDI5LM=ddd$boundariesTDI5LM, TDI5NGS=ddd$boundariesTDI5NGS)
-    class <- cut(EQR, c(10, boundaries, 0), labels=rev(WFD.classes))
-  } else if (metric2=="LTD") {
-    HA_boundaries <- switch(metric, LTDI1=ddd$boundariesLTDI1_HA, LTDI2=ddd$boundariesLTDI2_HA)
-    MA_boundaries <- switch(metric, LTDI1=ddd$boundariesLTDI1_MA, LTDI2=ddd$boundariesLTDI2_MA)
-    LA_boundaries <- switch(metric, LTDI1=ddd$boundariesLTDI1_LA, LTDI2=ddd$boundariesLTDI2_LA)
-    class <- vector(mode="character", length=length(EQR))
-    class[lake.type=="HA"] <- as.character(cut(EQR[lake.type=="HA"], c(10, HA_boundaries, 0), labels=rev(WFD.classes)))
-    class[lake.type=="MA"] <- as.character(cut(EQR[lake.type=="MA"], c(10, MA_boundaries, 0), labels=rev(WFD.classes)))
-    class[lake.type=="LA"] <- as.character(cut(EQR[lake.type=="LA"], c(10, LA_boundaries, 0), labels=rev(WFD.classes)))
-  } else if (metric2=="DAM") {
-    boundaries <- ddd$boundariesDAM
-    class <- cut(EQR, c(10, boundaries, 0), labels=rev(WFD.classes))
-  }
-  class
-}
-
-calc_SiteEQR <- function(EQR, SiteID, Type=NULL) {
-  mean_EQR <- aggregate(EQR, list(SiteID=SiteID), function(x) round(mean(x, na.rm=TRUE), 2) )
-  N_EQR <- aggregate(EQR, list(SiteID=SiteID), function(x) sum(!is.na(x)) )
-  res <- data.frame(SiteID=N_EQR[, 1], N=N_EQR[, 2], EQR=mean_EQR[, 2])
-  if (!is.null(Type)) {
-    Type2 <- aggregate(Type, list(SiteID=SiteID), function(x) return(x[1]) )
-    res$TYPE <- Type2[, 2]
-  }
-  SiteID2 <- unique(SiteID)
-  mt <- match(SiteID2, res$SiteID)
-  res[mt, ]
-}
-
-#summary.DARLEQ_EQR <- function(x, ...) {
-#  cat(paste("No. samples:", nrow(x$EQR), "\n"))
-#  if (!is.null(x$Uncertainty)) {
-#     cat(paste("No. sites:", ncol(x$Uncertainty), "\n"))
-#  } else {
-#    cat("Site ID not found, uncertainty not calculated\n")
-#  }
-#  cat(paste("Metric:", x$metric, "\n"))
-#}
-
-calc_Uncertainty <- function(x, metric, lake_Type=NULL) {
-  ddd <- darleq3::darleq3_data$defaults
-  if (substring(metric, 1, 3) == "LTD") {
-    HA_boundaries <- switch(metric, LTDI1=ddd$boundariesLTDI1_HA, LTDI2=ddd$boundariesLTDI2_HA)
-    MA_boundaries <- switch(metric, LTDI1=ddd$boundariesLTDI1_MA, LTDI2=ddd$boundariesLTDI2_MA)
-    LA_boundaries <- switch(metric, LTDI1=ddd$boundariesLTDI1_LA, LTDI2=ddd$boundariesLTDI2_LA)
-    nsam <- length(x$EQR)
-    HG <- rep(HA_boundaries["HG"], nsam); HG[lake_Type=="MA"] <- MA_boundaries["HG"]; HG[lake_Type=="LA"] <- LA_boundaries["HG"]
-    GM <- rep(HA_boundaries["GM"], nsam); GM[lake_Type=="MA"] <- MA_boundaries["GM"]; GM[lake_Type=="LA"] <- LA_boundaries["GM"]
-    MP <- rep(HA_boundaries["HG"], nsam); MP[lake_Type=="MA"] <- MA_boundaries["MP"]; MP[lake_Type=="LA"] <- LA_boundaries["MP"]
-    PB <- rep(HA_boundaries["HG"], nsam); PB[lake_Type=="MA"] <- MA_boundaries["PB"]; PB[lake_Type=="LA"] <- LA_boundaries["PB"]
-    A0 <- darleq3_data$defaults$CoC_LTDI["A0"]
-    B1 <- darleq3_data$defaults$CoC_LTDI["B1"]
-    B2 <- darleq3_data$defaults$CoC_LTDI["B2"]
-    Power <- darleq3_data$defaults$CoC_LTDI["Power"]
-  } else {
-    boundaries <- switch(metric, TDI3=ddd$boundariesTDI3, TDI4=ddd$boundariesTDI4, TDI5LM=ddd$boundariesTDI5LM, TDI5NGS=ddd$boundariesTDI5NGS)
-    HG <- boundaries["HG"]
-    GM <- boundaries["GM"]
-    MP <- boundaries["MP"]
-    PB <- boundaries["PB"]
-    A0 <- darleq3_data$defaults$CoC_TDI["A0"]
-    B1 <- darleq3_data$defaults$CoC_TDI["B1"]
-    B2 <- darleq3_data$defaults$CoC_TDI["B2"]
-    Power <- darleq3_data$defaults$CoC_TDI["Power"]
-  }
-  EQR <- x$EQR
-  EQR[EQR > 0.999] <- 0.999
-  nSam <- x$N
-  stdev <- (A0 + B1*EQR + B2 * (EQR^Power)) / sqrt(nSam)
-  TMean <- log(EQR / (1-EQR))
-  Tstdev <- stdev/(EQR * (1-EQR))
-  if (substring(metric, 1, 3) == "LTD") {
-    Tstdev[Tstdev > 1.5] <- 1.5
-  } else {
-    Tstdev[Tstdev > 1.0] <- 1.0
-  }
-  tHG <- log(HG/(1-HG))
-  tGM <- log(GM/(1-GM))
-  tMP <- log(MP/(1-MP))
-  tPB <- log(PB/(1-PB))
-  N1 <- pnorm((tPB-TMean) / Tstdev)
-  N2 <- pnorm((tMP-TMean) / Tstdev)
-  N3 <- pnorm((tGM-TMean) / Tstdev)
-  N4 <- pnorm((tHG-TMean) / Tstdev)
-  CoCB <- 100 * N1
-  CoCP <- 100 * (N2 - N1)
-  CoCM <- 100 * (N3 - N2)
-  CoCG <- 100 * (N4 - N3)
-  CoCH <- 100 * (1 - N4)
-  ROM <- 100 - CoCH
-  ROM[EQR <= PB] <- 100 - CoCB[EQR <= PB]
-  ROM[EQR <= MP] <- 100 - CoCP[EQR <= MP]
-  ROM[EQR <= GM] <- 100 - CoCM[EQR <= GM]
-  ROM[EQR <= HG] <- 100 - CoCG[EQR <= HG]
-  CoCHG <- CoCH + CoCG
-  CoCMPB <- CoCP + CoCB + CoCM
-  ROM_GM <- 100-CoCHG
-  ROM_GM[EQR <= GM] <- 100-CoCMPB[EQR <= GM]
-  round(data.frame(CoCH=CoCH, CoCG=CoCG, CoCM=CoCM, CoCP=CoCP, CoCB=CoCB, ROM=ROM, CoCHG=CoCHG, CoCMPB=CoCMPB, RMO_GM=ROM_GM), 2)
-}

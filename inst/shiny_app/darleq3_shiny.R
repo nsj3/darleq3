@@ -4,7 +4,7 @@ suppressPackageStartupMessages(library(shinydashboard))
 suppressPackageStartupMessages(library(darleq3))
 suppressPackageStartupMessages(library(mgcv))
 
-header <- dashboardHeader(title = paste0("DARLEQ3 for diatom-based water quality assessment, version ", utils::packageDescription("darleq3", fields="Version")), titleWidth=750)
+header <- dashboardHeader(title = paste0("DARLEQ3 for diatom-based water quality assessment"), titleWidth=750)
 
 email <- tags$html( tags$body( a(href="mailto:Stephen.Juggins@ncl.ac.uk")))
 
@@ -47,7 +47,7 @@ summarise_data <- function(fn, sheet, data) {
   if (nchar(fn_display) > 0) {
     nsam <- nrow(darleq_data$diatom_data)
     nsp <- ncol(darleq_data$diatom_data)
-    p <- capture.output(print.DARLEQ_DATA(darleq_data))
+    p <- capture.output(print(darleq_data))
     return(paste(p, collapse="\n"))
 #    paste("File name: ", fn, "\n\rSheet:", sheet, "\n\nNumber of samples: ", nsam, "\nNumber of taxa: ", nsp )
   } else {
@@ -58,7 +58,10 @@ summarise_data <- function(fn, sheet, data) {
 D_server <- function(input, output, session) {
   outFile <- ""
   output$table1 <- renderText(summarise_data(fn, sheet, darleq_data))
-  output$messagebox <- renderText(paste0("This is a test version of DARLEQ3\nPlease send comments, bugs reports etc. to ", email))
+  output$messagebox <- renderText(paste0("This is a test version of DARLEQ3 (Version ",
+                                         utils::packageDescription("darleq3", fields="Version"), "; Date ",
+                                         utils::packageDescription("darleq3", fields="Date"),
+                                         ")\nPlease send comments, bugs reports etc. to ", email))
   res <- NULL
   observeEvent(input$sheet, {
     darleq_data <<- NULL
@@ -77,6 +80,10 @@ D_server <- function(input, output, session) {
   }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
   observeEvent(input$fn$name, {
+    get_Sheets <- function(file) {
+      sheets <- readxl::excel_sheets(file)
+      sheets
+    }
     fn1 <- input$fn$name
     if (is.null(fn1))
       return(NULL)
@@ -177,7 +184,7 @@ D_server <- function(input, output, session) {
       outFile
     },
     content <- function(file) {
-      retval <- tryCatch(save_darleq3(res, file, fn=fn, sheet=sheet, FALSE))
+      retval <- tryCatch(save_DARLEQ(res, file, fn=fn, sheet=sheet, FALSE))
       if (inherits(retval, "error")) {
         output$table2 <- renderText(res$message, quoted=TRUE)
         return()

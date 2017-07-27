@@ -1,0 +1,19 @@
+/* Whole document: */
+body{
+  font-family: Calibri;
+  font-size: 12pt;
+}
+
+h1 {
+  font-size: 18pt;
+}
+
+.table {
+  font-family: Calibri;
+    width: auto;
+   font-size: 11pt;
+}
+
+.smalltable .table {
+    font-size: 10pt;
+}

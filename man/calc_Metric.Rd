@@ -4,20 +4,53 @@
 \alias{calc_Metric}
 \title{Calculate water quality metrics from diatom data}
 \usage{
-calc_Metric(x, metric, dictionary = darleq3::darleq3_taxa, verbose = TRUE)
+calc_Metric(x, metric = "TDI5LM", dictionary = darleq3::darleq3_taxa,
+  verbose = TRUE)
 }
 \arguments{
-\item{x}{Data frame of diatom counts or relative abundance data}
+\item{x}{data frame of diatom counts or relative abundance data}
 
-\item{metric}{Diatom metric, one of "TDI3", "TDI4", "TDI5LM", "TDI5NGS", "LTDI1", "LTDI2", "DAM".}
+\item{metric}{diatom metric, one of "TDI3", "TDI4", "TDI5LM", "TDI5NGS", "LTDI1", "LTDI2", or "DAM".  Defaults to "TDI5LM".}
 
-\item{dictionary}{Diatom dictionary, a data frame with diatom taxon codes and indicator values for different metrics.  Defaults to the built-in DARLEQ3 dictionary.}
+\item{dictionary}{diatom dictionary, a data frame with diatom taxon codes and indicator values for different metrics.  Defaults to the built-in DARLEQ3 dictionary.}
+
+\item{verbose}{logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.}
 }
 \value{
 A object of class \code{DIATOM_METRIC}, a list with the following named elements:
+\item{Metric_Code}{metric code}
+\item{CodingID}{taxon coding type - the column name containing taxon codes in the taxon dictionary}
+\item{Metric}{data frame with one column listing the value of the metric for each sample}
+\item{Summary}{data frame summaring the input data with the following columns:}
+\itemize{
+\item{Total_count: total diatom count for each sample}
+\item{Percent_in_Metric, percentage of count included in metric calculations}
+\item{N_Metric, Number of taxa included in metric calculations}
+\item{N2_Metric, Hill's N2 effective number of taxa included in metric calculations}
+\item{Max_Metric, maximum abundance of any taxon included in metric calculations}
+}
+\item{EcolGroup}{data frame containing a list of the percentage of motile, organic tolerant, planktic and saline tolerant taxa in each sample}
+\item{Job_Summary}{list containing elements giving the total number of samples, number of samples with data, total number of taxa, number of taxa with occurrences, diatom metric and list of taxa that do not have a metric indicator value in the taxon dictionary}
 }
 \description{
 Calculate water quality metrics from diatom data
+}
+\details{
+\code{calc_Metric} takes as arguments a data frame of diatom counts or relative abundances, a metric code and a "dictionary" of diatom metric indicator values. The function will like the diatom taxon codes from the column names in the diatom data to those listed in the dictionary and calculate the relevant metric, along with some useful summary statistics.Diatoms data should be coded with either NBS codes or 6-character DiatCode codes. See \code{\link{darleq3_taxa}} for the current DARLEQ3 dictionary.
+}
+\examples{
+fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+d <- read_DARLEQ(fn, "Rivers TDI Test Data")
+x <- calc_Metric(d$diatom_data, metric="TDI4")
+head(x$Metric)
+
+}
+\references{
+Kelly, M., S. Juggins, R. Guthrie, S. Pritchard, J. Jamieson, B. Rippey, H. Hirst, and M. Yallop, Assessment of ecological status in UK rivers using diatoms. \emph{Freshwater Biology}, 2008. 403-422.
+
+Juggins, S., M. Kelly, T. Allott, M. Kelly-Quinn, and D. Monteith, A Water Framework Directive-compatible metric for assessing acidification in UK and Irish rivers using diatoms. \emph{Science of The Total Environment}, 2016. 671-678.
+
+Bennion, H., M.G. Kelly, S. Juggins, M.L. Yallop, A. Burgess, J. Jamieson, and J. Krokowski, Assessment of ecological status in UK lakes using benthic diatoms. \emph{Freshwater Science}, 2014. 639-654.
 }
 \author{
 Steve Juggins \email{Stephen.Juggins@ncl.ac.uk}
