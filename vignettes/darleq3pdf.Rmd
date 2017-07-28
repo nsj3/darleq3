@@ -1,0 +1,16 @@
+---
+title: "darleq3: User Guide"
+author: "Steve Juggins and Martyn Kelly"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::pdf_document
+---
+<!--
+  %\VignetteIndexEntry{`darleq3: User Guide PDF Version`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+-->
+
+
+```{r child = 'darleq3.Rmd'}
+```

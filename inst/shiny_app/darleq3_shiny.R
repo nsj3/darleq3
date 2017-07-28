@@ -33,7 +33,8 @@ D_ui <- dashboardPage(header, dashboardSidebar(disable = TRUE),
         box(p(paste0("This is a test version of DARLEQ3 (Version ",
                      utils::packageDescription("darleq3", fields="Version"), "; Date ",
                      utils::packageDescription("darleq3", fields="Date"),")")),
-            "Please email comments, bug reports etc to ", a("Stephen.Juggins@ncl.ac.uk", href="mailto:Stephen.Juggins@ncl.ac.uk"), width="80%")
+            "Please email comments, bug reports etc to ", a("Stephen.Juggins@ncl.ac.uk", href="mailto:Stephen.Juggins@ncl.ac.uk"), width="80%"),
+        box(actionButton("userguideButton", "User Guide"), actionButton("interpretButton", "NGS data interpretation guide"), width="80%")
       )
     )
   )
@@ -65,6 +66,14 @@ D_server <- function(input, output, session) {
   shinyjs::disable("downloadResults")
   shinyjs::disable("calculateButton")
   shinyjs::disable("importButton")
+  observeEvent(input$userguideButton, {
+    RShowDoc("darleq3pdf", "pdf", "darleq3")
+     }
+  )
+  observeEvent(input$interpretButton, {
+    RShowDoc("Interpreting_NGS_data", "pdf", "darleq3")
+  }
+  )
   observeEvent(input$sheet, {
     darleq_data <<- NULL
     sheet <<- ""
