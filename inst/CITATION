@@ -4,10 +4,10 @@ citHeader("To cite package 'darleq3' in publications use:")
 
 citEntry(entry="Manual",
 	title ="darleq3: Diatom-based water quality assessment",
-	author = personList(as.person("Steve Juggins")),
+	authors = personList(as.person("Steve Juggins"), as.person("Martyn Kelly")),
 	year = 2017,
 	note = paste("R package version", meta$Version),
-	textVersion =	paste("Juggins, S. (2017) ",
+	textVersion =	paste("Juggins, S. and Kelly, M.G. (2017) ",
   "darleq3: Diatom-based water quality assessment, R package version (",
 	meta$Version, ")."," (http://cran.r-project.org/package=darleq3).", sep="")
 )

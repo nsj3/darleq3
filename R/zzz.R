@@ -3,5 +3,5 @@
     pth <- system.file("zip/zip.exe", package="darleq3")
     Sys.setenv("R_ZIPCMD" = pth)
   }
-  packageStartupMessage("This is darleq3 demo version ", utils::packageDescription("darleq3", fields="Version"), appendLF = TRUE)
+  packageStartupMessage("This is darleq3 version ", utils::packageDescription("darleq3", fields="Version"), "\ntype ?darleq3 for help.", appendLF = TRUE)
 }
