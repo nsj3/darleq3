@@ -35,7 +35,7 @@ D_ui <- dashboardPage(header, dashboardSidebar(disable = TRUE),
                      utils::packageDescription("darleq3", fields="Date"),")")),
             "Please email comments, bug reports etc to ", a("Stephen.Juggins@ncl.ac.uk", href="mailto:Stephen.Juggins@ncl.ac.uk"), width="80%"),
         helpText(p(a("darleq3 User Guide", target="_blank", href="darleq3UserGuidePDF.pdf")),
-            a("Guide to interpreting TDI5 NGS data", target="_blank", href="interpreting_NGS_data.pdf"),
+            a("Guide to interpreting TDI5 NGS data", target="_blank", href="Interpreting_NGS_data.pdf"),
             width="80%")
       )
     )
