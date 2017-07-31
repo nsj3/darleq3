@@ -5,8 +5,11 @@
 #' Additonal help on using the package and interpreting the results can be found in the following vignettes:
 #'
 #' [darleq3 User Guide (html version)](../doc/darleq3UserGuide.html)
+#'
 #' [darleq3 User Guide (pdf version)](../doc/darleq3UserGuidePDF.pdf)
+#'
 #' [darleq3 Manual (pdf version)](../doc/darleq3.pdf)
+#'
 #' [Guide to interpreting TDI5 NGS data (pdf version)](../doc/interpreting_NGS_data.pdf)
 #'
 #'
