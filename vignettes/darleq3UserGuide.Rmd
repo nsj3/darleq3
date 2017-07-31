@@ -73,7 +73,7 @@ shell.exec(fn)
 
 https://nsj3.shinyapps.io/darleq3/  
 
-https://gpsgpuserver.ncl.ac.uk/darleq3/
+https://gpsgpuserver.ncl.ac.uk:3838/darleq3/
 
 Both these hosts have been set up for testing purposes and may change.  There may be problems running the app on the second server listed from within the EA.  
 
