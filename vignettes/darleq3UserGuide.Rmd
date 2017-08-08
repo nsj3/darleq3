@@ -1,5 +1,5 @@
 ---
-title: 'darleq3: User Guide Version (0.6.3)'
+title: 'darleq3: User Guide Version (0.6.4)'
 author: "Steve Juggins and Martyn Kelly"
 date: '`r Sys.Date()`'
 output:
