@@ -6,7 +6,7 @@
 #'
 #' @details This is a wrapper function to \code{\link{calc_Metric}} and \code{\link{calc_EQR}} that calculates multiple metrics, EQRs and WFD classes.  The output can be saved to an Excel file using function \code{\link{save_DARLEQ}}.
 #'
-#' @return a list with a named element for each metric calculated.Each element in the list is itself a list containing the output from \code{\link{calc_EQR}} (ie. the sample and site metrics, EQRs and WFD classes), and the job summary produced by \code{\link{calc_Metric}}.
+#' @return A list with a named element for each metric calculated. Each element in the list is itself a list containing the output from \code{\link{calc_EQR}} (ie. the sample and site metrics, EQRs and WFD classes), and the job summary produced by \code{\link{calc_Metric}}.
 #'
 #' @author Steve Juggins \email{Stephen.Juggins@@ncl.ac.uk}
 #' @references Kelly, M., S. Juggins, R. Guthrie, S. Pritchard, J. Jamieson, B. Rippey, H. Hirst, and M. Yallop, Assessment of ecological status in UK rivers using diatoms. \emph{Freshwater Biology}, 2008. 403-422.

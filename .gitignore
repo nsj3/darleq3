@@ -5,3 +5,4 @@
 packrat/lib*/
 rsconnect/
 inst/doc
+vignettes/Cache

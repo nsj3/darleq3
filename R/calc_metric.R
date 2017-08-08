@@ -81,7 +81,7 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
   Job_Summary[[1]] <- length(totals)
   Job_Summary[[2]] <- sum(totals > 0)
   Job_Summary[[3]] <- ncol(diat.pc)
-  diat.pc <- diat.pc[, colSums(diat.pc) > 0]
+  diat.pc <- diat.pc[, colSums(diat.pc) > 0, drop=FALSE]
   Job_Summary[[4]] <- ncol(diat.pc)
   Job_Summary[[5]] <- metric
   names(Job_Summary) <- c("N_samples", "N_samples_gt_zero", "N_taxa", "N_taxa_gt_zero", "Metric")
@@ -93,7 +93,7 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
   names(tdi.sp.all) <- dictionary[stats::na.omit(mt), codingID]
   tdi.sp <- stats::na.omit(tdi.sp.all)
   tdi.sp.nms <- names(tdi.sp)
-  diat.pc2 <- diat.pc[, tdi.sp.nms]
+  diat.pc2 <- diat.pc[, tdi.sp.nms, drop=FALSE]
 
   planktic <- as.logical(dictionary[stats::na.omit(mt), "Planktic"])
   saline <- as.logical(dictionary[stats::na.omit(mt), "Saline"])
@@ -109,19 +109,19 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
   organic_T <- names(tdi.sp.all)[organic]
   nsam <- nrow(diat.pc)
   if (any(planktic))
-     pc.planktic <- rowSums(diat.pc[, planktic_T])
+     pc.planktic <- rowSums(diat.pc[, planktic_T, drop=FALSE])
   else
     pc.planktic <- rep(0.0, nsam)
   if (any(saline))
-    pc.saline <- rowSums(diat.pc[, saline_T])
+    pc.saline <- rowSums(diat.pc[, saline_T, drop=FALSE])
   else
     pc.saline <- rep(0.0, nsam)
   if (any(motile))
-     pc.motile <- rowSums(diat.pc[, motile_T])
+     pc.motile <- rowSums(diat.pc[, motile_T, drop=FALSE])
   else
      pc.motile <- rep(0.0, nsam)
   if (any(organic))
-    pc.organic <- rowSums(diat.pc[, organic_T])
+    pc.organic <- rowSums(diat.pc[, organic_T, drop=FALSE])
   else
     pc.organic <- rep(0.0, nsam)
 

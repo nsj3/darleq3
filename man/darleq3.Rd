@@ -4,9 +4,19 @@
 \name{darleq3}
 \alias{darleq3}
 \alias{darleq3-package}
-\title{darleq3: Diatom Assessment of River and Lake Ecological Quality}
+\title{darleq3: Diatom Assessment of River and Lake Ecological Quality (Version 0.6.4)}
 \description{
-darleq3 is an R package for the assessment of river and lake ecological status using diatom data obtained by light microscopy (LM) or Next Generation Sequencing (NGS). The package contains functions for importing data from Excel worksheets, calculating various water quality metrics, EQRs and Water Framework Directive quality classes
+darleq3 is an R package for the assessment of river and lake ecological status using diatom data obtained by light microscopy (LM) or Next Generation Sequencing (NGS). The package contains functions for importing data from Excel worksheets, calculating various water quality metrics, EQRs and Water Framework Directive quality classes.
+
+Additonal help on using the package and interpreting the results can be found in the following vignettes:
+
+\href{../doc/darleq3UserGuide.html}{darleq3 User Guide (html version)}
+
+\href{../doc/darleq3UserGuidePDF.pdf}{darleq3 User Guide (pdf version)}
+
+\href{../doc/darleq3.pdf}{darleq3 Manual (pdf version)}
+
+\href{../doc/interpreting_NGS_data.pdf}{Guide to interpreting TDI5 NGS data (pdf version)}
 }
 \section{darleq3 functions}{
 

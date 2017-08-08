@@ -27,7 +27,7 @@
 #' * Rows 5+: Further option sample descriptors such as river name, reach name etc. These data are not used by the program but will be reproduced in the output.
 #' Note that the second column of the header information must be left blank.
 #'
-#' \if{html}{\figure{DARLEQ_River_Data.png}{options: width="60\%" alt=""}}
+#' \if{html}{\figure{DARLEQRiverData.png}{options: width="60\%" alt=""}}
 #' \if{latex}{\figure{DARLEQRiverData.png}{options: width=9cm}}
 #'
 #' ***Figure 1: Example format for river diatom samples***

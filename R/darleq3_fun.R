@@ -3,7 +3,7 @@
 #' @param inFile Excel file name containing diatom and sample environmental data. See \code{\link{read_DARLEQ}} for acceptible formats for these data.
 #' @param  sheet name of the worksheet in the Excel file to import.
 #' @param metrics character vector of metric codes.  Currently one or more of the following: "TDI3", "TDI4", "TDI5LM" (for river LM TDI calculations), "TDI5NGS" for river NGS metric, "LTDI1", "LTDI2" for lake LM TDI metric or "DAMLM" for river diatom acidification metric.
-#' @param outFile name of Excel file to save results.  If not given the function will generate a name by concatenating "DARLEQ3_Results_" with the original filename, the sheet name and the current data.
+#' @param outFile name of Excel file to save results.  If not given the function will generate a name by concatenating "DARLEQ3_Results_" with the original filename, the sheet name and the current date.
 #' @param verbose logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.
 #'
 #' @details This is a wrapper function to \code{\link{read_DARLEQ}} \code{\link{calc_Metric_EQR}} and \code{\link{save_DARLEQ}} that imports data form an Excel file, calculates multiple metrics, EQRs and WFD classes and saves the results to another Excel file in one step.

@@ -38,7 +38,7 @@ The first four header rows are mandatory and must contain the following informat
 Note that the second column of the header information must be left blank.
 }
 
-\if{html}{\figure{DARLEQ_River_Data.png}{options: width="60\%" alt=""}}
+\if{html}{\figure{DARLEQRiverData.png}{options: width="60\%" alt=""}}
 \if{latex}{\figure{DARLEQRiverData.png}{options: width=9cm}}
 
 \emph{\strong{Figure 1: Example format for river diatom samples}}

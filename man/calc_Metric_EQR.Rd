@@ -14,7 +14,7 @@ calc_Metric_EQR(x, metrics = "TDI5LM", verbose = TRUE)
 \item{verbose}{logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.}
 }
 \value{
-a list with a named element for each metric calculated.Each element in the list is itself a list containing the output from \code{\link{calc_EQR}} (ie. the sample and site metrics, EQRs and WFD classes), and the job summary produced by \code{\link{calc_Metric}}.
+A list with a named element for each metric calculated. Each element in the list is itself a list containing the output from \code{\link{calc_EQR}} (ie. the sample and site metrics, EQRs and WFD classes), and the job summary produced by \code{\link{calc_Metric}}.
 }
 \description{
 Calculate diatom water quality metrics, EQRs and WFD class for samples, and uncertainties of site classification
