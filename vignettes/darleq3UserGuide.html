@@ -12,9 +12,9 @@
 
 <meta name="author" content="Steve Juggins and Martyn Kelly" />
 
-<meta name="date" content="2017-08-08" />
+<meta name="date" content="2017-08-10" />
 
-<title>darleq3: User Guide Version (0.6.3)</title>
+<title>darleq3: User Guide Version (0.7.0)</title>
 
 
 
@@ -68,9 +68,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">darleq3: User Guide Version (0.6.3)</h1>
+<h1 class="title toc-ignore">darleq3: User Guide Version (0.7.0)</h1>
 <h4 class="author"><em>Steve Juggins and Martyn Kelly</em></h4>
-<h4 class="date"><em>2017-08-08</em></h4>
+<h4 class="date"><em>2017-08-10</em></h4>
 
 
 
@@ -186,13 +186,13 @@ body{
 <span class="op">&gt;</span><span class="st"> </span>d &lt;-<span class="st"> </span><span class="kw">read_DARLEQ</span>(fn, <span class="st">&quot;Rivers TDI Test Data&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>results &lt;-<span class="st"> </span><span class="kw">calc_Metric_EQR</span>(d, <span class="dt">metrics=</span><span class="kw">c</span>(<span class="st">&quot;TDI4&quot;</span>, <span class="st">&quot;TDI5LM&quot;</span>))
 <span class="op">&gt;</span><span class="st"> </span><span class="kw">head</span>(results<span class="op">$</span>TDI5LM<span class="op">$</span>EQR[, <span class="dv">9</span><span class="op">:</span><span class="dv">15</span>])</code></pre></div>
-<pre><code>##        N_TDI5LM N2_TDI5LM Max_TDI5LM TDI5LM eTDI5LM EQR_TDI5LM Class_TDI5LM
-## SPR001       41     12.39      16.93  55.60   68.49       1.00         High
-## AUT001       23      3.09      51.57  70.02   68.49       0.76         Good
-## SPR002       55     13.14      20.93  70.67   69.28       0.76         Good
-## AUT002       39      7.69      26.91  66.09   69.28       0.88         High
-## SPR003       39      9.37      27.30  49.95   65.49       1.00         High
-## AUT003       32      5.87      37.14  39.66   65.49       1.00         High</code></pre>
+<pre><code>##        N_TDI5LM N2_TDI5LM Max_TDI5LM   TDI5LM  eTDI5LM EQR_TDI5LM Class_TDI5LM
+## SPR001       41     12.39      16.93 55.60483 68.49447  1.0000000         High
+## AUT001       23      3.09      51.57 70.01608 68.49447  0.7613627         Good
+## SPR002       55     13.14      20.93 70.66666 69.28261  0.7639539         Good
+## AUT002       39      7.69      26.91 66.08840 69.28261  0.8831896         High
+## SPR003       39      9.37      27.30 49.94616 65.48689  1.0000000         High
+## AUT003       32      5.87      37.14 39.65652 65.48689  1.0000000         High</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">head</span>(results<span class="op">$</span>TDI5LM<span class="op">$</span>Uncertainty)</code></pre></div>
 <pre><code>##    SiteID N  EQR WFDClass   CoCH  CoCG  CoCM  CoCP CoCB   ROM  CoCHG CoCMPB ROM_GM
 ## 43  36082 2 0.88     High  79.41 19.01  1.52  0.06 0.00 20.59  98.42   1.58   1.58
@@ -211,26 +211,26 @@ body{
 <span class="op">&gt;</span><span class="st"> </span>d &lt;-<span class="st"> </span><span class="kw">read_DARLEQ</span>(fn, <span class="st">&quot;Rivers TDI Test Data&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>x &lt;-<span class="st"> </span><span class="kw">calc_Metric</span>(d<span class="op">$</span>diatom_data, <span class="dt">metric=</span><span class="st">&quot;TDI4&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span><span class="kw">head</span>(x<span class="op">$</span>Metric)</code></pre></div>
-<pre><code>##         TDI4
-## SPR001 52.23
-## AUT001 83.44
-## SPR002 70.71
-## AUT002 67.54
-## SPR003 49.98
-## AUT003 38.46</code></pre>
+<pre><code>##            TDI4
+## SPR001 52.22581
+## AUT001 83.44051
+## SPR002 70.70833
+## AUT002 67.53959
+## SPR003 49.97693
+## AUT003 38.45844</code></pre>
 <p><code>calc_EQR</code> calculates sample and site EQRS and WFD classes, and class uncertainties from a list of sample metrics.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;example_datasets/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>d &lt;-<span class="st"> </span><span class="kw">read_DARLEQ</span>(fn, <span class="st">&quot;Rivers TDI Test Data&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>x &lt;-<span class="st"> </span><span class="kw">calc_Metric</span>(d<span class="op">$</span>diatom_data, <span class="dt">metric=</span><span class="st">&quot;TDI4&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>eqr &lt;-<span class="st"> </span><span class="kw">calc_EQR</span>(x, d<span class="op">$</span>header)
 <span class="op">&gt;</span><span class="st"> </span><span class="kw">head</span>(eqr<span class="op">$</span>EQR[, <span class="dv">9</span><span class="op">:</span><span class="dv">15</span>])</code></pre></div>
-<pre><code>##        N_TDI4 N2_TDI4 Max_TDI4  TDI4 eTDI4 EQR_TDI4 Class_TDI4
-## SPR001     41   12.39    16.93 52.23 68.49     1.00       High
-## AUT001     23    3.09    51.57 83.44 68.49     0.42   Moderate
-## SPR002     55   13.14    20.93 70.71 69.28     0.76       Good
-## AUT002     39    7.69    26.91 67.54 69.28     0.85       High
-## SPR003     39    9.37    27.30 49.98 65.49     1.00       High
-## AUT003     32    5.87    37.14 38.46 65.49     1.00       High</code></pre>
+<pre><code>##        N_TDI4 N2_TDI4 Max_TDI4     TDI4    eTDI4  EQR_TDI4 Class_TDI4
+## SPR001     41   12.39    16.93 52.22581 68.49447 1.0000000       High
+## AUT001     23    3.09    51.57 83.44051 68.49447 0.4204847   Moderate
+## SPR002     55   13.14    20.93 70.70833 69.28261 0.7628688       Good
+## AUT002     39    7.69    26.91 67.53959 69.28261 0.8453951       High
+## SPR003     39    9.37    27.30 49.97693 65.48689 1.0000000       High
+## AUT003     32    5.87    37.14 38.45844 65.48689 1.0000000       High</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">head</span>(eqr<span class="op">$</span>Uncertainty)</code></pre></div>
 <pre><code>##    SiteID N  EQR WFDClass   CoCH  CoCG  CoCM  CoCP CoCB   ROM  CoCHG CoCMPB ROM_GM
 ## 43  36082 2 0.71     Good  14.23 71.48 14.05  0.23 0.00 28.52  85.72  14.28  14.28
@@ -269,6 +269,15 @@ body{
 <li><p>Planktic: Percentage of planktic diatoms in the sample. These are excluded from the status calculations.</p></li>
 <li><p>Saline: Percentage of diatoms tolerant of slightly saline waters.</p></li>
 <li><p>Comments: List of any warning messages generated during calculations for individual samples relating to missing or out-of-range environmental values.</p></li>
+</ul>
+<p>For TSI4 the following coulms are also included:</p>
+<ul>
+<li><p>TDI4.D2.Sum: Sum of taxa included in DARLEQ version 2 TDI4 calculations</p></li>
+<li><p>TDI4.D2: TDI4 calculated using DARLEQ version 2 taxon list and indicator values</p></li>
+<li><p>TDI4.Diff: Difference in TDI4 calculated using DARLEQ version 3 and 2 taxon lists and indicator values</p></li>
+<li><p>TDI4.D2.EQR: EQR for DARLEQ version 2 TDI4</p></li>
+<li><p>TDI4.D2.Class: Status class for DARLEQ version 2 TDI4</p></li>
+<li><p>Class.Diff: Indication if there is a difference in DARLEQ version 2 and 3 TDI4 status class</p></li>
 </ul>
 </div>
 <div id="uncertainty" class="section level3">

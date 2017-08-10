@@ -1,4 +1,4 @@
-#' darleq3: Diatom Assessment of River and Lake Ecological Quality (Version 0.6.4)
+#' darleq3: Diatom Assessment of River and Lake Ecological Quality (Version 0.7.0)
 #'
 #' @description
 #' darleq3 is an R package for the assessment of river and lake ecological status using diatom data obtained by light microscopy (LM) or Next Generation Sequencing (NGS). The package contains functions for importing data from Excel worksheets, calculating various water quality metrics, EQRs and Water Framework Directive quality classes.

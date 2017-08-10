@@ -21,6 +21,8 @@
 #' }
 #' \item{EcolGroup}{data frame containing a list of the percentage of motile, organic tolerant, planktic and saline tolerant taxa in each sample}
 #' \item{Job_Summary}{list containing elements giving the total number of samples, number of samples with data, total number of taxa, number of taxa with occurrences, diatom metric and list of taxa that do not have a metric indicator value in the taxon dictionary}
+#' \item{TDI4.D2}{for TDI4 caluclations, a data frame containing TDI4 calculated using the DARLEQ2 taxon list, the sum of taxa included in the calculation, and the difference between TDI4 calculated by DARLEQ3 and DARLEQ2 software}
+#'
 #'
 #' @author Steve Juggins \email{Stephen.Juggins@@ncl.ac.uk}
 #'
@@ -149,12 +151,32 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
   res <- list()
   res$CodingID <- codingID
   res$Metric_Code <- metric
-  res$Metric <- data.frame(Metric=round(tdi.sam, 2))
+  res$Metric <- data.frame(Metric=tdi.sam)
   colnames(res$Metric) <- metric
-  res$Summary <- data.frame(Total.count=round(totals, 2), total.TDI=round(rSum, 2), calc_N_N2_Max(diat.pc2))
+  res$Summary <- data.frame(Total.count=totals, total.TDI=rSum, calc_N_N2_Max(diat.pc2))
   colnames(res$Summary) <- c("Total_count", paste0(c("Percent_in_", "N_", "N2_", "Max_"), metric))
   res$EcolGroup <- round(data.frame(Motile=pc.motile, OrganicTolerant=pc.organic, Planktic=pc.planktic, Saline=pc.saline), 2)
   res$Job_Summary <- Job_Summary
+
+  if (codingID=="NBSCode" & metric=="TDI4") {
+    mt <- match(nms, dictionary[, codingID])
+    tdi.sp.all2 <- dictionary[stats::na.omit(mt), "TDI4.D2"]
+    names(tdi.sp.all2) <- dictionary[stats::na.omit(mt), codingID]
+    tdi.sp2 <- stats::na.omit(tdi.sp.all2)
+    tdi.sp.nms2 <- names(tdi.sp2)
+    diat.pc3 <- diat.pc[, tdi.sp.nms2, drop=FALSE]
+    tdi4.D2 <- apply(diat.pc3, 1, wm, x=tdi.sp2)
+    tdi4.D2 <- (tdi4.D2 * 25) - 25
+    tdi4.D2.rSum <- rowSums(diat.pc3) * totals / 100
+    res$TDI4.D2 <- data.frame(TDI4.D2.Sum=tdi4.D2.rSum, TDI4.D2=tdi4.D2, TDI4.Diff=tdi.sam-tdi4.D2)
+    nWarn <- sum(abs(res$TDI4.D2$TDI4.Diff)>2.0)
+    if (nWarn > 0) {
+      res$warnings <- paste0(nWarn, " samples have a difference of more than 2 units in TDI4 between DARLEQ versions 2 and 3.")
+      if (verbose)
+        warning(res$warning, call.=FALSE)
+    }
+  }
+
   if (length(missingTaxa)>0) {
     res$Job_Summary$MissingTaxa <- missingTaxonSummary
   }

@@ -1,5 +1,5 @@
 ---
-title: 'darleq3: User Guide Version (0.6.4)'
+title: 'darleq3: User Guide Version (0.7.0)'
 author: "Steve Juggins and Martyn Kelly"
 date: '`r Sys.Date()`'
 output:
@@ -228,6 +228,20 @@ After the metric and classification fields a series of summary fields are listed
 * Saline:	Percentage of diatoms tolerant of slightly saline waters. 
 
 * Comments:	List of any warning messages generated during calculations for individual samples relating to missing or out-of-range environmental values.
+
+For TSI4 the following coulms are also included:
+
+* TDI4.D2.Sum: Sum of taxa included in DARLEQ version 2 TDI4 calculations
+
+* TDI4.D2: TDI4 calculated using DARLEQ version 2 taxon list and indicator values
+
+* TDI4.Diff: Difference in TDI4 calculated using DARLEQ version 3 and 2 taxon lists and indicator values
+
+* TDI4.D2.EQR: EQR for DARLEQ version 2 TDI4
+
+* TDI4.D2.Class: Status class for DARLEQ version 2 TDI4
+
+* Class.Diff: Indication if there is a difference in DARLEQ version 2 and 3 TDI4 status class
 
 
 ### 5.3 Uncertainty

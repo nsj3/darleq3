@@ -37,8 +37,17 @@ calc_Metric_EQR <- function(x, metrics="TDI5LM", verbose=TRUE) {
     x.tdi <- tryCatch(calc_Metric(x$diatom_data, metrics[i], verbose=FALSE), error=function(e) { e } )
     if (inherits(x.tdi, "error"))
         errMessage(x.tdi$message, verbose)
-    res[[i]] <- calc_EQR(x.tdi, x$header)
+    res[[i]] <- calc_EQR(x.tdi, x$header, verbose=FALSE)
     res[[i]]$Job_Summary <- x.tdi$Job_Summary
+    if (!is.null(x.tdi$warnings)) {
+      if (is.null(res[[i]]$warnings)) {
+         res[[i]]$warnings <- x.tdi$warnings
+      } else {
+         res[[i]]$warnings <- paste0(res[[i]]$warnings, "\n", x.tdi$warnings)
+      }
+    }
+    if (verbose & !is.null(res[[i]]$warnings))
+      warning(res[[i]]$warnings, call.=FALSE)
   }
   names(res) <- metrics
   class(res) <- "DARLEQ3_EQR"

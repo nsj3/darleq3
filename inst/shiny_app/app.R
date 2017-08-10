@@ -175,7 +175,13 @@ D_server <- function(input, output, session) {
       return()
     } else {
       mm <- paste(names(res), collapse=", ")
-      output$table2 <- renderText(paste0("Results ready for ", mm, ".\nClick button below to download."))
+      msg <- paste0("Results ready for ", mm, ".\nClick button below to download.")
+      for (i in 1:length(res)) {
+         if (!is.null(res[[i]]$warnings)) {
+            msg <- paste0(msg, "\nWarning: ", res[[i]]$warnings, "\n")
+         }
+      }
+      output$table2 <- renderText(msg)
     }
     shinyjs::enable("downloadResults")
   })

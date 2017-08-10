@@ -31,6 +31,7 @@ A object of class \code{DIATOM_METRIC}, a list with the following named elements
 }
 \item{EcolGroup}{data frame containing a list of the percentage of motile, organic tolerant, planktic and saline tolerant taxa in each sample}
 \item{Job_Summary}{list containing elements giving the total number of samples, number of samples with data, total number of taxa, number of taxa with occurrences, diatom metric and list of taxa that do not have a metric indicator value in the taxon dictionary}
+\item{TDI4.D2}{for TDI4 caluclations, a data frame containing TDI4 calculated using the DARLEQ2 taxon list, the sum of taxa included in the calculation, and the difference between TDI4 calculated by DARLEQ3 and DARLEQ2 software}
 }
 \description{
 Calculate water quality metrics from diatom data
