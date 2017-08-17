@@ -24,12 +24,12 @@ save_DARLEQ <- function(d, outFile=NULL, fn="", sheet="", verbose=TRUE) {
     nm <- paste0(i, "_Job_Summary")
     openxlsx::addWorksheet(wb, nm)
     openxlsx::writeData(wb, nm, startCol = 1, startRow = 1, x=paste("File:", fn))
-    openxlsx::writeData(wb, nm, startCol = 1, startRow = 2, x=paste("Sheet:", fn))
+    openxlsx::writeData(wb, nm, startCol = 1, startRow = 2, x=paste("Sheet:", sheet))
     openxlsx::writeData(wb, nm, startCol = 1, startRow = 4, x=paste("Metric: ", x$Metric))
-    openxlsx::writeData(wb, nm, startCol = 1, startRow = 5, x=paste("Number of taxa: ", x$N_taxa))
-    openxlsx::writeData(wb, nm, startCol = 1, startRow = 6, x=paste("Number of taxa with no occurrences: ", x$N_taxa - x$N_taxa_gt_zero))
-    openxlsx::writeData(wb, nm, startCol = 1, startRow = 7, x=paste("Number of samples: ", x$N_samples))
-    openxlsx::writeData(wb, nm, startCol = 1, startRow = 8, x=paste("Number of samples with no taxa: ", x$N_samples - x$N_samples_gt_zero))
+    openxlsx::writeData(wb, nm, startCol = 1, startRow = 5, x=paste("Number of taxa: ", x$Job_Summary$N_taxa))
+    openxlsx::writeData(wb, nm, startCol = 1, startRow = 6, x=paste("Number of taxa with no occurrences: ", x$Job_Summary$N_taxa - x$Job_Summary$N_taxa_gt_zero))
+    openxlsx::writeData(wb, nm, startCol = 1, startRow = 7, x=paste("Number of samples: ", x$Job_Summary$N_samples))
+    openxlsx::writeData(wb, nm, startCol = 1, startRow = 8, x=paste("Number of samples with no taxa: ", x$Job_Summary$N_samples - x$Job_Summary$N_samples_gt_zero))
     startRow <- 10
 
     if (i == "TDI4" & !is.null(x$warnings)) {

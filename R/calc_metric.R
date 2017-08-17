@@ -169,7 +169,7 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
     tdi4.D2 <- (tdi4.D2 * 25) - 25
     tdi4.D2.rSum <- rowSums(diat.pc3) * totals / 100
     res$TDI4.D2 <- data.frame(TDI4.D2.Sum=tdi4.D2.rSum, TDI4.D2=tdi4.D2, TDI4.Diff=tdi.sam-tdi4.D2)
-    nWarn <- sum(abs(res$TDI4.D2$TDI4.Diff)>2.0)
+    nWarn <- sum(abs(res$TDI4.D2$TDI4.Diff)>2.0, na.rm=TRUE)
     if (nWarn > 0) {
       res$warnings <- paste0(nWarn, " samples have a difference of more than 2 units in TDI4 between DARLEQ versions 2 and 3.")
       if (verbose)

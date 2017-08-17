@@ -166,7 +166,7 @@ calc_EQR <- function(x, header, verbose=TRUE) {
   colnames(res2) <- paste0(c("e", "EQR_", "Class_"), metric)
   if (metric=="TDI4" & x$CodingID=="NBSCode") {
      mt <- grep("CLASS", toupper(colnames(res2)))
-     nClass <- sum(res2[, mt] != class2)
+     nClass <- sum(res2[, mt] != class2, na.rm=TRUE)
      res$EQR <- data.frame(header, x$Summary, x$Metric, res2, x$EcolGroup, Comments=comments[, 2], x$TDI4.D2, TDI4.D2.EQR=EQR2, TDI4.D2.Class=class2, Class.Diff=ifelse(res2[, mt] != class2, "Changed", NA))
      if (nClass > 0)
         res$warnings <- paste0(nClass, " sample(s) have different TDI4 classes in DARLEQ versions 2 and 3.")
