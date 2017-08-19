@@ -178,7 +178,7 @@ D_server <- function(input, output, session) {
       msg <- paste0("Results ready for ", mm, ".\nClick button below to download.")
       for (i in 1:length(res)) {
          if (!is.null(res[[i]]$warnings)) {
-            msg <- paste0(msg, "\nWarning: ", res[[i]]$warnings, "\n")
+            msg <- paste0(msg, "\nWarning: ", res[[i]]$warnings)
          }
       }
       output$table2 <- renderText(msg)

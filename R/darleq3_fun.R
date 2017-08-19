@@ -14,7 +14,7 @@
 #' @references Bennion, H., M.G. Kelly, S. Juggins, M.L. Yallop, A. Burgess, J. Jamieson, and J. Krokowski, Assessment of ecological status in UK lakes using benthic diatoms. \emph{Freshwater Science}, 2014. 639-654.
 #'
 #' @examples
-#' fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+#' fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 #' darleq(fn, outFile="Results.xlsx")
 #'
 #' @export darleq

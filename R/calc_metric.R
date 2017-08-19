@@ -21,7 +21,7 @@
 #' }
 #' \item{EcolGroup}{data frame containing a list of the percentage of motile, organic tolerant, planktic and saline tolerant taxa in each sample}
 #' \item{Job_Summary}{list containing elements giving the total number of samples, number of samples with data, total number of taxa, number of taxa with occurrences, diatom metric and list of taxa that do not have a metric indicator value in the taxon dictionary}
-#' \item{TDI4.D2}{for TDI4 caluclations, a data frame containing TDI4 calculated using the DARLEQ2 taxon list, the sum of taxa included in the calculation, and the difference between TDI4 calculated by DARLEQ3 and DARLEQ2 software}
+#' \item{Metric.D2}{for TDI3 and TDI4 calculations, a data frame containing TDI calculated using the DARLEQ2 taxon list, the sum of taxa included in the calculation, and the difference between TDI calculated by DARLEQ3 and DARLEQ2 software}
 #'
 #'
 #' @author Steve Juggins \email{Stephen.Juggins@@ncl.ac.uk}
@@ -31,7 +31,7 @@
 #' @references Bennion, H., M.G. Kelly, S. Juggins, M.L. Yallop, A. Burgess, J. Jamieson, and J. Krokowski, Assessment of ecological status in UK lakes using benthic diatoms. \emph{Freshwater Science}, 2014. 639-654.
 #'
 #' @examples
-#' fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+#' fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 #' d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 #' x <- calc_Metric(d$diatom_data, metric="TDI4")
 #' head(x$Metric)
@@ -158,20 +158,24 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
   res$EcolGroup <- round(data.frame(Motile=pc.motile, OrganicTolerant=pc.organic, Planktic=pc.planktic, Saline=pc.saline), 2)
   res$Job_Summary <- Job_Summary
 
-  if (codingID=="NBSCode" & metric=="TDI4") {
+  if (codingID=="NBSCode" & (metric=="TDI4" | metric=="TDI3")) {
     mt <- match(nms, dictionary[, codingID])
-    tdi.sp.all2 <- dictionary[stats::na.omit(mt), "TDI4.D2"]
+    met.D2 <- paste0(metric, "_D2")
+    tdi.sp.all2 <- dictionary[stats::na.omit(mt), met.D2]
     names(tdi.sp.all2) <- dictionary[stats::na.omit(mt), codingID]
     tdi.sp2 <- stats::na.omit(tdi.sp.all2)
     tdi.sp.nms2 <- names(tdi.sp2)
     diat.pc3 <- diat.pc[, tdi.sp.nms2, drop=FALSE]
-    tdi4.D2 <- apply(diat.pc3, 1, wm, x=tdi.sp2)
-    tdi4.D2 <- (tdi4.D2 * 25) - 25
-    tdi4.D2.rSum <- rowSums(diat.pc3) * totals / 100
-    res$TDI4.D2 <- data.frame(TDI4.D2.Sum=tdi4.D2.rSum, TDI4.D2=tdi4.D2, TDI4.Diff=tdi.sam-tdi4.D2)
-    nWarn <- sum(abs(res$TDI4.D2$TDI4.Diff)>2.0, na.rm=TRUE)
+    tdi.D2 <- apply(diat.pc3, 1, wm, x=tdi.sp2)
+    tdi.D2 <- (tdi.D2 * 25) - 25
+    tdi.D2.rSum <- rowSums(diat.pc3) * totals / 100
+    tdi.diff <- tdi.sam-tdi.D2
+    tmp <- data.frame(TDI.D2.Sum=tdi.D2.rSum, TDI.D2=tdi.D2, TDI.Diff=tdi.diff)
+    colnames(tmp) <- paste(metric, c("D2_Sum", "D2", "Diff"), sep="_")
+    res$Metric.D2 <- tmp
+    nWarn <- sum(abs(tdi.diff)>2.0, na.rm=TRUE)
     if (nWarn > 0) {
-      res$warnings <- paste0(nWarn, " samples have a difference of more than 2 units in TDI4 between DARLEQ versions 2 and 3.")
+      res$warnings <- paste0(nWarn, " sample(s) have a difference of more than 2 ", metric, "units between DARLEQ versions 2 and 3.")
       if (verbose)
         warning(res$warning, call.=FALSE)
     }

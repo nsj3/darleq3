@@ -49,14 +49,14 @@
 #' ***Figure 3: Example format for lake diatom LTDI samples***
 #'
 #' @examples
-#' fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+#' fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 #' d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 #' head(d$diatom_data)
 #' head(d$header)
 #' \dontrun{
 #' # view the example dataset in Excel
 #' # note running the following lines will open the file in Excel (if installed)
-#' fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+#' fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 #' shell.exec(fn)
 #' }
 #'
@@ -72,7 +72,7 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
     sheets
   }
 
-# if sheet is null we just read the first sheet
+# if sheet is null we just read the first workssheet
   if (is.null(sheet)) {
      d <- readxl::read_excel(file, col_types = "text")
      sheet <- get_Sheets(file)[1]
@@ -86,7 +86,11 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
   for (i in 1:20) {
     if (!is_empty(d[i, 2]))
         break
+
   }
+# check for TAXON_NAME entry in EA data conversion tool
+  if (toupper(d[i, 2])=="TAXON_NAME")
+    i <- i + 1
 
 # find rightmost column of data.  It should have a sample ID in row 1.
   iStartRow <- i; iStartCol <- 3
@@ -96,6 +100,7 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
       break
     }
   }
+
 
 # Extract header and remove any rows with no variable ID in column 1.
   header <- as.data.frame(d[1:(iStartRow-1), 1:iEndCol])

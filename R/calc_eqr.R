@@ -4,7 +4,7 @@
 #' @param header data frame containing sample and site environmental information for calculating the expected value of the metric.
 #' @param verbose logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.
 #' @return A object of class \code{DIATOM_EQR}, a list with the following named elements:
-#' \item{EQR}{data frame containing, for each sample, sample codes, water chemistry data and other columns from the header in original Excel file, metric and summary information from function \code{calc_Metric}, expected EQRs (eEQR), calculated EQRs, predicted WFD class, percentage diatoms in diagnostic ecological groups, and a flag to indicate missing or out of range environmental data.  For TDI4 the output also contains 3 additional columns containing the count included in the metric calculation, TDI4, EQR and status Class calculated using the (old) DARLEQ2 taxon list and indicator values, and the difference in TDI4 and status class between DARLEQ3 and DARLEQ2 software.}
+#' \item{EQR}{data frame containing, for each sample, sample codes, water chemistry data and other columns from the header in original Excel file, metric and summary information from function \code{calc_Metric}, expected EQRs (eEQR), calculated EQRs, predicted WFD class, percentage diatoms in diagnostic ecological groups, and a flag to indicate missing or out of range environmental data.  For TDI3 and TDI4 the output also contains 3 additional columns containing the count included in the metric calculation, EQR and status Class calculated using the (old) DARLEQ2 taxon list (suffix D2) and indicator values, and the difference in TDI values and status class between DARLEQ3 and DARLEQ2 software.}
 #' \item{Uncertainty}{data frame containing, for each site, mean EQRS, predicted WFD class, and confidence of class (CoC) for each WFD class and HG/MPB boundary (CoCCHG, COCMPB), and risk of misclassification for the predicted class (ROM) and for the G/M boundary (ROM_GM)}.
 #'
 #' @author Steve Juggins \email{Stephen.Juggins@@ncl.ac.uk}
@@ -14,7 +14,7 @@
 #' @references Bennion, H., M.G. Kelly, S. Juggins, M.L. Yallop, A. Burgess, J. Jamieson, and J. Krokowski, Assessment of ecological status in UK lakes using benthic diatoms. \emph{Freshwater Science}, 2014. 639-654.
 #'
 #' @examples
-#' fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+#' fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 #' d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 #' x <- calc_Metric(d$diatom_data, metric="TDI4")
 #' eqr <- calc_EQR(x, d$header)
@@ -29,7 +29,6 @@ calc_EQR <- function(x, header, verbose=TRUE) {
   if (!inherits(x, "DIATOM_METRIC")) {
     simpleError("Input is not of class DIATOM_METRIC")
   }
-
   if (nrow(x$Metric) != nrow(header))
     simpleError("Diatom and environmental data have different number of samples")
   metric <- x$Metric_Code
@@ -88,12 +87,6 @@ calc_EQR <- function(x, header, verbose=TRUE) {
     EQR <- (100 - x$Metric) / (100 - eTDI) * mult_Factor
     EQR[EQR > 1.0] <- 1.0
     class <- calc_WFDClass(EQR[, 1], metric)
-    if (metric=="TDI4") {
-      EQR2 <- (100 - x$TDI4.D2$TDI4.D2) / (100 - eTDI) * mult_Factor
-      EQR2[EQR2 > 1.0] <- 1.0
-      class2 <- calc_WFDClass(EQR2, metric)
-    }
-
     if (!is.null(SiteID)) {
       mean_EQR <- calc_SiteEQR(EQR[, 1], SiteID)
       class.site <- calc_WFDClass(mean_EQR$EQR, metric)
@@ -164,16 +157,21 @@ calc_EQR <- function(x, header, verbose=TRUE) {
   res <- list()
   res2 <- data.frame(eTDI, EQR, class)
   colnames(res2) <- paste0(c("e", "EQR_", "Class_"), metric)
-  if (metric=="TDI4" & x$CodingID=="NBSCode") {
+  res$EQR <- data.frame(header, x$Summary, x$Metric, res2, x$EcolGroup, Comments=comments[, 2])
+  if ((metric=="TDI4" | metric=="TDI3") & x$CodingID=="NBSCode") {
+     metID <- paste0(metric, "_D2")
+     EQR2 <- (100 - x$Metric.D2[, metID]) / (100 - eTDI) * mult_Factor
+     EQR2[EQR2 > 1.0] <- 1.0
+     Class2 <- calc_WFDClass(EQR2, metric)
      mt <- grep("CLASS", toupper(colnames(res2)))
-     nClass <- sum(res2[, mt] != class2, na.rm=TRUE)
-     res$EQR <- data.frame(header, x$Summary, x$Metric, res2, x$EcolGroup, Comments=comments[, 2], x$TDI4.D2, TDI4.D2.EQR=EQR2, TDI4.D2.Class=class2, Class.Diff=ifelse(res2[, mt] != class2, "Changed", NA))
+     nClass <- sum(res2[, mt] != Class2, na.rm=TRUE)
+     tmp <- data.frame(eqr2=EQR2, class2=Class2, diff=ifelse(res2[, mt] != Class2, "Changed", NA))
+     colnames(tmp) <- c(paste(metric, c("D2_EQR", "D2_Class"), sep="_"), "Class_Diff")
+     res$EQR <- cbind(res$EQR, x$Metric.D2, tmp)
      if (nClass > 0)
-        res$warnings <- paste0(nClass, " sample(s) have different TDI4 classes in DARLEQ versions 2 and 3.")
+        res$warnings <- paste0(nClass, " sample(s) have different ", metric,  " classes in DARLEQ versions 2 and 3.")
         if (verbose)
           warnings(res$warnings, call.=FALSE)
-  } else {
-     res$EQR <- data.frame(header, x$Summary, x$Metric, res2, x$EcolGroup, Comments=comments[, 2])
   }
   if (!is.null(SiteID)) {
     if (metric == "DAM") {

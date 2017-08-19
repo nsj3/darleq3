@@ -9,7 +9,7 @@
 #' @author Steve Juggins \email{Stephen.Juggins@@ncl.ac.uk}
 #'
 #' @examples
-#' fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+#' fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 #' d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 #' x <- calc_Metric_EQR(d)
 #' save_DARLEQ(x, outFile="results.xlsx")
@@ -57,11 +57,14 @@ save_DARLEQ <- function(d, outFile=NULL, fn="", sheet="", verbose=TRUE) {
       mt <- match("Total_count", colnames(d[[i]]$EQR))
       openxlsx::writeDataTable(wb, nm, d[[i]]$EQR, withFilter=FALSE, keepNA=FALSE)
       if (!is.na(mt[1])) {
-        cc <- c(1, 2, 4:6, 8:12)
+        cc <- c(1, 3:7, 9:12)
         openxlsx::addStyle(wb, sheet=nm, cf, cols=mt+cc, rows=2:(1+nrow(d[[i]]$EQR)), gridExpand=TRUE)
-        mt <- match("TDI4.D2.Sum", colnames(d[[i]]$EQR))
+        mt <- match("TDI4_D2_Sum", colnames(d[[i]]$EQR))
+        if (is.na(mt)) {
+          mt <- match("TDI3_D2_Sum", colnames(d[[i]]$EQR))
+        }
         if (!is.na(mt)) {
-           openxlsx::addStyle(wb, sheet=nm, cf, cols=mt+0:3, rows=2:(1+nrow(d[[i]]$EQR)), gridExpand=TRUE)
+           openxlsx::addStyle(wb, sheet=nm, cf, cols=mt+1:3, rows=2:(1+nrow(d[[i]]$EQR)), gridExpand=TRUE)
         }
       }
     }

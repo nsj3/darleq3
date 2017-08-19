@@ -23,7 +23,7 @@ Calculate diatom water quality metrics, EQRs and WFD class for samples, and unce
 This is a wrapper function to \code{\link{calc_Metric}} and \code{\link{calc_EQR}} that calculates multiple metrics, EQRs and WFD classes.  The output can be saved to an Excel file using function \code{\link{save_DARLEQ}}.
 }
 \examples{
-fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 x <- calc_Metric_EQR(d)
 save_DARLEQ(x, outFile="results.xlsx")

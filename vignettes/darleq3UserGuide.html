@@ -12,9 +12,9 @@
 
 <meta name="author" content="Steve Juggins and Martyn Kelly" />
 
-<meta name="date" content="2017-08-15" />
+<meta name="date" content="2017-08-19" />
 
-<title>darleq3: User Guide Version (0.7.1)</title>
+<title>darleq3: User Guide (Version 0.7.2)</title>
 
 
 
@@ -68,14 +68,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">darleq3: User Guide Version (0.7.1)</h1>
+<h1 class="title toc-ignore">darleq3: User Guide (Version 0.7.2)</h1>
 <h4 class="author"><em>Steve Juggins and Martyn Kelly</em></h4>
-<h4 class="date"><em>2017-08-15</em></h4>
+<h4 class="date"><em>2017-08-19</em></h4>
 
 
 
 <!--
-  %\VignetteIndexEntry{`darleq3: User Guide Version`}
+  %\VignetteIndexEntry{`darleq3: User Guide`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 -->
@@ -105,7 +105,7 @@ body{
 <span class="op">&gt;</span><span class="st"> </span><span class="kw">install_github</span>(<span class="st">&quot;nsj3/darleq3&quot;</span>, <span class="dt">build_vignettes=</span><span class="ot">TRUE</span>)</code></pre></div>
 <p><code>darleq3</code> also contains an example Excel data file. This can be made available in a R session with the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(darleq3)
-<span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;example_datasets/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)</code></pre></div>
+<span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)</code></pre></div>
 <p>The file can be opened in Excel usingt he following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="co"># note running the following lines will open the file in Excel (if installed)</span>
 <span class="er">&gt;</span><span class="st"> </span><span class="kw">shell.exec</span>(fn)</code></pre></div>
@@ -150,20 +150,20 @@ body{
 <div id="darleq3-wrapper-functions" class="section level3">
 <h3>4.1 <code>darleq3</code> wrapper functions</h3>
 <p>The most useful wrapper function is <code>darleq</code>. This function imports data form an Excel file, calculates multiple metrics, EQRs and WFD classes and saves the results to another Excel file in one step.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;example_datasets/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span><span class="kw">darleq</span>(fn)</code></pre></div>
 <p><code>darleq</code> will, by default, import data from the first sheet in the Excel file, and calculate TDI3, TDI4 and TDI5LM. If the output filename is not given the function will generate a name by concatenating “DARLEQ3_Results_” with the original filename, the sheet name and the current date.</p>
 <p>To specify the sheet name, a different metric, and a output file name:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;example_datasets/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span><span class="kw">darleq</span>(fn, <span class="dt">sheet=</span><span class="st">&quot;Lakes LTDI Test Data&quot;</span>, <span class="dt">metrics=</span><span class="st">&quot;LTDI2&quot;</span>, <span class="dt">outFile=</span><span class="st">&quot;Results.xlsx&quot;</span>)</code></pre></div>
 <p>To calculate and save results for multiple metrics:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;example_datasets/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span><span class="kw">darleq</span>(fn, <span class="dt">sheet=</span><span class="st">&quot;Lakes LTDI Test Data&quot;</span>, <span class="dt">metrics=</span><span class="kw">c</span>(<span class="st">&quot;LTDI1&quot;</span>, <span class="st">&quot;LTDI2&quot;</span>), <span class="dt">outFile=</span><span class="st">&quot;Results.xlsx&quot;</span>)</code></pre></div>
 </div>
 <div id="darleq3-low-level-functions" class="section level3">
 <h3>4.2 <code>darleq3</code> low-level functions</h3>
 <p><code>darleq3</code> low-level functions are useful for calculating partial results or for embedding darleq3 in a longer data analysis sequence. The key functions are <code>read_DARLEQ</code> to import data from a DARLEQ-formatted data file (see Section 6 below for guidelines on how to format the data correctly). <code>read_DARLEQ</code> returns a list with two elementss: <code>diatom_data</code> - a data frame of the diatom count or relative abundance data, and <code>header</code> - a data frame of sample, site and environmental data from the header of the Excel file.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;example_datasets/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>d &lt;-<span class="st"> </span><span class="kw">read_DARLEQ</span>(fn, <span class="st">&quot;Rivers TDI Test Data&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span><span class="kw">head</span>(d<span class="op">$</span>diatom_data[, <span class="dv">1</span><span class="op">:</span><span class="dv">8</span>])</code></pre></div>
 <pre><code>##          AC023A AC083A AC143A AC161A AC9999  AD009A   AM001A  AM004A
@@ -182,7 +182,7 @@ body{
 ## SPR003   SPR003  36073  2004-04-02        213 LAMBOURN At Gauging Station, East Shefford
 ## AUT003   AUT003  36073  2004-09-21        213 LAMBOURN At Gauging Station, East Shefford</code></pre>
 <p><code>calc_Metric_EQR</code> calculates one or more diatom metrics and the corresponding sample and site EQRS and WFD classes, and class uncertainties. The function returns a list with an element for each metric. Each element is itself a list containing sample EQRs, site EQRs and uncertaintues and a job summary.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;example_datasets/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>d &lt;-<span class="st"> </span><span class="kw">read_DARLEQ</span>(fn, <span class="st">&quot;Rivers TDI Test Data&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>results &lt;-<span class="st"> </span><span class="kw">calc_Metric_EQR</span>(d, <span class="dt">metrics=</span><span class="kw">c</span>(<span class="st">&quot;TDI4&quot;</span>, <span class="st">&quot;TDI5LM&quot;</span>))
 <span class="op">&gt;</span><span class="st"> </span><span class="kw">head</span>(results<span class="op">$</span>TDI5LM<span class="op">$</span>EQR[, <span class="dv">9</span><span class="op">:</span><span class="dv">15</span>])</code></pre></div>
@@ -202,12 +202,12 @@ body{
 ## 36  35101 1 0.48 Moderate   0.06 14.04 62.37 23.35 0.19 85.96  14.10  85.90  14.10
 ## 35  35075 2 0.71     Good  14.23 71.48 14.05  0.23 0.00 28.52  85.72  14.28  14.28</code></pre>
 <p><code>save_DARLEQ</code> saves the output from <code>calc_Metric_EQR</code> in an Excel file:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;example_datasets/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>d &lt;-<span class="st"> </span><span class="kw">read_DARLEQ</span>(fn, <span class="st">&quot;Rivers TDI Test Data&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>results &lt;-<span class="st"> </span><span class="kw">calc_Metric_EQR</span>(d, <span class="dt">metrics=</span><span class="kw">c</span>(<span class="st">&quot;TDI4&quot;</span>, <span class="st">&quot;TDI5LM&quot;</span>))
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">save</span>(results, <span class="dt">outFile=</span><span class="st">&quot;Results.xlsx&quot;</span>)</code></pre></div>
+<span class="op">&gt;</span><span class="st"> </span><span class="kw">save_DARLEQ</span>(results, <span class="dt">outFile=</span><span class="st">&quot;Results.xlsx&quot;</span>)</code></pre></div>
 <p><code>calc_Metric</code> calculates a single metric from a data frame of diatom count or relative abundance data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;example_datasets/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>d &lt;-<span class="st"> </span><span class="kw">read_DARLEQ</span>(fn, <span class="st">&quot;Rivers TDI Test Data&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>x &lt;-<span class="st"> </span><span class="kw">calc_Metric</span>(d<span class="op">$</span>diatom_data, <span class="dt">metric=</span><span class="st">&quot;TDI4&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span><span class="kw">head</span>(x<span class="op">$</span>Metric)</code></pre></div>
@@ -219,7 +219,7 @@ body{
 ## SPR003 49.97693
 ## AUT003 38.45844</code></pre>
 <p><code>calc_EQR</code> calculates sample and site EQRS and WFD classes, and class uncertainties from a list of sample metrics.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;example_datasets/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>fn &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata/DARLEQ2TestData.xlsx&quot;</span>, <span class="dt">package=</span><span class="st">&quot;darleq3&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>d &lt;-<span class="st"> </span><span class="kw">read_DARLEQ</span>(fn, <span class="st">&quot;Rivers TDI Test Data&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>x &lt;-<span class="st"> </span><span class="kw">calc_Metric</span>(d<span class="op">$</span>diatom_data, <span class="dt">metric=</span><span class="st">&quot;TDI4&quot;</span>)
 <span class="op">&gt;</span><span class="st"> </span>eqr &lt;-<span class="st"> </span><span class="kw">calc_EQR</span>(x, d<span class="op">$</span>header)

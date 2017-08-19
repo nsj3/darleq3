@@ -1,5 +1,5 @@
 ---
-title: 'darleq3: User Guide Version (0.7.1)'
+title: 'darleq3: User Guide (Version `r read.dcf("../DESCRIPTION", fields="Version")`)'
 author: "Steve Juggins and Martyn Kelly"
 date: '`r Sys.Date()`'
 output:
@@ -7,7 +7,7 @@ output:
     css: style.css
 ---
 <!--
-  %\VignetteIndexEntry{`darleq3: User Guide Version`}
+  %\VignetteIndexEntry{`darleq3: User Guide`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 -->
@@ -57,7 +57,7 @@ install_github("nsj3/darleq3", build_vignettes=TRUE)
 
 ```{r example, eval=FALSE}
 library(darleq3)
-fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 ```
 
 The file can be opened in Excel usingt he following:
@@ -121,7 +121,7 @@ The `darleq3` functions have been designed to allow the user to perform individu
 The most useful wrapper function is `darleq`.  This function imports data form an Excel file, calculates multiple metrics, EQRs and WFD classes and saves the results to another Excel file in one step.  
 
 ```{r darleq, eval=FALSE}
-fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 darleq(fn)
 ```
 
@@ -130,14 +130,14 @@ darleq(fn)
 To specify the sheet name, a different metric, and a output file name:
 
 ```{r darleq2, eval=FALSE}
-fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 darleq(fn, sheet="Lakes LTDI Test Data", metrics="LTDI2", outFile="Results.xlsx")
 ```
 
 To calculate and save results for multiple metrics:
 
 ```{r darleq3, eval=FALSE}
-fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 darleq(fn, sheet="Lakes LTDI Test Data", metrics=c("LTDI1", "LTDI2"), outFile="Results.xlsx")
 ```
 
@@ -146,7 +146,7 @@ darleq(fn, sheet="Lakes LTDI Test Data", metrics=c("LTDI1", "LTDI2"), outFile="R
 `darleq3` low-level functions are useful for calculating partial results or for embedding darleq3 in a longer data analysis sequence.  The key functions are `read_DARLEQ` to import data from a DARLEQ-formatted data file (see Section 6 below for guidelines on how to format the data correctly).  `read_DARLEQ` returns a list with two elementss: `diatom_data` - a data frame of the diatom count or relative abundance data, and `header` - a data frame of sample, site and environmental data from the header of the Excel file.
 
 ```{r read}
-fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 head(d$diatom_data[, 1:8])
 head(d$header)
@@ -155,7 +155,7 @@ head(d$header)
 `calc_Metric_EQR` calculates one or more diatom metrics and the corresponding sample and site EQRS and WFD classes, and class uncertainties.  The function returns a list with an element for each metric.  Each element is itself a list containing sample EQRs, site EQRs and uncertaintues and a job summary.
 
 ```{r meqr}
-fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 results <- calc_Metric_EQR(d, metrics=c("TDI4", "TDI5LM"))
 head(results$TDI5LM$EQR[, 9:15])
@@ -165,16 +165,16 @@ head(results$TDI5LM$Uncertainty)
 `save_DARLEQ` saves the output from `calc_Metric_EQR` in an Excel file:
 
 ```{r save, eval=FALSE}
-fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 results <- calc_Metric_EQR(d, metrics=c("TDI4", "TDI5LM"))
-save(results, outFile="Results.xlsx")
+save_DARLEQ(results, outFile="Results.xlsx")
 ```
 
 `calc_Metric` calculates a single metric from a data frame of diatom count or relative abundance data.
 
 ```{r metric}
-fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 x <- calc_Metric(d$diatom_data, metric="TDI4")
 head(x$Metric)
@@ -183,7 +183,7 @@ head(x$Metric)
 `calc_EQR` calculates sample and site EQRS and WFD classes, and class uncertainties from a list of sample metrics.
 
 ```{r eqr}
-fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 x <- calc_Metric(d$diatom_data, metric="TDI4")
 eqr <- calc_EQR(x, d$header)
