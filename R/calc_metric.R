@@ -158,7 +158,8 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
   res$EcolGroup <- round(data.frame(Motile=pc.motile, OrganicTolerant=pc.organic, Planktic=pc.planktic, Saline=pc.saline), 2)
   res$Job_Summary <- Job_Summary
 
-  if (codingID=="NBSCode" & (metric=="TDI4" | metric=="TDI3")) {
+  missingTaxa2 <- NULL
+  if (codingID=="NBSCode" & (metric %in% c("TDI4", "TDI3", "LTDI1", "LTDI2"))) {
     mt <- match(nms, dictionary[, codingID])
     met.D2 <- paste0(metric, "_D2")
     tdi.sp.all2 <- dictionary[stats::na.omit(mt), met.D2]
@@ -174,6 +175,16 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
     colnames(tmp) <- paste(metric, c("D2_Sum", "D2", "Diff"), sep="_")
     res$Metric.D2 <- tmp
     nWarn <- sum(abs(tdi.diff)>2.0, na.rm=TRUE)
+
+    missingTaxa2 <- setdiff(nms, tdi.sp.nms2)
+    if (length(missingTaxa2) > 0) {
+      tmp <- diat.pc[, missingTaxa2]
+      tmp2 <- calc_N_N2_Max(t(tmp))
+      mt <- match(missingTaxa2, dictionary[, codingID])
+      names <- dictionary[mt, "TaxonName"]
+      missingTaxonSummary2 <- data.frame(TaxonID=missingTaxa2, Name=names, tmp2)
+    }
+
     if (nWarn > 0) {
       res$warnings <- paste0(nWarn, " sample(s) have a difference of more than 2 ", metric, "units between DARLEQ versions 2 and 3.")
       if (verbose)
@@ -183,6 +194,9 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
 
   if (length(missingTaxa)>0) {
     res$Job_Summary$MissingTaxa <- missingTaxonSummary
+  }
+  if (length(missingTaxa2)>0) {
+    res$Job_Summary$MissingTaxa2 <- missingTaxonSummary2
   }
   class(res) <- c("Diatom_METRIC")
   res

@@ -38,7 +38,7 @@ darleq3_data$defaults$CoC_TDI <- c(A0=0.03, B1=0.177, B2=-0.157, Power=5.73)
 darleq3_data$metric.codes <- c("TDI3", "TDI4", "TDI5LM", "TDI5NGS", "LTDI1", "LTDI2", "DAM")
 darleq3_data$metric.types <- c("TDILM", "LTDILM", "DAMLM", "TDINGS")
 
-col_types <- c(rep("text", 8), rep("numeric", 15))
+col_types <- c(rep("text", 8), rep("numeric", 17))
 darleq3_taxa <- as.data.frame(read_excel("\\Data\\R_Libraries\\People\\Martyn_Kelly\\Barcoding\\TaxonLists\\DarleqTaxonList2017_Master.xlsx", sheet="D3_List", col_types=col_types))
 rm(col_types)
 

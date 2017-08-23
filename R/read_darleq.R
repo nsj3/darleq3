@@ -73,11 +73,12 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
   }
 
 # if sheet is null we just read the first workssheet
+# include workaround for old versions of readxl
   if (is.null(sheet)) {
-     d <- readxl::read_excel(file, col_types = "text")
-     sheet <- get_Sheets(file)[1]
+    d <- readxl::read_excel(file)
+    sheet <- get_Sheets(file)[1]
   } else {
-     d <- readxl::read_excel(file, col_types = "text", sheet=sheet)
+    d <- readxl::read_excel(file, sheet=sheet)
   }
 
 # Now split data into header with site and water chemistry information, and diatom data

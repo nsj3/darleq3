@@ -40,8 +40,14 @@ save_DARLEQ <- function(d, outFile=NULL, fn="", sheet="", verbose=TRUE) {
     }
 
     if (!is.null(x$Job_Summary$MissingTaxa)) {
-      openxlsx::writeData(wb, nm, startCol = 1, startRow = startRow+1, x=paste("The following taxa do not have", x$Metric, "scores in the DARLEQ3 database:"))
-      openxlsx::writeDataTable(wb, nm, startCol = 1, startRow = startRow+2, x=x$Job_Summary$MissingTaxa, withFilter=FALSE, keepNA=FALSE)
+      openxlsx::writeData(wb, nm, startCol = 1, startRow = startRow+1, x=paste("The following taxa do not have", x$Metric, "scores in the DARLEQ database:"))
+      MissingTaxa <- x$Job_Summary$MissingTaxa
+      nm1 <- colnames(MissingTaxa)[1:2]
+      if (!is.null(x$Job_Summary$MissingTaxa2)) {
+         MissingTaxa <- merge(MissingTaxa, x$Job_Summary$MissingTaxa2, by=nm1, all=TRUE)
+         colnames(MissingTaxa)[-(1:2)] <- c("N.D3", "N2.D3", "Max.D3", "N.D2", "N2.D2", "Max.D2")
+      }
+      openxlsx::writeDataTable(wb, nm, startCol = 1, startRow = startRow+2, x=MissingTaxa, withFilter=FALSE, keepNA=FALSE)
     }
   }
   wb <- openxlsx::createWorkbook("Temp")
@@ -59,11 +65,9 @@ save_DARLEQ <- function(d, outFile=NULL, fn="", sheet="", verbose=TRUE) {
       if (!is.na(mt[1])) {
         cc <- c(1, 3:7, 9:12)
         openxlsx::addStyle(wb, sheet=nm, cf, cols=mt+cc, rows=2:(1+nrow(d[[i]]$EQR)), gridExpand=TRUE)
-        mt <- match("TDI4_D2_Sum", colnames(d[[i]]$EQR))
-        if (is.na(mt)) {
-          mt <- match("TDI3_D2_Sum", colnames(d[[i]]$EQR))
-        }
-        if (!is.na(mt)) {
+        mt <- match(c("TDI4_D2_Sum", "TDI3_D2_Sum", "LTDI1_D2_Sum", "LTDI2_D2_Sum"), colnames(d[[i]]$EQR))
+        mt <- na.omit(mt)
+        if (length(mt) > 0) {
            openxlsx::addStyle(wb, sheet=nm, cf, cols=mt+1:3, rows=2:(1+nrow(d[[i]]$EQR)), gridExpand=TRUE)
         }
       }

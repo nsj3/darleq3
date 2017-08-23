@@ -158,11 +158,17 @@ calc_EQR <- function(x, header, verbose=TRUE) {
   res2 <- data.frame(eTDI, EQR, class)
   colnames(res2) <- paste0(c("e", "EQR_", "Class_"), metric)
   res$EQR <- data.frame(header, x$Summary, x$Metric, res2, x$EcolGroup, Comments=comments[, 2])
-  if ((metric=="TDI4" | metric=="TDI3") & x$CodingID=="NBSCode") {
+  if (x$CodingID=="NBSCode" & (metric %in% c("TDI4", "TDI3", "LTDI1", "LTDI2"))) {
      metID <- paste0(metric, "_D2")
-     EQR2 <- (100 - x$Metric.D2[, metID]) / (100 - eTDI) * mult_Factor
-     EQR2[EQR2 > 1.0] <- 1.0
-     Class2 <- calc_WFDClass(EQR2, metric)
+     if (metric2=="TDI") {
+        EQR2 <- (100 - x$Metric.D2[, metID]) / (100 - eTDI) * mult_Factor
+        EQR2[EQR2 > 1.0] <- 1.0
+        Class2 <- calc_WFDClass(EQR2, metric)
+     } else {
+        EQR2 <- (100 - x$Metric.D2[, metID]) / (100 - eTDI)
+        EQR[EQR > 1.0] <- 1.0
+        Class2 <- calc_WFDClass(EQR2, metric, env$lake_TYPE)
+     }
      mt <- grep("CLASS", toupper(colnames(res2)))
      nClass <- sum(res2[, mt] != Class2, na.rm=TRUE)
      tmp <- data.frame(eqr2=EQR2, class2=Class2, diff=ifelse(res2[, mt] != Class2, "Changed", NA))
