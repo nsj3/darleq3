@@ -98,13 +98,13 @@ calc_EQR <- function(x, header, verbose=TRUE) {
     mt <- grep("TYPE", toupper(colnames(header)))
     if (length(mt)==0) {
       header$lake_TYPE <- NA
-      mt <- grep("lake_TYPE", toupper(colnames(header)))
+      mt <- grep("lake_TYPE", colnames(header))
     }
     env <- header[, mt[1], drop=FALSE]
     colnames(env) <- "lake_TYPE"
     comments$missingType <- is.na(env$lake_TYPE)
-    comments[comments$missingType, 2] <- paste0(comments[comments$missingType, 2], "Missing lake Type, value set to ", ddd$defaultsLakeType)
     env$lake_TYPE[is.na(env$lake_TYPE)] <- ddd$defaultLakeType
+    comments[comments$missingType, 2] <- paste0(comments[comments$missingType, 2], "Missing lake Type, value set to ", ddd$defaultsLakeType)
     eTDI <- apply(env[, "lake_TYPE", drop=FALSE], 1, function(x) switch(x, HA=medians[1], MA=medians[2], LA=medians[3]))
     EQR <- (100 - x$Metric) / (100 - eTDI)
     EQR[EQR > 1.0] <- 1.0
