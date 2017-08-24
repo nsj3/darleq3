@@ -46,9 +46,6 @@ x <- calc_Metric(d$diatom_data, metric="TDI4")
 head(x$Metric)
 
 }
-\author{
-Steve Juggins \email{Stephen.Juggins@ncl.ac.uk}
-}
 \references{
 Kelly, M., S. Juggins, R. Guthrie, S. Pritchard, J. Jamieson, B. Rippey, H. Hirst, and M. Yallop, Assessment of ecological status in UK rivers using diatoms. \emph{Freshwater Biology}, 2008. 403-422.
 
@@ -56,4 +53,6 @@ Juggins, S., M. Kelly, T. Allott, M. Kelly-Quinn, and D. Monteith, A Water Frame
 
 Bennion, H., M.G. Kelly, S. Juggins, M.L. Yallop, A. Burgess, J. Jamieson, and J. Krokowski, Assessment of ecological status in UK lakes using benthic diatoms. \emph{Freshwater Science}, 2014. 639-654.
 }
-
+\author{
+Steve Juggins \email{Stephen.Juggins@ncl.ac.uk}
+}

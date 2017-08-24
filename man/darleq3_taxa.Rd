@@ -7,4 +7,3 @@
 \description{
 A dataframe containing diatom codes, names and indicator values for different water quality metrics
 }
-
