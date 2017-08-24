@@ -34,7 +34,7 @@ library(darleq3)
 
 ## 1. Introduction
 
-`darleq3` is an R package for the assessment of river and lake ecological status using diatom data obtained by light microscopy (LM) or Next Generation Sequencing (NGS). The package contains functions to import diatom and associated environmental data from Excel worksheets, perform simple data validation checks, calculate various water quality metrics, EQRs and Water Framework Directive (WFD) quality classes for samples, and clafficiation uncertainty for sites.  The package can calculate Trophic Diatom Index TDI5LM, TDI4 and TDI3 scores for light miscroscopy river diatom samples, TDI5NGS for NGS river diatom samples, Lake Trophic Diatom Index LTDI2 and LTDI1 scores for light miscrscopy lake diaotm samples, and Diatom Acidification Metric (DAM) scores for lake and river light microscopy samples. Details of the TDI / LTDI metrics, algorithm and derivation of the status class boundaries for rivers are given in Kelly _et al_. (2008) and for lakes in Bennion _et al_. (2014). Details of the DAM acidification metric is described in Juggins _et al_. (2016). Calculation of uncertainty of classification is described in Kelly _et al_. 2009.
+`darleq3` is an R package for the assessment of river and lake ecological status using diatom data obtained by light microscopy (LM) or Next Generation Sequencing (NGS). The package contains functions to import diatom and associated environmental data from Excel worksheets, perform simple data validation checks, calculate various water quality metrics, EQRs and Water Framework Directive (WFD) quality classes for samples, and classification uncertainty for sites.  The package can calculate Trophic Diatom Index TDI5LM, TDI4 and TDI3 scores for light microscopy river diatom samples, TDI5NGS for NGS river diatom samples, Lake Trophic Diatom Index LTDI2 and LTDI1 scores for light microscopy lake diatom samples, and Diatom Acidification Metric (DAM) scores for lake and river light microscopy samples. Details of the TDI / LTDI metrics, algorithm and derivation of the status class boundaries for rivers are given in Kelly _et al_. (2008) and for lakes in Bennion _et al_. (2014). Details of the DAM acidification metric is described in Juggins _et al_. (2016). Calculation of uncertainty of classification is described in Kelly _et al_. 2009.
 
 `darleq3` can be run in two ways, either as an interactive shiny app, or a a series of R functions issues from the R console or an R script.  The first method attempts to mimic the old DARLEQ2 software will be the easiest for most users. The second methods will be more convenient for processing multiple data sets, for automating darleq calculations, or including them in a longer chain of analysis.
 
@@ -60,7 +60,7 @@ library(darleq3)
 fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 ```
 
-The file can be opened in Excel usingt he following:
+The file can be opened in Excel using t he following:
 
 ```{r Excel, eval=FALSE}
 # note running the following lines will open the file in Excel (if installed)
@@ -104,7 +104,7 @@ To quit the app simple close the browser and or hit Escape in the RStudio Consol
 
 `darleq3` contains a number of functions for importing diatom data, calculating various sample and site-based metrics, EQRs and WFD quality classes, and saving the results in Excel format.  The main functions are:
 
-* `darleq` import diatom data from an Excel file, calculate matrics, EQRs and WFD quality classes, and save results in Excel format
+* `darleq` import diatom data from an Excel file, calculate metrics, EQRs and WFD quality classes, and save results in Excel format
 * `read_DARLEQ` import diatom data from an Excel file
 * `save_DARLEQ` save metric and EQR results in an Excel file
 * `calc_Metric_EQR` calculate EQRS, WFD quality classes and summary diagnostic measures for multiple metrics
@@ -112,7 +112,7 @@ To quit the app simple close the browser and or hit Escape in the RStudio Consol
 * `calc_EQR` calculate sample and site EQRs and WFD quality classes
 * `runDARLEQ` run DARLEQ3 as an interactive shiny app in a web browser
 
-type ?function_Name at the R prompt to get help and example useage for these functions.
+type ?function_Name at the R prompt to get help and example usage for these functions.
 
 The `darleq3` functions have been designed to allow the user to perform individual steps of the data analysis sequence individually, for example importing diatom data, calculating a particular metric diatom from LM or NGS diatom data, or calculating EQRs from a metric and site information. These low-level functions are useful for embedding darleq3 in a longer data analysis chain using R.  The package also includes "wrapper" functions, that "wrap" multiple low-level functions to perform a complete analysis with a single function call.  
 
@@ -143,7 +143,7 @@ darleq(fn, sheet="Lakes LTDI Test Data", metrics=c("LTDI1", "LTDI2"), outFile="R
 
 ### 4.2 `darleq3` low-level functions
 
-`darleq3` low-level functions are useful for calculating partial results or for embedding darleq3 in a longer data analysis sequence.  The key functions are `read_DARLEQ` to import data from a DARLEQ-formatted data file (see Section 6 below for guidelines on how to format the data correctly).  `read_DARLEQ` returns a list with two elementss: `diatom_data` - a data frame of the diatom count or relative abundance data, and `header` - a data frame of sample, site and environmental data from the header of the Excel file.
+`darleq3` low-level functions are useful for calculating partial results or for embedding darleq3 in a longer data analysis sequence.  The key functions are `read_DARLEQ` to import data from a DARLEQ-formatted data file (see Section 6 below for guidelines on how to format the data correctly).  `read_DARLEQ` returns a list with two elements: `diatom_data` - a data frame of the diatom count or relative abundance data, and `header` - a data frame of sample, site and environmental data from the header of the Excel file.
 
 ```{r read}
 fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
@@ -152,7 +152,7 @@ head(d$diatom_data[, 1:8])
 head(d$header)
 ```
 
-`calc_Metric_EQR` calculates one or more diatom metrics and the corresponding sample and site EQRS and WFD classes, and class uncertainties.  The function returns a list with an element for each metric.  Each element is itself a list containing sample EQRs, site EQRs and uncertaintues and a job summary.
+`calc_Metric_EQR` calculates one or more diatom metrics and the corresponding sample and site EQRS and WFD classes, and class uncertainties.  The function returns a list with an element for each metric.  Each element is itself a list containing sample EQRs, site EQRs and uncertainties and a job summary.
 
 ```{r meqr}
 fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
@@ -197,7 +197,7 @@ The DARLEQ shiny app and R functions produce output that is similar in structure
 
 ### 5.1 Job summary 
 
-This sheet contains the input file name, worksheet name and a summary of the number of samples and taxa in the file.  It also contains a list of taxa included in the file but exclused from the metric calculations either because they are planktic or because they are not included in the DARLEQ list of indicator values for that metric.  The list also caons the number of occurennces (N), Hill's N2 effective number of occurrences (Hill 1973) and maximum abundance of these taxa.  The list of useful in checking the data for coding errors to identify abundant taxa excluded from the metric calculations.
+This sheet contains the input file name, worksheet name and a summary of the number of samples and taxa in the file.  It also contains a list of taxa included in the file but excludes from the metric calculations either because they are planktic or because they are not included in the DARLEQ list of indicator values for that metric.  The list also contains the number of occurrences (N), Hill's N2 effective number of occurrences (Hill 1973) and maximum abundance of these taxa.  The list of useful in checking the data for coding errors to identify abundant taxa excluded from the metric calculations.  For TDI3/4 and LTDI1/2 the output also contains a list of taxa with indicator values included in DARLEQ3 but not in DARLEQ2 software.  This is useful in understanding the reasons for differences in metric scores between DARLEQ versions 2 and 3 for the same metric.
 
 ### 5.2 Sample_Summary
 
@@ -211,7 +211,7 @@ Percent_in_CODE: 	Percentages of the total count of taxa that are matched to tax
 
 * CODE: value of the metric for each sample.
 
-* eCODE:	Expected vaklue of the metric for each sample according to typology (lakes) or site-specific prediction (rivers).
+* eCODE:	Expected value of the metric for each sample according to typology (lakes) or site-specific prediction (rivers).
 
 * EQR_CODE:	EQR for each sample based on predicted and observed metrics.
 
@@ -229,20 +229,19 @@ After the metric and classification fields a series of summary fields are listed
 
 * Comments:	List of any warning messages generated during calculations for individual samples relating to missing or out-of-range environmental values.
 
-For TSI4 the following coulms are also included:
+For TDI3/4 and LTDI1/2 the following columns are also included:
 
-* TDI4.D2.Sum: Sum of taxa included in DARLEQ version 2 TDI4 calculations
+* xxx.D2.Sum: Sum of taxa included in DARLEQ version 2 TDI calculations
 
-* TDI4.D2: TDI4 calculated using DARLEQ version 2 taxon list and indicator values
+* xxx.D2: TDI calculated using DARLEQ version 2 taxon list and indicator values
 
-* TDI4.Diff: Difference in TDI4 calculated using DARLEQ version 3 and 2 taxon lists and indicator values
+* xxx.Diff: Difference in TDI calculated using DARLEQ version 3 and 2 taxon lists and indicator values
 
-* TDI4.D2.EQR: EQR for DARLEQ version 2 TDI4
+* xxx.D2.EQR: EQR for DARLEQ version 2 TDI
 
-* TDI4.D2.Class: Status class for DARLEQ version 2 TDI4
+* xxx.D2.Class: Status class for DARLEQ version 2 TDI
 
-* Class.Diff: Indication if there is a difference in DARLEQ version 2 and 3 TDI4 status class
-
+* Class.Diff: Indication if there is a difference in DARLEQ version 2 and 3 TDI status class
 
 ### 5.3 Uncertainty
 
@@ -291,7 +290,7 @@ Note that the second column of the header information must be left blank.
 
 Identifiers for each row of the sample header information should be listed in column 1.  Diatom data then follow the header information and may be in count or percentage format. The first column must contain the taxon code in either NBS or DiatCode (http://www.ecrc.ucl.ac.uk/?q=databases/diatcode) format. The codes in this column are used to link the data to the DARLEQ3 taxon list and ecological information and cannot be empty (an empty cell indicates the end of the data). The second column must include either the taxon name or code (ie. a repeat of column 1).  
 
-The remaining columns to the right of the taxon name contain diatom counts or percentages.  Empty (blank) cells in the matrix will be read as zero. Character data in the diatom matrix will generate an error. A full list of diatom codes (either NBS or DiatCodes) are available in the dataframe `darleq3_taxa`.
+The remaining columns to the right of the taxon name contain diatom counts or percentages.  Empty (blank) cells in the matrix will be read as zero. Character data in the diatom matrix will generate an error. A full list of diatom codes (either NBS or DiatCodes) are available in the data frame `darleq3_taxa`.
 
 If the Diatom Acidification Metric (DAM) is to be calculated, the header must contain estimates of mean annual Calcium and DOC concentrations, rows named Calcium and DOC, and in ueq l-1 and mg l-1 respectively. Figure 3 shows an example formatted for calculation of TDI and DAM.  Note that if only DAM scores are required the Alkalinity field may be left blank.  Sample Date is not used for calculating DAM and may be left blank.
 
