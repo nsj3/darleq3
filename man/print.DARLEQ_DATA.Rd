@@ -14,3 +14,4 @@
 \description{
 Print an object of class DARLEQ_Data
 }
+

@@ -7,3 +7,4 @@
 \description{
 darleq3_data internal variables used in metric, EQR and WFD quality class calculations
 }
+
