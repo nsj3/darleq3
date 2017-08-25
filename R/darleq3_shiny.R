@@ -1,5 +1,7 @@
 #' Run DARLEQ3 as an interactive shiny app
 #'
+#' @param browser Logical to indicate if the app should open in an external browser (the default) or in R/RStudio's default shiny app window.
+#'
 #' @details
 #' \code{runDARLEQ} runs darleq3 as an interactive shiny app. When running the function will open a web browser displaying the shiny app:
 #'
@@ -25,8 +27,11 @@
 #' @importFrom shinydashboard dashboardPage dashboardHeader dashboardSidebar
 #' @importFrom shinyjs disable enable
 
-runDARLEQ <- function() {
+runDARLEQ <- function(browser=TRUE) {
   fn <- system.file("shiny_app/app.R", package="darleq3")
-  shiny::shinyAppFile(fn)
+  if (browser)
+     shiny::shinyAppFile(fn, options=list(launch.browser=TRUE))
+  else
+     shiny::shinyAppFile(fn)
 }
 
