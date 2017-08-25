@@ -4,7 +4,7 @@
 #' @param header data frame containing sample and site environmental information for calculating the expected value of the metric.
 #' @param verbose logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.
 #' @return A object of class \code{DIATOM_EQR}, a list with the following named elements:
-#' \item{EQR}{data frame containing, for each sample, sample codes, water chemistry data and other columns from the header in original Excel file, metric and summary information from function \code{calc_Metric}, expected EQRs (eEQR), calculated EQRs, predicted WFD class, percentage diatoms in diagnostic ecological groups, and a flag to indicate missing or out of range environmental data.  For TDI3 and TDI4 the output also contains 3 additional columns containing the count included in the metric calculation, EQR and status Class calculated using the (old) DARLEQ2 taxon list (suffix D2) and indicator values, and the difference in TDI values and status class between DARLEQ3 and DARLEQ2 software.}
+#' \item{EQR}{data frame containing, for each sample, sample codes, water chemistry data and other columns from the header in original Excel file, metric and summary information from function \code{calc_Metric}, expected EQRs (eEQR), calculated EQRs, predicted WFD class, percentage diatoms in diagnostic ecological groups, and a flag to indicate missing or out of range environmental data.  For TDI3, and TDI4, and LTDI1 and LTDI2, the output also contains 3 additional columns containing the count included in the metric calculation, EQR and status Class calculated using the (old) DARLEQ2 taxon list (suffix D2) and indicator values, and the difference in TDI values and status class between DARLEQ3 and DARLEQ2 software.}
 #' \item{Uncertainty}{data frame containing, for each site, mean EQRS, predicted WFD class, and confidence of class (CoC) for each WFD class and HG/MPB boundary (CoCCHG, COCMPB), and risk of misclassification for the predicted class (ROM) and for the G/M boundary (ROM_GM)}.
 #'
 #' @author Steve Juggins \email{Stephen.Juggins@@ncl.ac.uk}
@@ -98,13 +98,13 @@ calc_EQR <- function(x, header, verbose=TRUE) {
     mt <- grep("TYPE", toupper(colnames(header)))
     if (length(mt)==0) {
       header$lake_TYPE <- NA
-      mt <- grep("lake_TYPE", toupper(colnames(header)))
+      mt <- grep("lake_TYPE", colnames(header))
     }
     env <- header[, mt[1], drop=FALSE]
     colnames(env) <- "lake_TYPE"
     comments$missingType <- is.na(env$lake_TYPE)
-    comments[comments$missingType, 2] <- paste0(comments[comments$missingType, 2], "Missing lake Type, value set to ", ddd$defaultsLakeType)
     env$lake_TYPE[is.na(env$lake_TYPE)] <- ddd$defaultLakeType
+    comments[comments$missingType, 2] <- paste0(comments[comments$missingType, 2], "Missing lake Type, value set to ", ddd$defaultsLakeType)
     eTDI <- apply(env[, "lake_TYPE", drop=FALSE], 1, function(x) switch(x, HA=medians[1], MA=medians[2], LA=medians[3]))
     EQR <- (100 - x$Metric) / (100 - eTDI)
     EQR[EQR > 1.0] <- 1.0
@@ -158,11 +158,17 @@ calc_EQR <- function(x, header, verbose=TRUE) {
   res2 <- data.frame(eTDI, EQR, class)
   colnames(res2) <- paste0(c("e", "EQR_", "Class_"), metric)
   res$EQR <- data.frame(header, x$Summary, x$Metric, res2, x$EcolGroup, Comments=comments[, 2])
-  if ((metric=="TDI4" | metric=="TDI3") & x$CodingID=="NBSCode") {
+  if (x$CodingID=="NBSCode" & (metric %in% c("TDI4", "TDI3", "LTDI1", "LTDI2"))) {
      metID <- paste0(metric, "_D2")
-     EQR2 <- (100 - x$Metric.D2[, metID]) / (100 - eTDI) * mult_Factor
-     EQR2[EQR2 > 1.0] <- 1.0
-     Class2 <- calc_WFDClass(EQR2, metric)
+     if (metric2=="TDI") {
+        EQR2 <- (100 - x$Metric.D2[, metID]) / (100 - eTDI) * mult_Factor
+        EQR2[EQR2 > 1.0] <- 1.0
+        Class2 <- calc_WFDClass(EQR2, metric)
+     } else {
+        EQR2 <- (100 - x$Metric.D2[, metID]) / (100 - eTDI)
+        EQR[EQR > 1.0] <- 1.0
+        Class2 <- calc_WFDClass(EQR2, metric, env$lake_TYPE)
+     }
      mt <- grep("CLASS", toupper(colnames(res2)))
      nClass <- sum(res2[, mt] != Class2, na.rm=TRUE)
      tmp <- data.frame(eqr2=EQR2, class2=Class2, diff=ifelse(res2[, mt] != Class2, "Changed", NA))

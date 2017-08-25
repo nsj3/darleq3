@@ -13,9 +13,9 @@ save_DARLEQ(d, outFile = NULL, fn = "", sheet = "", verbose = TRUE)
 
 \item{fn}{name of in the input file for inclusion in the job summary page of output.}
 
-\item{sheet}{name of in the input worksheet name for inclusion in the job summary page of output.}
+\item{sheet}{name of the input worksheet for inclusion in the job summary page of output.}
 
-\item{verbose}{logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.}
+\item{verbose}{logical to indicate if function should stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.}
 }
 \description{
 Saves results of diatom EQR and class claculation to an Excel file

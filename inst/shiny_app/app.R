@@ -83,7 +83,8 @@ D_server <- function(input, output, session) {
     shinyjs::disable("calculateButton")
     res <<- NULL
     output$table2 <- renderText("")
-  }, ignoreInit = TRUE, ignoreNULL = TRUE)
+#  }, ignoreSysqInit = TRUE, ignoreNULL = TRUE)
+}, ignoreNULL = TRUE)
 
   observeEvent(input$fn$name, {
     get_Sheets <- function(file) {
@@ -122,7 +123,8 @@ D_server <- function(input, output, session) {
       output$message1 <- renderText("Select worksheet and click import data...")
       updateSelectInput(session, "sheet", choices=sheets.nms)
     }
-  }, ignoreInit = TRUE, ignoreNULL = TRUE)
+#  }, ignoreInit = TRUE, ignoreNULL = TRUE)
+  }, ignoreNULL = TRUE)
 
   observeEvent(input$importButton, {
     if (nchar(fn2[1]) > 4) {

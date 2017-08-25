@@ -5,7 +5,7 @@
 #' @param dictionary diatom dictionary, a data frame with diatom taxon codes and indicator values for different metrics.  Defaults to the built-in DARLEQ3 dictionary.
 #' @param verbose logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.
 #'
-#' @details \code{calc_Metric} takes as arguments a data frame of diatom counts or relative abundances, a metric code and a "dictionary" of diatom metric indicator values. The function will like the diatom taxon codes from the column names in the diatom data to those listed in the dictionary and calculate the relevant metric, along with some useful summary statistics.Diatoms data should be coded with either NBS codes or 6-character DiatCode codes. See \code{\link{darleq3_taxa}} for the current DARLEQ3 dictionary.
+#' @details \code{calc_Metric} takes as arguments a data frame of diatom counts or relative abundances, a metric code and a "dictionary" of diatom metric indicator values. The function will link the diatom taxon codes from the column names in the diatom data to those listed in the dictionary and calculate the relevant metric, along with some useful summary statistics. Diatom data should be coded with either NBS codes or 6-character DiatCode codes. See \code{\link{darleq3_taxa}} for the current DARLEQ3 dictionary.
 #'
 #' @return A object of class \code{DIATOM_METRIC}, a list with the following named elements:
 #' \item{Metric_Code}{metric code}
@@ -21,7 +21,7 @@
 #' }
 #' \item{EcolGroup}{data frame containing a list of the percentage of motile, organic tolerant, planktic and saline tolerant taxa in each sample}
 #' \item{Job_Summary}{list containing elements giving the total number of samples, number of samples with data, total number of taxa, number of taxa with occurrences, diatom metric and list of taxa that do not have a metric indicator value in the taxon dictionary}
-#' \item{Metric.D2}{for TDI3 and TDI4 calculations, a data frame containing TDI calculated using the DARLEQ2 taxon list, the sum of taxa included in the calculation, and the difference between TDI calculated by DARLEQ3 and DARLEQ2 software}
+#' \item{Metric.D2}{for TDI3 and TDI4, and LTDI1 and LTDI2, a data frame containing TDI calculated using the DARLEQ2 taxon list, the sum of taxa included in the calculation, and the difference between TDI calculated by DARLEQ3 and DARLEQ2 software}
 #'
 #'
 #' @author Steve Juggins \email{Stephen.Juggins@@ncl.ac.uk}
@@ -158,7 +158,8 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
   res$EcolGroup <- round(data.frame(Motile=pc.motile, OrganicTolerant=pc.organic, Planktic=pc.planktic, Saline=pc.saline), 2)
   res$Job_Summary <- Job_Summary
 
-  if (codingID=="NBSCode" & (metric=="TDI4" | metric=="TDI3")) {
+  missingTaxa2 <- NULL
+  if (codingID=="NBSCode" & (metric %in% c("TDI4", "TDI3", "LTDI1", "LTDI2"))) {
     mt <- match(nms, dictionary[, codingID])
     met.D2 <- paste0(metric, "_D2")
     tdi.sp.all2 <- dictionary[stats::na.omit(mt), met.D2]
@@ -174,8 +175,18 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
     colnames(tmp) <- paste(metric, c("D2_Sum", "D2", "Diff"), sep="_")
     res$Metric.D2 <- tmp
     nWarn <- sum(abs(tdi.diff)>2.0, na.rm=TRUE)
+
+    missingTaxa2 <- setdiff(nms, tdi.sp.nms2)
+    if (length(missingTaxa2) > 0) {
+      tmp <- diat.pc[, missingTaxa2]
+      tmp2 <- calc_N_N2_Max(t(tmp))
+      mt <- match(missingTaxa2, dictionary[, codingID])
+      names <- dictionary[mt, "TaxonName"]
+      missingTaxonSummary2 <- data.frame(TaxonID=missingTaxa2, Name=names, tmp2)
+    }
+
     if (nWarn > 0) {
-      res$warnings <- paste0(nWarn, " sample(s) have a difference of more than 2 ", metric, "units between DARLEQ versions 2 and 3.")
+      res$warnings <- paste0(nWarn, " sample(s) have a difference of more than 2 ", metric, " units between DARLEQ versions 2 and 3.")
       if (verbose)
         warning(res$warning, call.=FALSE)
     }
@@ -183,6 +194,9 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
 
   if (length(missingTaxa)>0) {
     res$Job_Summary$MissingTaxa <- missingTaxonSummary
+  }
+  if (length(missingTaxa2)>0) {
+    res$Job_Summary$MissingTaxa2 <- missingTaxonSummary2
   }
   class(res) <- c("Diatom_METRIC")
   res

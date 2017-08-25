@@ -3,7 +3,7 @@ library(rmarkdown)
 
 render("vignettes/darleq3UserGuide.Rmd", pdf_document(), output_file="darleq3UserGuidePDF.pdf")
 
-pack <- "darleq3"
+  pack <- "darleq3"
 path <- find.package(pack)
 system(paste(shQuote(file.path(R.home("bin"), "R")),
              "CMD", "Rd2pdf", "--no-preview", "--force", "--output=vignettes/darleq3.pdf", shQuote(path)))
