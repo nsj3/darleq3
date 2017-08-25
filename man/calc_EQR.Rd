@@ -4,23 +4,25 @@
 \alias{calc_EQR}
 \title{Calculate EQRs and WFD status classes from diatom metric and sample environmental data}
 \usage{
-calc_EQR(x, header)
+calc_EQR(x, header, verbose = TRUE)
 }
 \arguments{
 \item{x}{an object of class \code{DIATOM_METRIC}, usually the output from function \code{\link{calc_Metric}}.}
 
 \item{header}{data frame containing sample and site environmental information for calculating the expected value of the metric.}
+
+\item{verbose}{logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.}
 }
 \value{
 A object of class \code{DIATOM_EQR}, a list with the following named elements:
-\item{EQR}{data frame containing, for each sample, sample codes, water chemistry data and other columns from the header in original Excel file, metric and summary information from function \code{calc_Metric}, expected EQRs (eEQR), calculated EQRs, predicted WFD class, percentage diatoms in diagnostic ecological groups, and a flag to indicate missing or out of range environmental data.}
+\item{EQR}{data frame containing, for each sample, sample codes, water chemistry data and other columns from the header in original Excel file, metric and summary information from function \code{calc_Metric}, expected EQRs (eEQR), calculated EQRs, predicted WFD class, percentage diatoms in diagnostic ecological groups, and a flag to indicate missing or out of range environmental data.  For TDI3 and TDI4 the output also contains 3 additional columns containing the count included in the metric calculation, EQR and status Class calculated using the (old) DARLEQ2 taxon list (suffix D2) and indicator values, and the difference in TDI values and status class between DARLEQ3 and DARLEQ2 software.}
 \item{Uncertainty}{data frame containing, for each site, mean EQRS, predicted WFD class, and confidence of class (CoC) for each WFD class and HG/MPB boundary (CoCCHG, COCMPB), and risk of misclassification for the predicted class (ROM) and for the G/M boundary (ROM_GM)}.
 }
 \description{
 Calculate EQRs and WFD status classes from diatom metric and sample environmental data
 }
 \examples{
-fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 x <- calc_Metric(d$diatom_data, metric="TDI4")
 eqr <- calc_EQR(x, d$header)

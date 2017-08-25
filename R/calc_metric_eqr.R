@@ -14,7 +14,7 @@
 #' @references Bennion, H., M.G. Kelly, S. Juggins, M.L. Yallop, A. Burgess, J. Jamieson, and J. Krokowski, Assessment of ecological status in UK lakes using benthic diatoms. \emph{Freshwater Science}, 2014. 639-654.
 #'
 #' @examples
-#' fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+#' fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 #' d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 #' x <- calc_Metric_EQR(d)
 #' save_DARLEQ(x, outFile="results.xlsx")
@@ -37,8 +37,17 @@ calc_Metric_EQR <- function(x, metrics="TDI5LM", verbose=TRUE) {
     x.tdi <- tryCatch(calc_Metric(x$diatom_data, metrics[i], verbose=FALSE), error=function(e) { e } )
     if (inherits(x.tdi, "error"))
         errMessage(x.tdi$message, verbose)
-    res[[i]] <- calc_EQR(x.tdi, x$header)
+    res[[i]] <- calc_EQR(x.tdi, x$header, verbose=FALSE)
     res[[i]]$Job_Summary <- x.tdi$Job_Summary
+    if (!is.null(x.tdi$warnings)) {
+      if (is.null(res[[i]]$warnings)) {
+         res[[i]]$warnings <- x.tdi$warnings
+      } else {
+         res[[i]]$warnings <- paste0(res[[i]]$warnings, "\n", x.tdi$warnings)
+      }
+    }
+    if (verbose & !is.null(res[[i]]$warnings))
+      warning(res[[i]]$warnings, call.=FALSE)
   }
   names(res) <- metrics
   class(res) <- "DARLEQ3_EQR"

@@ -14,7 +14,7 @@
 #' @references Bennion, H., M.G. Kelly, S. Juggins, M.L. Yallop, A. Burgess, J. Jamieson, and J. Krokowski, Assessment of ecological status in UK lakes using benthic diatoms. \emph{Freshwater Science}, 2014. 639-654.
 #'
 #' @examples
-#' fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+#' fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 #' darleq(fn, outFile="Results.xlsx")
 #'
 #' @export darleq
@@ -24,7 +24,7 @@ darleq <- function(inFile, sheet=NULL, metrics=c("TDI3", "TDI4", "TDI5LM"), outF
   metrics2 <- darleq3::darleq3_data$metric.codes
   if (!is.null(metrics)) {
     mt <- metrics %in% metrics2
-    if(any(is.na(mt)))
+    if(any(!mt))
        errMessage("Invalid diatom metric", verbose)
   } else {
     errMessage("metrics missing with no default", verbose)
@@ -43,11 +43,18 @@ darleq <- function(inFile, sheet=NULL, metrics=c("TDI3", "TDI4", "TDI5LM"), outF
     fn <- strsplit(tmp, "\\.")[[1]][1]
     if (is.null(sheet))
       sheet <- d$sheet
-    fn <- paste0("DARLEQ3_Results_", fn, "_", sheet, "_", Sys.Date(), ".xlsx")
+    outFile <- paste0("DARLEQ3_Results_", fn, "_", sheet, "_", Sys.Date(), ".xlsx")
     outFile <- gsub(" ", "_", outFile)
   }
   retval <- tryCatch(save_DARLEQ(res, outFile, fn=inFile, sheet=sheet, FALSE))
   if (inherits(retval, "error"))
     errMessage(retval$message, verbose)
+
+  if (verbose) {
+    for (i in 1:length(res)) {
+      if (!is.null(res[[i]]$warnings))
+        warning(res[[i]]$warnings, call.=FALSE)
+    }
+  }
 }
 

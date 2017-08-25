@@ -21,6 +21,8 @@
 #' }
 #' \item{EcolGroup}{data frame containing a list of the percentage of motile, organic tolerant, planktic and saline tolerant taxa in each sample}
 #' \item{Job_Summary}{list containing elements giving the total number of samples, number of samples with data, total number of taxa, number of taxa with occurrences, diatom metric and list of taxa that do not have a metric indicator value in the taxon dictionary}
+#' \item{Metric.D2}{for TDI3 and TDI4 calculations, a data frame containing TDI calculated using the DARLEQ2 taxon list, the sum of taxa included in the calculation, and the difference between TDI calculated by DARLEQ3 and DARLEQ2 software}
+#'
 #'
 #' @author Steve Juggins \email{Stephen.Juggins@@ncl.ac.uk}
 #'
@@ -29,7 +31,7 @@
 #' @references Bennion, H., M.G. Kelly, S. Juggins, M.L. Yallop, A. Burgess, J. Jamieson, and J. Krokowski, Assessment of ecological status in UK lakes using benthic diatoms. \emph{Freshwater Science}, 2014. 639-654.
 #'
 #' @examples
-#' fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+#' fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 #' d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 #' x <- calc_Metric(d$diatom_data, metric="TDI4")
 #' head(x$Metric)
@@ -81,7 +83,7 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
   Job_Summary[[1]] <- length(totals)
   Job_Summary[[2]] <- sum(totals > 0)
   Job_Summary[[3]] <- ncol(diat.pc)
-  diat.pc <- diat.pc[, colSums(diat.pc) > 0]
+  diat.pc <- diat.pc[, colSums(diat.pc) > 0, drop=FALSE]
   Job_Summary[[4]] <- ncol(diat.pc)
   Job_Summary[[5]] <- metric
   names(Job_Summary) <- c("N_samples", "N_samples_gt_zero", "N_taxa", "N_taxa_gt_zero", "Metric")
@@ -93,7 +95,7 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
   names(tdi.sp.all) <- dictionary[stats::na.omit(mt), codingID]
   tdi.sp <- stats::na.omit(tdi.sp.all)
   tdi.sp.nms <- names(tdi.sp)
-  diat.pc2 <- diat.pc[, tdi.sp.nms]
+  diat.pc2 <- diat.pc[, tdi.sp.nms, drop=FALSE]
 
   planktic <- as.logical(dictionary[stats::na.omit(mt), "Planktic"])
   saline <- as.logical(dictionary[stats::na.omit(mt), "Saline"])
@@ -109,19 +111,19 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
   organic_T <- names(tdi.sp.all)[organic]
   nsam <- nrow(diat.pc)
   if (any(planktic))
-     pc.planktic <- rowSums(diat.pc[, planktic_T])
+     pc.planktic <- rowSums(diat.pc[, planktic_T, drop=FALSE])
   else
     pc.planktic <- rep(0.0, nsam)
   if (any(saline))
-    pc.saline <- rowSums(diat.pc[, saline_T])
+    pc.saline <- rowSums(diat.pc[, saline_T, drop=FALSE])
   else
     pc.saline <- rep(0.0, nsam)
   if (any(motile))
-     pc.motile <- rowSums(diat.pc[, motile_T])
+     pc.motile <- rowSums(diat.pc[, motile_T, drop=FALSE])
   else
      pc.motile <- rep(0.0, nsam)
   if (any(organic))
-    pc.organic <- rowSums(diat.pc[, organic_T])
+    pc.organic <- rowSums(diat.pc[, organic_T, drop=FALSE])
   else
     pc.organic <- rep(0.0, nsam)
 
@@ -149,12 +151,36 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
   res <- list()
   res$CodingID <- codingID
   res$Metric_Code <- metric
-  res$Metric <- data.frame(Metric=round(tdi.sam, 2))
+  res$Metric <- data.frame(Metric=tdi.sam)
   colnames(res$Metric) <- metric
-  res$Summary <- data.frame(Total.count=round(totals, 2), total.TDI=round(rSum, 2), calc_N_N2_Max(diat.pc2))
+  res$Summary <- data.frame(Total.count=totals, total.TDI=rSum, calc_N_N2_Max(diat.pc2))
   colnames(res$Summary) <- c("Total_count", paste0(c("Percent_in_", "N_", "N2_", "Max_"), metric))
   res$EcolGroup <- round(data.frame(Motile=pc.motile, OrganicTolerant=pc.organic, Planktic=pc.planktic, Saline=pc.saline), 2)
   res$Job_Summary <- Job_Summary
+
+  if (codingID=="NBSCode" & (metric=="TDI4" | metric=="TDI3")) {
+    mt <- match(nms, dictionary[, codingID])
+    met.D2 <- paste0(metric, "_D2")
+    tdi.sp.all2 <- dictionary[stats::na.omit(mt), met.D2]
+    names(tdi.sp.all2) <- dictionary[stats::na.omit(mt), codingID]
+    tdi.sp2 <- stats::na.omit(tdi.sp.all2)
+    tdi.sp.nms2 <- names(tdi.sp2)
+    diat.pc3 <- diat.pc[, tdi.sp.nms2, drop=FALSE]
+    tdi.D2 <- apply(diat.pc3, 1, wm, x=tdi.sp2)
+    tdi.D2 <- (tdi.D2 * 25) - 25
+    tdi.D2.rSum <- rowSums(diat.pc3) * totals / 100
+    tdi.diff <- tdi.sam-tdi.D2
+    tmp <- data.frame(TDI.D2.Sum=tdi.D2.rSum, TDI.D2=tdi.D2, TDI.Diff=tdi.diff)
+    colnames(tmp) <- paste(metric, c("D2_Sum", "D2", "Diff"), sep="_")
+    res$Metric.D2 <- tmp
+    nWarn <- sum(abs(tdi.diff)>2.0, na.rm=TRUE)
+    if (nWarn > 0) {
+      res$warnings <- paste0(nWarn, " sample(s) have a difference of more than 2 ", metric, "units between DARLEQ versions 2 and 3.")
+      if (verbose)
+        warning(res$warning, call.=FALSE)
+    }
+  }
+
   if (length(missingTaxa)>0) {
     res$Job_Summary$MissingTaxa <- missingTaxonSummary
   }

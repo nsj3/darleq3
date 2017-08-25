@@ -7,8 +7,7 @@
 \title{darleq3: Diatom Assessment of River and Lake Ecological Quality}
 \description{
 darleq3 is an R package for the assessment of river and lake ecological status using diatom data obtained by light microscopy (LM) or Next Generation Sequencing (NGS). The package contains functions for importing data from Excel worksheets, calculating various water quality metrics, EQRs and Water Framework Directive quality classes.
-}
-\details{
+
 Additonal help on using the package and interpreting the results can be found in the following vignettes:
 
 \href{../doc/darleq3UserGuide.html}{darleq3 User Guide (html version)}

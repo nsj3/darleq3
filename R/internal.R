@@ -118,6 +118,8 @@ calc_Uncertainty <- function(x, metric, lake_Type=NULL) {
   CoCG <- 100 * (N4 - N3)
   CoCH <- 100 * (1 - N4)
   ROM <- 100 - CoCH
+  sel <- is.na(EQR)
+  EQR[sel] <- 0
   ROM[EQR <= PB] <- 100 - CoCB[EQR <= PB]
   ROM[EQR <= MP] <- 100 - CoCP[EQR <= MP]
   ROM[EQR <= GM] <- 100 - CoCM[EQR <= GM]
@@ -126,5 +128,7 @@ calc_Uncertainty <- function(x, metric, lake_Type=NULL) {
   CoCMPB <- CoCP + CoCB + CoCM
   ROM_GM <- 100-CoCHG
   ROM_GM[EQR <= GM] <- 100-CoCMPB[EQR <= GM]
+  ROM[sel]  <- NA
+  ROM_GM[sel] <- NA
   round(data.frame(CoCH=CoCH, CoCG=CoCG, CoCM=CoCM, CoCP=CoCP, CoCB=CoCB, ROM=ROM, CoCHG=CoCHG, CoCMPB=CoCMPB, ROM_GM=ROM_GM), 2)
 }

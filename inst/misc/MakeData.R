@@ -38,8 +38,8 @@ darleq3_data$defaults$CoC_TDI <- c(A0=0.03, B1=0.177, B2=-0.157, Power=5.73)
 darleq3_data$metric.codes <- c("TDI3", "TDI4", "TDI5LM", "TDI5NGS", "LTDI1", "LTDI2", "DAM")
 darleq3_data$metric.types <- c("TDILM", "LTDILM", "DAMLM", "TDINGS")
 
-col_types <- c(rep("text", 8), rep("numeric", 13))
-darleq3_taxa <- as.data.frame(read_excel("\\Data\\R_Libraries\\People\\Martyn_Kelly\\Barcoding\\TaxonLists\\DarleqTaxonList2017_Master.xlsx", col_types=col_types))
+col_types <- c(rep("text", 8), rep("numeric", 15))
+darleq3_taxa <- as.data.frame(read_excel("\\Data\\R_Libraries\\People\\Martyn_Kelly\\Barcoding\\TaxonLists\\DarleqTaxonList2017_Master.xlsx", sheet="D3_List", col_types=col_types))
 rm(col_types)
 
 load("..\\darleq3_test\\NGS_ma.Rda")
@@ -50,3 +50,25 @@ darleq3_data$mono.mod <- mono.mod
 
 save(darleq3_taxa, darleq3_data, file="data\\darleq3_data.rda")
 
+if (0) {
+  # check list against Darleq2 TDI4 taxon codes and indicator values
+
+  col_types <- c(rep("text", 8), rep("numeric", 14))
+  darleq3_taxa <- as.data.frame(read_excel("\\Data\\R_Libraries\\People\\Martyn_Kelly\\Barcoding\\TaxonLists\\DarleqTaxonList2017_Master.xlsx", sheet="D3_List", col_types=col_types))
+  rm(col_types)
+  col_types <- c(rep("text", 12), rep("numeric", 6), rep("text", 5))
+  darleq2_taxa <- as.data.frame(read_excel("\\Data\\R_Libraries\\People\\Martyn_Kelly\\Barcoding\\TaxonLists\\DarleqTaxonList2017_Master.xlsx", sheet="D2_List", col_types=col_types))
+  rm(col_types)
+
+  require(dplyr)
+  require(openxlsx)
+  tmp1 <- darleq3_taxa[, c(1:5, 9:17)]
+  tmp1 <- dplyr::filter(tmp1, !is.na(NBSCode))
+  which(table(tmp1$NBSCode) > 1)
+  tmp2 <- aggregate(darleq2_taxa[, "TDI4", drop=FALSE], list(NBSCode=darleq2_taxa$NBSCode), first)
+  which(table(darleq2_taxa$NBSCode) > 1)
+
+  tmp <- left_join(tmp1, tmp2, by="NBSCode")
+  o <- order(tmp$NBSCode)
+  write.xlsx(tmp[o, ], "../darleq3_test/merged_taxon_list.xlsx", rownames=TRUE)
+}

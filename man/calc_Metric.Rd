@@ -31,6 +31,7 @@ A object of class \code{DIATOM_METRIC}, a list with the following named elements
 }
 \item{EcolGroup}{data frame containing a list of the percentage of motile, organic tolerant, planktic and saline tolerant taxa in each sample}
 \item{Job_Summary}{list containing elements giving the total number of samples, number of samples with data, total number of taxa, number of taxa with occurrences, diatom metric and list of taxa that do not have a metric indicator value in the taxon dictionary}
+\item{Metric.D2}{for TDI3 and TDI4 calculations, a data frame containing TDI calculated using the DARLEQ2 taxon list, the sum of taxa included in the calculation, and the difference between TDI calculated by DARLEQ3 and DARLEQ2 software}
 }
 \description{
 Calculate water quality metrics from diatom data
@@ -39,7 +40,7 @@ Calculate water quality metrics from diatom data
 \code{calc_Metric} takes as arguments a data frame of diatom counts or relative abundances, a metric code and a "dictionary" of diatom metric indicator values. The function will like the diatom taxon codes from the column names in the diatom data to those listed in the dictionary and calculate the relevant metric, along with some useful summary statistics.Diatoms data should be coded with either NBS codes or 6-character DiatCode codes. See \code{\link{darleq3_taxa}} for the current DARLEQ3 dictionary.
 }
 \examples{
-fn <- system.file("example_datasets/DARLEQ2TestData.xlsx", package="darleq3")
+fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 d <- read_DARLEQ(fn, "Rivers TDI Test Data")
 x <- calc_Metric(d$diatom_data, metric="TDI4")
 head(x$Metric)
