@@ -23,4 +23,4 @@ LazyData: true
 BinaryFiles: zip.exe
 RoxygenNote: 5.0.1
 Roxygen: list(markdown = TRUE)
-VignetteBuilder: R.rsp
+VignetteBuilder: knitr, R.rsp
