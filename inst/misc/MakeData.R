@@ -38,7 +38,7 @@ darleq3_data$defaults$CoC_TDI <- c(A0=0.03, B1=0.177, B2=-0.157, Power=5.73)
 darleq3_data$metric.codes <- c("TDI3", "TDI4", "TDI5LM", "TDI5NGS", "LTDI1", "LTDI2", "DAM")
 darleq3_data$metric.types <- c("TDILM", "LTDILM", "DAMLM", "TDINGS")
 
-col_types <- c(rep("text", 8), rep("numeric", 17))
+col_types <- c(rep("text", 9), rep("numeric", 17))
 darleq3_taxa <- as.data.frame(read_excel("\\Data\\R_Libraries\\People\\Martyn_Kelly\\Barcoding\\TaxonLists\\DarleqTaxonList2017_Master.xlsx", sheet="D3_List", col_types=col_types))
 rm(col_types)
 
@@ -53,7 +53,7 @@ save(darleq3_taxa, darleq3_data, file="data\\darleq3_data.rda")
 if (0) {
   # check list against Darleq2 TDI4 taxon codes and indicator values
 
-  col_types <- c(rep("text", 8), rep("numeric", 14))
+  col_types <- c(rep("text", 9), rep("numeric", 17))
   darleq3_taxa <- as.data.frame(read_excel("\\Data\\R_Libraries\\People\\Martyn_Kelly\\Barcoding\\TaxonLists\\DarleqTaxonList2017_Master.xlsx", sheet="D3_List", col_types=col_types))
   rm(col_types)
   col_types <- c(rep("text", 12), rep("numeric", 6), rep("text", 5))

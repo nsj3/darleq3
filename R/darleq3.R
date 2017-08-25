@@ -5,13 +5,14 @@
 #'
 #' Additonal help on using the package and interpreting the results can be found in the following vignettes:
 #'
-#' [darleq3 User Guide (html version)](../doc/darleq3UserGuide.html)
+#' \href{../doc/darleq3UserGuide.html}{darleq3 User Guide (html version)}
 #'
-#' [darleq3 User Guide (pdf version)](../doc/darleq3UserGuidePDF.pdf)
+#' \href{../doc/darleq3UserGuidePDF.pdf}{darleq3 User Guide (pdf version)}
 #'
-#' [darleq3 Manual (pdf version)](../doc/darleq3.pdf)
+#' \href{../doc/darleq3.pdf}{darleq3 Manual (pdf version)}
 #'
-#' [Guide to interpreting TDI5 NGS data (pdf version)](../doc/interpreting_NGS_data.pdf)
+#' \href{../doc/interpreting_NGS_data.pdf}{Guide to interpreting TDI5 NGS data (pdf version)}
+#'
 #'
 #' @section darleq3 functions:
 #'
@@ -36,4 +37,4 @@
 #'
 #' @docType package
 #' @name darleq3
-NULL
+"_PACKAGE"

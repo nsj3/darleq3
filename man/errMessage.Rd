@@ -17,3 +17,4 @@ error message handler
 \details{
 This is an internal function and is not meant to be called directly.
 }
+

@@ -4,7 +4,10 @@
 \alias{runDARLEQ}
 \title{Run DARLEQ3 as an interactive shiny app}
 \usage{
-runDARLEQ()
+runDARLEQ(browser = TRUE)
+}
+\arguments{
+\item{browser}{Logical to indicate if the app should open in an external browser (the default) or in R/RStudio's default shiny app window.}
 }
 \description{
 Run DARLEQ3 as an interactive shiny app
@@ -16,12 +19,10 @@ Run DARLEQ3 as an interactive shiny app
 \if{latex}{\figure{darleq3shiny.png}{options: width=9cm}}
 
 To use the app follow these simple steps:
-\itemize{
-\item 1: Click the Browse... button to select and upload a DARLEQ diatom file (see function \code{\link{read_DARLEQ}} for guidelines on how to format this file).
-\item 2: Once uploaded, select a sheet and click import.  A summary (number of samples & taxa) will be displayed in the Data summary box when upload is complete.
-\item 3: Select the metric type. "TDI for LM" will calculate TDI3, TDI4 and TDI5LM for river LM diatom data, TDI for NGS will calculate TDI5NGS for river NGS diatom data, "LTDI for LM" will calculate LTDI1 and LTDI2 for lake LM data, and "DAM for LM" will calculate the diatom acidification metric for river LM data.  A summary of results will appear in the Results summary box when the calculations are complete.
-\item 4: Click Download Results to save the results in an Excel file.  The default name for this file will be the "DARLEQ3_Results_" concatenated with the original data filename, worksheet name, and date.
-}
+* 1: Click the Browse... button to select and upload a DARLEQ diatom file (see function \code{\link{read_DARLEQ}} for guidelines on how to format this file).
+* 2: Once uploaded, select a sheet and click import.  A summary (number of samples & taxa) will be displayed in the Data summary box when upload is complete.
+* 3: Select the metric type. "TDI for LM" will calculate TDI3, TDI4 and TDI5LM for river LM diatom data, TDI for NGS will calculate TDI5NGS for river NGS diatom data, "LTDI for LM" will calculate LTDI1 and LTDI2 for lake LM data, and "DAM for LM" will calculate the diatom acidification metric for river LM data.  A summary of results will appear in the Results summary box when the calculations are complete.
+* 4: Click Download Results to save the results in an Excel file.  The default name for this file will be the "DARLEQ3_Results_" concatenated with the original data filename, worksheet name, and date.
 
 To quit the app simple close the browser and or hit Escape in the RStudio Console window.
 }
@@ -32,3 +33,4 @@ runDARLEQ()
 }
 
 }
+

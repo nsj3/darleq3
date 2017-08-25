@@ -29,19 +29,17 @@ A list with the following named elements:
 An example Excel file is included in this package.  See examples below to view it.  The required data and layout are slightly different for river and lake samples.  Figure 1 below shows the required format for performing TDI calculations for river samples.
 
 The first four header rows are mandatory and must contain the following information:
-\itemize{
-\item Row 1: Sample identifier – a short numerical or alphanumeric code to uniquely identify the sample. This field cannot be empty (an empty cell indicates the end of data).
-\item Row 2:	Site identifier – a short numerical or alphanumeric code to uniquely identify the site. This code will be used to aggregate multiple samples when calculating confidence of class for a site.
-\item Row 3:	Sample Date in Day/Month/Year format. Missing dates are set to “Spring” for the purposes of classification using TDI3 and samples flagged with a warning.
-\item Row 4:	Mean annual alkalinity (or best available estimate) in mg l-1 (CaCO3). Missing values are set to 100 mg l-1 for the purposes of classification and samples flagged with a warning.  Alkalinity values outside the range of the site prediction algorithm are set to the appropriate limit (6 or 150 mg l-1 for TDI3 and 5 or 250 mg l-1 for TDI4 and TDI5LM / TDI5NGS).
-\item Rows 5+: Further option sample descriptors such as river name, reach name etc. These data are not used by the program but will be reproduced in the output.
+* Row 1: Sample identifier – a short numerical or alphanumeric code to uniquely identify the sample. This field cannot be empty (an empty cell indicates the end of data).
+* Row 2:	Site identifier – a short numerical or alphanumeric code to uniquely identify the site. This code will be used to aggregate multiple samples when calculating confidence of class for a site.
+* Row 3:	Sample Date in Day/Month/Year format. Missing dates are set to “Spring” for the purposes of classification using TDI3 and samples flagged with a warning.
+* Row 4:	Mean annual alkalinity (or best available estimate) in mg l-1 (CaCO3). Missing values are set to 100 mg l-1 for the purposes of classification and samples flagged with a warning.  Alkalinity values outside the range of the site prediction algorithm are set to the appropriate limit (6 or 150 mg l-1 for TDI3 and 5 or 250 mg l-1 for TDI4 and TDI5LM / TDI5NGS).
+* Rows 5+: Further option sample descriptors such as river name, reach name etc. These data are not used by the program but will be reproduced in the output.
 Note that the second column of the header information must be left blank.
-}
 
 \if{html}{\figure{DARLEQRiverData.png}{options: width="60\%" alt=""}}
 \if{latex}{\figure{DARLEQRiverData.png}{options: width=9cm}}
 
-\emph{\strong{Figure 1: Example format for river diatom samples}}
+***Figure 1: Example format for river diatom samples***
 
 Identifiers for each row of the sample header information should be listed in column 1.  Diatom data then follow the header information and may be in count or percentage format. The first column must contain the taxon code in either NBS or DiatCode (http://www.ecrc.ucl.ac.uk/?q=databases/diatcode) format. The codes in this column are used to link the data to the DARLEQ3 taxon list and ecological information and cannot be empty (an empty cell indicates the end of the data). The second column must include either the taxon name or code (ie. a repeat of column 1). Empty (blank) cells in the count or percentage data matrix will be read as zero. Character data in the diatom matrix will generate an error. A full list of diatom codes (either NBS or DiatCodes) are available in the dataframe \code{darleq3_taxa}.
 
@@ -50,14 +48,14 @@ If the Diatom Acidification Metric (DAM) is to be calculated, rows 5 and 6 must 
 \if{html}{\figure{DARLEQDAMData.png}{options: width="60\%" alt=""}}
 \if{latex}{\figure{DARLEQDAMData.png}{options: width=9cm}}
 
-\emph{\strong{Figure 2: Example format for river diatom TDI and DAM samples}}
+***Figure 2: Example format for river diatom TDI and DAM samples***
 
 The required format for lake samples is shown in Figure 3. This is exactly the same as for river data except that the fourth row must contain a code indicating lake type according to the GB lake typology alkalinity classes.  Marl lakes are included in the high alkalinity (HA) group. Peat and brackish lakes are not covered by the tool.  Sample date for lake samples is not used in the class calculations and can contain missing values.
 
 \if{html}{\figure{DARLEQLakeData.png}{options: width="60\%" alt=""}}
 \if{latex}{\figure{DARLEQLakeData.png}{options: width=9cm}}
 
-\emph{\strong{Figure 3: Example format for lake diatom LTDI samples}}
+***Figure 3: Example format for lake diatom LTDI samples***
 }
 \examples{
 fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
@@ -75,3 +73,4 @@ shell.exec(fn)
 \author{
 Steve Juggins \email{Stephen.Juggins@ncl.ac.uk}
 }
+

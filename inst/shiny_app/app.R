@@ -19,7 +19,11 @@ D_ui <- dashboardPage(header, dashboardSidebar(disable = TRUE),
     # Boxes need to be put in a row (or column)
     fluidRow(shinyjs::useShinyjs(),
       column(width=4,
-        box(fileInput("fn", "Select input file:", accept=c(".xlsx", ".xls"), width="100%"), width=200),
+        box(fileInput("fn", "Select input file:",
+              accept=c("application/vnd.ms-excel",
+                       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        ".xlsx", ".xls"),
+              width="100%"), width=200),
         box(verbatimTextOutput("message1"),
             selectInput("sheet", "Select worksheet:", ""), width=200),
         box(actionButton("importButton", "Import data"), width="80%"),
@@ -92,9 +96,13 @@ D_server <- function(input, output, session) {
       sheets
     }
     fn1 <- input$fn$name
-    if (is.null(fn1))
+    cat(paste("Input file = ", input$fn$name, "\n"))
+    cat(paste("fn =", input$fn$type, "\n"))
+    cat(paste("fn =", input$fn$datapath, "\n"))
+    if (is.null(fn1)) {
       return(NULL)
-    if (fn1 != fn) {
+    }
+#    if (fn1 != fn) {
       dn <- dirname(input$fn$datapath)
       fn2 <<- file.path(dn, input$fn$name)
       if (file.exists(fn2))
@@ -122,7 +130,7 @@ D_server <- function(input, output, session) {
       }
       output$message1 <- renderText("Select worksheet and click import data...")
       updateSelectInput(session, "sheet", choices=sheets.nms)
-    }
+#    }
 #  }, ignoreInit = TRUE, ignoreNULL = TRUE)
   }, ignoreNULL = TRUE)
 
