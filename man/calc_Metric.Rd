@@ -31,7 +31,6 @@ A object of class \code{DIATOM_METRIC}, a list with the following named elements
 }
 \item{EcolGroup}{data frame containing a list of the percentage of motile, organic tolerant, planktic and saline tolerant taxa in each sample}
 \item{Job_Summary}{list containing elements giving the total number of samples, number of samples with data, total number of taxa, number of taxa with occurrences, diatom metric and list of taxa that do not have a metric indicator value in the taxon dictionary}
-\item{Metric.D2}{for TDI3 and TDI4, and LTDI1 and LTDI2, a data frame containing TDI calculated using the DARLEQ2 taxon list, the sum of taxa included in the calculation, and the difference between TDI calculated by DARLEQ3 and DARLEQ2 software}
 }
 \description{
 Calculate water quality metrics from diatom data
@@ -46,9 +45,6 @@ x <- calc_Metric(d$diatom_data, metric="TDI4")
 head(x$Metric)
 
 }
-\author{
-Steve Juggins \email{Stephen.Juggins@ncl.ac.uk}
-}
 \references{
 Kelly, M., S. Juggins, R. Guthrie, S. Pritchard, J. Jamieson, B. Rippey, H. Hirst, and M. Yallop, Assessment of ecological status in UK rivers using diatoms. \emph{Freshwater Biology}, 2008. 403-422.
 
@@ -56,4 +52,6 @@ Juggins, S., M. Kelly, T. Allott, M. Kelly-Quinn, and D. Monteith, A Water Frame
 
 Bennion, H., M.G. Kelly, S. Juggins, M.L. Yallop, A. Burgess, J. Jamieson, and J. Krokowski, Assessment of ecological status in UK lakes using benthic diatoms. \emph{Freshwater Science}, 2014. 639-654.
 }
-
+\author{
+Steve Juggins \email{Stephen.Juggins@ncl.ac.uk}
+}

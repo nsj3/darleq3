@@ -12,9 +12,9 @@
 
 <meta name="author" content="Steve Juggins and Martyn Kelly" />
 
-<meta name="date" content="2017-08-24" />
+<meta name="date" content="2017-09-06" />
 
-<title>darleq3: User Guide (Version 0.7.5)</title>
+<title>darleq3: User Guide (Version 0.8.0)</title>
 
 
 
@@ -68,9 +68,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">darleq3: User Guide (Version 0.7.5)</h1>
+<h1 class="title toc-ignore">darleq3: User Guide (Version 0.8.0)</h1>
 <h4 class="author"><em>Steve Juggins and Martyn Kelly</em></h4>
-<h4 class="date"><em>2017-08-24</em></h4>
+<h4 class="date"><em>2017-09-06</em></h4>
 
 
 
@@ -128,7 +128,7 @@ body{
 <ul>
 <li><p>1: Click the Browse… button to select and upload a DARLEQ diatom file (see below).</p></li>
 <li><p>2: Once uploaded, select a sheet and click import. A summary (number of samples &amp; taxa) will be displayed in the Data summary box when upload is complete.</p></li>
-<li><p>3: Select the metric type. “TDI for LM” will calculate TDI3, TDI4 and TDI5LM for river LM diatom data, TDI for NGS will calculate TDI5NGS for river NGS diatom data, “LTDI for LM” will calculate LTDI1 and LTDI2 for lake LM data, and “DAM for LM” will calculate the diatom acidification metric for river LM data. A summary of results will appear in the Results summary box when the calculations are complete.</p></li>
+<li><p>3: Select the metric type. “TDI3 &amp; 4 for LM” will calculate TDI3 and TDI4 for river samples according to the DARLEQ 2 taxon list, TDI5LM will calculate TDI5 for river LM diatom data, TDI for NGS will calculate TDI5NGS for river NGS diatom data, “LTDI for LM” will calculate LTDI1 and LTDI2 for lake LM data, and “DAM for LM” will calculate the diatom acidification metric for river LM data. A summary of results will appear in the Results summary box when the calculations are complete.</p></li>
 <li><p>4: Click Download Results to save the results in an Excel file. The default name for this file will be the “DARLEQ3_Results_” concatenated with the original data filename, worksheet name, and date.</p></li>
 </ul>
 <p>To quit the app simple close the browser and or hit Escape in the RStudio Console window.</p>
@@ -145,7 +145,7 @@ body{
 <li><code>calc_EQR</code> calculate sample and site EQRs and WFD quality classes</li>
 <li><code>runDARLEQ</code> run DARLEQ3 as an interactive shiny app in a web browser</li>
 </ul>
-<p>type ?function_Name at the R prompt to get help and example usage for these functions.</p>
+<p>Type ?function_Name at the R prompt to get help and example usage for these functions.</p>
 <p>The <code>darleq3</code> functions have been designed to allow the user to perform individual steps of the data analysis sequence individually, for example importing diatom data, calculating a particular metric diatom from LM or NGS diatom data, or calculating EQRs from a metric and site information. These low-level functions are useful for embedding darleq3 in a longer data analysis chain using R. The package also includes “wrapper” functions, that “wrap” multiple low-level functions to perform a complete analysis with a single function call.</p>
 <div id="darleq3-wrapper-functions" class="section level3">
 <h3>4.1 <code>darleq3</code> wrapper functions</h3>
@@ -269,15 +269,6 @@ body{
 <li><p>Planktic: Percentage of planktic diatoms in the sample. These are excluded from the status calculations.</p></li>
 <li><p>Saline: Percentage of diatoms tolerant of slightly saline waters.</p></li>
 <li><p>Comments: List of any warning messages generated during calculations for individual samples relating to missing or out-of-range environmental values.</p></li>
-</ul>
-<p>For TDI3/4 and LTDI1/2 the following columns are also included:</p>
-<ul>
-<li><p>xxx.D2.Sum: Sum of taxa included in DARLEQ version 2 TDI calculations</p></li>
-<li><p>xxx.D2: TDI calculated using DARLEQ version 2 taxon list and indicator values</p></li>
-<li><p>xxx.Diff: Difference in TDI calculated using DARLEQ version 3 and 2 taxon lists and indicator values</p></li>
-<li><p>xxx.D2.EQR: EQR for DARLEQ version 2 TDI</p></li>
-<li><p>xxx.D2.Class: Status class for DARLEQ version 2 TDI</p></li>
-<li><p>Class.Diff: Indication if there is a difference in DARLEQ version 2 and 3 TDI status class</p></li>
 </ul>
 </div>
 <div id="uncertainty" class="section level3">

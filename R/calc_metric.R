@@ -21,8 +21,6 @@
 #' }
 #' \item{EcolGroup}{data frame containing a list of the percentage of motile, organic tolerant, planktic and saline tolerant taxa in each sample}
 #' \item{Job_Summary}{list containing elements giving the total number of samples, number of samples with data, total number of taxa, number of taxa with occurrences, diatom metric and list of taxa that do not have a metric indicator value in the taxon dictionary}
-#' \item{Metric.D2}{for TDI3 and TDI4, and LTDI1 and LTDI2, a data frame containing TDI calculated using the DARLEQ2 taxon list, the sum of taxa included in the calculation, and the difference between TDI calculated by DARLEQ3 and DARLEQ2 software}
-#'
 #'
 #' @author Steve Juggins \email{Stephen.Juggins@@ncl.ac.uk}
 #'
@@ -153,51 +151,53 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
   res$Metric_Code <- metric
   res$Metric <- data.frame(Metric=tdi.sam)
   colnames(res$Metric) <- metric
+  rownames(res$Metric) <- rownames(diat.pc2)
   res$Summary <- data.frame(Total.count=totals, total.TDI=rSum, calc_N_N2_Max(diat.pc2))
   colnames(res$Summary) <- c("Total_count", paste0(c("Percent_in_", "N_", "N2_", "Max_"), metric))
   res$EcolGroup <- round(data.frame(Motile=pc.motile, OrganicTolerant=pc.organic, Planktic=pc.planktic, Saline=pc.saline), 2)
   res$Job_Summary <- Job_Summary
 
   missingTaxa2 <- NULL
-  if (codingID=="NBSCode" & (metric %in% c("TDI4", "TDI3", "LTDI1", "LTDI2"))) {
-    mt <- match(nms, dictionary[, codingID])
-    met.D2 <- paste0(metric, "_D2")
-    tdi.sp.all2 <- dictionary[stats::na.omit(mt), met.D2]
-    names(tdi.sp.all2) <- dictionary[stats::na.omit(mt), codingID]
-    tdi.sp2 <- stats::na.omit(tdi.sp.all2)
-    tdi.sp.nms2 <- names(tdi.sp2)
-    diat.pc3 <- diat.pc[, tdi.sp.nms2, drop=FALSE]
-    tdi.D2 <- apply(diat.pc3, 1, wm, x=tdi.sp2)
-    tdi.D2 <- (tdi.D2 * 25) - 25
-    tdi.D2.rSum <- rowSums(diat.pc3) * totals / 100
-    tdi.diff <- tdi.sam-tdi.D2
-    tmp <- data.frame(TDI.D2.Sum=tdi.D2.rSum, TDI.D2=tdi.D2, TDI.Diff=tdi.diff)
-    colnames(tmp) <- paste(metric, c("D2_Sum", "D2", "Diff"), sep="_")
-    res$Metric.D2 <- tmp
-    nWarn <- sum(abs(tdi.diff)>2.0, na.rm=TRUE)
 
-    missingTaxa2 <- setdiff(nms, tdi.sp.nms2)
-    if (length(missingTaxa2) > 0) {
-      tmp <- diat.pc[, missingTaxa2]
-      tmp2 <- calc_N_N2_Max(t(tmp))
-      mt <- match(missingTaxa2, dictionary[, codingID])
-      names <- dictionary[mt, "TaxonName"]
-      missingTaxonSummary2 <- data.frame(TaxonID=missingTaxa2, Name=names, tmp2)
-    }
+#  if (codingID=="NBSCode" & (metric %in% c("TDI4", "TDI3", "LTDI1", "LTDI2"))) {
+#    mt <- match(nms, dictionary[, codingID])
+#    met.D2 <- paste0(metric, "_D2")
+#    tdi.sp.all2 <- dictionary[stats::na.omit(mt), met.D2]
+#    names(tdi.sp.all2) <- dictionary[stats::na.omit(mt), codingID]
+#    tdi.sp2 <- stats::na.omit(tdi.sp.all2)
+#    tdi.sp.nms2 <- names(tdi.sp2)
+#    diat.pc3 <- diat.pc[, tdi.sp.nms2, drop=FALSE]
+#    tdi.D2 <- apply(diat.pc3, 1, wm, x=tdi.sp2)
+#    tdi.D2 <- (tdi.D2 * 25) - 25
+#    tdi.D2.rSum <- rowSums(diat.pc3) * totals / 100
+#    tdi.diff <- tdi.sam-tdi.D2
+#    tmp <- data.frame(TDI.D2.Sum=tdi.D2.rSum, TDI.D2=tdi.D2, TDI.Diff=tdi.diff)
+#    colnames(tmp) <- paste(metric, c("D2_Sum", "D2", "Diff"), sep="_")
+#    res$Metric.D2 <- tmp
+#    nWarn <- sum(abs(tdi.diff)>2.0, na.rm=TRUE)
+#
+#    missingTaxa2 <- setdiff(nms, tdi.sp.nms2)
+#    if (length(missingTaxa2) > 0) {
+#      tmp <- diat.pc[, missingTaxa2]
+#      tmp2 <- calc_N_N2_Max(t(tmp))
+#      mt <- match(missingTaxa2, dictionary[, codingID])
+#      names <- dictionary[mt, "TaxonName"]
+#      missingTaxonSummary2 <- data.frame(TaxonID=missingTaxa2, Name=names, tmp2)
+#    }
 
-    if (nWarn > 0) {
-      res$warnings <- paste0(nWarn, " sample(s) have a difference of more than 2 ", metric, " units between DARLEQ versions 2 and 3.")
-      if (verbose)
-        warning(res$warning, call.=FALSE)
-    }
-  }
+#    if (nWarn > 0) {
+#      res$warnings <- paste0(nWarn, " sample(s) have a difference of more than 2 ", metric, " units between DARLEQ versions 2 and 3.")
+#      if (verbose)
+#        warning(res$warning, call.=FALSE)
+#    }
+ # }
 
   if (length(missingTaxa)>0) {
     res$Job_Summary$MissingTaxa <- missingTaxonSummary
   }
-  if (length(missingTaxa2)>0) {
-    res$Job_Summary$MissingTaxa2 <- missingTaxonSummary2
-  }
+#  if (length(missingTaxa2)>0) {
+#    res$Job_Summary$MissingTaxa2 <- missingTaxonSummary2
+#  }
   class(res) <- c("Diatom_METRIC")
   res
 }

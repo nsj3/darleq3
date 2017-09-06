@@ -94,7 +94,7 @@ To use the app follow these simple steps:
 
 * 2: Once uploaded, select a sheet and click import.  A summary (number of samples & taxa) will be displayed in the Data summary box when upload is complete.
 
-* 3: Select the metric type. "TDI for LM" will calculate TDI3, TDI4 and TDI5LM for river LM diatom data, TDI for NGS will calculate TDI5NGS for river NGS diatom data, "LTDI for LM" will calculate LTDI1 and LTDI2 for lake LM data, and "DAM for LM" will calculate the diatom acidification metric for river LM data.  A summary of results will appear in the Results summary box when the calculations are complete.
+* 3: Select the metric type. "TDI3 & 4 for LM" will calculate TDI3 and TDI4 for river samples according to the DARLEQ 2 taxon list,  TDI5LM will calculate TDI5 for river LM diatom data, TDI for NGS will calculate TDI5NGS for river NGS diatom data, "LTDI for LM" will calculate LTDI1 and LTDI2 for lake LM data, and "DAM for LM" will calculate the diatom acidification metric for river LM data.  A summary of results will appear in the Results summary box when the calculations are complete.
 
 * 4: Click Download Results to save the results in an Excel file.  The default name for this file will be the "DARLEQ3_Results_" concatenated with the original data filename, worksheet name, and date.
 
@@ -112,7 +112,7 @@ To quit the app simple close the browser and or hit Escape in the RStudio Consol
 * `calc_EQR` calculate sample and site EQRs and WFD quality classes
 * `runDARLEQ` run DARLEQ3 as an interactive shiny app in a web browser
 
-type ?function_Name at the R prompt to get help and example usage for these functions.
+Type ?function_Name at the R prompt to get help and example usage for these functions.
 
 The `darleq3` functions have been designed to allow the user to perform individual steps of the data analysis sequence individually, for example importing diatom data, calculating a particular metric diatom from LM or NGS diatom data, or calculating EQRs from a metric and site information. These low-level functions are useful for embedding darleq3 in a longer data analysis chain using R.  The package also includes "wrapper" functions, that "wrap" multiple low-level functions to perform a complete analysis with a single function call.  
 
@@ -228,20 +228,6 @@ After the metric and classification fields a series of summary fields are listed
 * Saline:	Percentage of diatoms tolerant of slightly saline waters. 
 
 * Comments:	List of any warning messages generated during calculations for individual samples relating to missing or out-of-range environmental values.
-
-For TDI3/4 and LTDI1/2 the following columns are also included:
-
-* xxx.D2.Sum: Sum of taxa included in DARLEQ version 2 TDI calculations
-
-* xxx.D2: TDI calculated using DARLEQ version 2 taxon list and indicator values
-
-* xxx.Diff: Difference in TDI calculated using DARLEQ version 3 and 2 taxon lists and indicator values
-
-* xxx.D2.EQR: EQR for DARLEQ version 2 TDI
-
-* xxx.D2.Class: Status class for DARLEQ version 2 TDI
-
-* Class.Diff: Indication if there is a difference in DARLEQ version 2 and 3 TDI status class
 
 ### 5.3 Uncertainty
 

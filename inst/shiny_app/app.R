@@ -27,7 +27,7 @@ D_ui <- dashboardPage(header, dashboardSidebar(disable = TRUE),
         box(verbatimTextOutput("message1"),
             selectInput("sheet", "Select worksheet:", ""), width=200),
         box(actionButton("importButton", "Import data"), width="80%"),
-        box(radioButtons("metric", "Select metric:", c(`TDI for LM`="TDILM", `TDI for NGS`="TDINGS", `LTDI for LM`="LTDILM", `DAM for LM`="DAMLM")), width=100),
+        box(radioButtons("metric", "Select metric:", c(`TDI5 for LM`="TDI5LM", `TDI 3 & 4 for LM`="TDI34LM", `TDI5 for NGS`="TDINGS", `LTDI 1 & 2 for LM`="LTDILM", `DAM for LM`="DAMLM")), width=100),
         box(actionButton("calculateButton", "Calculate!"), width="80%")
       ),
       column(width=8,
@@ -35,7 +35,7 @@ D_ui <- dashboardPage(header, dashboardSidebar(disable = TRUE),
         box(verbatimTextOutput("table2"), width=900, title="Results summary", status="primary"),
         box(downloadButton("downloadResults", "Download results"), width="80%"),
         box(p(paste0("This is a test version of DARLEQ3 (Version ",
-                     utils::packageDescription("darleq3", fields="Version"), "; Date ",
+                     utils::packageDescription("darleq3", fields="Version"), ", Date ",
                      utils::packageDescription("darleq3", fields="Date"),")")),
             "Please email comments, bug reports etc to ", a("Stephen.Juggins@ncl.ac.uk", href="mailto:Stephen.Juggins@ncl.ac.uk"), width="80%"),
         helpText(p(a("darleq3 User Guide", target="_blank", href="darleq3UserGuidePDF.pdf")),
@@ -52,6 +52,8 @@ fn_display <- ""
 darleq_data <- NULL
 sheet <- ""
 #outFile <- ""
+id <- NULL
+
 
 summarise_data <- function(fn, sheet, data) {
   if (nchar(fn_display) > 0) {
@@ -72,6 +74,14 @@ D_server <- function(input, output, session) {
   shinyjs::disable("downloadResults")
   shinyjs::disable("calculateButton")
   shinyjs::disable("importButton")
+
+  observeEvent(input$metric, {
+    if (!is.null(id))
+      removeNotification((id))
+    if (input$metric %in% c("TDI34LM", "LTDILM")) {
+      id <<- showNotification("Only use these metrics with diatom samples analysed optically prior to the 7th of March 2017", duration=NULL, type="error")
+    }
+  })
 
   observeEvent(input$sheet, {
     darleq_data <<- NULL
@@ -169,8 +179,10 @@ D_server <- function(input, output, session) {
       shinyjs::disable("calculateButton")
     }
     metrics <- NULL
-    if (metric=="TDILM") {
-      metrics <- c("TDI3", "TDI4", "TDI5LM")
+    if (metric=="TDI5LM") {
+      metrics <- c("TDI5LM")
+    } else if (metric == "TDI34LM") {
+      metrics <- c("TDI3", "TDI4")
     } else if (metric == "LTDILM") {
       metrics <- c("LTDI1", "LTDI2")
     } else if (metric == "TDINGS") {
