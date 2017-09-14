@@ -5,7 +5,7 @@
 \title{Calculate water quality metrics from diatom data}
 \usage{
 calc_Metric(x, metric = "TDI5LM", dictionary = darleq3::darleq3_taxa,
-  verbose = TRUE)
+  taxon_names = NULL, verbose = TRUE)
 }
 \arguments{
 \item{x}{data frame of diatom counts or relative abundance data}
@@ -13,6 +13,8 @@ calc_Metric(x, metric = "TDI5LM", dictionary = darleq3::darleq3_taxa,
 \item{metric}{diatom metric, one of "TDI3", "TDI4", "TDI5LM", "TDI5NGS", "LTDI1", "LTDI2", or "DAM".  Defaults to "TDI5LM".}
 
 \item{dictionary}{diatom dictionary, a data frame with diatom taxon codes and indicator values for different metrics.  Defaults to the built-in DARLEQ3 dictionary.}
+
+\item{taxon_names}{optional data frame containing taxon code in column 1 and taxon name in column 2.  Used only to supply names of missing taxa in the job summary.}
 
 \item{verbose}{logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.}
 }

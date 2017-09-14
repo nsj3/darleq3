@@ -3,6 +3,7 @@
 #' @param x data frame of diatom counts or relative abundance data
 #' @param metric diatom metric, one of "TDI3", "TDI4", "TDI5LM", "TDI5NGS", "LTDI1", "LTDI2", or "DAM".  Defaults to "TDI5LM".
 #' @param dictionary diatom dictionary, a data frame with diatom taxon codes and indicator values for different metrics.  Defaults to the built-in DARLEQ3 dictionary.
+#' @param taxon_names optional data frame containing taxon code in column 1 and taxon name in column 2.  Used only to supply names of missing taxa in the job summary.
 #' @param verbose logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.
 #'
 #' @details \code{calc_Metric} takes as arguments a data frame of diatom counts or relative abundances, a metric code and a "dictionary" of diatom metric indicator values. The function will link the diatom taxon codes from the column names in the diatom data to those listed in the dictionary and calculate the relevant metric, along with some useful summary statistics. Diatom data should be coded with either NBS codes or 6-character DiatCode codes. See \code{\link{darleq3_taxa}} for the current DARLEQ3 dictionary.
@@ -37,7 +38,7 @@
 #' @export calc_Metric
 #'
 
-calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, verbose=TRUE) {
+calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, taxon_names=NULL, verbose=TRUE) {
   wm <- function(w, x) {
     stats::weighted.mean(x, w, na.rm=TRUE)
   }
@@ -131,7 +132,7 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
     tmp2 <- calc_N_N2_Max(t(tmp))
     mt <- match(missingTaxa, dictionary[, codingID])
     names <- dictionary[mt, "TaxonName"]
-    missingTaxonSummary <- data.frame(TaxonID=missingTaxa, Name=names, tmp2)
+    missingTaxonSummary <- data.frame(TaxonID=missingTaxa, Name=names, tmp2, stringsAsFactors=FALSE)
   }
 
   tdi.sam <- apply(diat.pc2, 1, wm, x=tdi.sp)
@@ -192,9 +193,23 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ve
 #    }
  # }
 
+
   if (length(missingTaxa)>0) {
+    if (!is.null(taxon_names)) {
+      sel <- is.na(missingTaxonSummary[, 2])
+      mt <- match(as.character(missingTaxonSummary[sel, 1]), taxon_names[, 1])
+      missingTaxonSummary[sel, 2] <- taxon_names[mt, 2]
+    }
+    if (!is.null(dictionary$Planktic)) {
+       mt <- match(missingTaxonSummary[, 1], dictionary[, codingID])
+       type <- vector("character", length=length(mt))
+       type <- ifelse(dictionary[mt, "Planktic"]==1, "Planktic", "Benthic")
+       type[is.na(type)] <- "Not in dictionary"
+       missingTaxonSummary$Type <- type
+    }
     res$Job_Summary$MissingTaxa <- missingTaxonSummary
   }
+
 #  if (length(missingTaxa2)>0) {
 #    res$Job_Summary$MissingTaxa2 <- missingTaxonSummary2
 #  }

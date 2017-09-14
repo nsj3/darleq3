@@ -34,7 +34,7 @@ calc_Metric_EQR <- function(x, metrics="TDI5LM", verbose=TRUE) {
   res <- vector("list", length=length(metrics))
 
   for (i in 1:length(metrics)) {
-    x.tdi <- tryCatch(calc_Metric(x$diatom_data, metrics[i], verbose=FALSE), error=function(e) { e } )
+    x.tdi <- tryCatch(calc_Metric(x$diatom_data, metrics[i], taxon_names=x$taxon_names, verbose=FALSE), error=function(e) { e } )
     if (inherits(x.tdi, "error"))
         errMessage(x.tdi$message, verbose)
     res[[i]] <- calc_EQR(x.tdi, x$header, verbose=FALSE)

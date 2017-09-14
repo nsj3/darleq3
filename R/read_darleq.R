@@ -10,6 +10,7 @@
 #' @return A list with the following named elements:
 #' \item{header}{data frame containing the rows of environmental data from the top of the Excel file (ie. site, sample, water chemistry and data information)}
 #' \item{diatom_data}{data frame containing the diatom data}
+#' \item{taxon_names}{data frame containing taxon codes and names}
 #' \item{file}{name of the Excel file}
 #' \item{filepath}{full path to the Excel file}
 #' \item{sheet}{name of the Excel worksheet}
@@ -102,7 +103,6 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
     }
   }
 
-
 # Extract header and remove any rows with no variable ID in column 1.
   header <- as.data.frame(d[1:(iStartRow-1), 1:iEndCol])
   iEndRowHeader <- nrow(header)
@@ -146,7 +146,8 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
   }
 
 # Merge duplicate rows and replace missing values with zero
-  nms <- d2[, 1]
+  nms <- d2[, 1:2]
+  colnames(nms) <- c("TaxonCode", "TaxonName")
   d2 <- d2[, -c(1:2)]
   d2[is.na(d2)] <- 0
 
@@ -156,16 +157,21 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
   if (non_numeric > 0) {
     errMessage(paste0(non_numeric, " non-numeric values found in diatom data. Please correct and try again."), verbose)
   }
-  d2 <- stats::aggregate(d2, list(nms), sum)
-  rownames(d2) <- d2[, 1]
-  d2 <- as.data.frame(t(d2[, -1]), stringsAsFactors=FALSE)
-  d2[is.na(d2)] <- 0
+
+  if (any(table(nms[, 1] > 1))) {
+    d2 <- stats::aggregate(d2, list(nms[, 1]), sum)
+    rownames(d2) <- d2[, 1]
+    d2 <- as.data.frame(t(d2[, -1]), stringsAsFactors=FALSE)
+    d2[is.na(d2)] <- 0
+    mt <- match(colnames(d2), nms[,1])
+    nms <- nms[mt, ]
+  }
 
 #  d2 <- d2[, apply(d2, 2, sum) > 0]
   if (sum(apply(d2, 2, sum) > 0) < 1) {
     errMessage("No taxa found or all taxa have zero abundance.", verbose)
   }
-  res <- list(header=header, diatom_data=d2, file=basename(file), filepath=file, sheet=sheet)
+  res <- list(header=header, diatom_data=d2, taxon_names=nms, file=basename(file), filepath=file, sheet=sheet)
   class(res) <- "DARLEQ_DATA"
   res
 }

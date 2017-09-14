@@ -17,6 +17,7 @@ read_DARLEQ(file, sheet = NULL, verbose = TRUE)
 A list with the following named elements:
 \item{header}{data frame containing the rows of environmental data from the top of the Excel file (ie. site, sample, water chemistry and data information)}
 \item{diatom_data}{data frame containing the diatom data}
+\item{taxon_names}{data frame containing taxon codes and names}
 \item{file}{name of the Excel file}
 \item{filepath}{full path to the Excel file}
 \item{sheet}{name of the Excel worksheet}
