@@ -82,6 +82,10 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
     d <- readxl::read_excel(file, sheet=sheet)
   }
 
+  if (ncol(d) == 1) {
+    errMessage("Input file has only one column of data.  If this is a file produced by the EA diatom extraction tool please open the file in Excel and save, and try again.", verbose)
+  }
+
 # Now split data into header with site and water chemistry information, and diatom data
 # find start of data.  Column 2 should be empty in header but have taxon names in block of diatom data
   iEndCol <- ncol(d); iEndRow <- nrow(d)
