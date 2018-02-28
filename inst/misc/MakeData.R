@@ -60,6 +60,13 @@ if (0) {
   darleq2_taxa <- as.data.frame(read_excel("\\Data\\R_Libraries\\People\\Martyn_Kelly\\Barcoding\\TaxonLists\\DarleqTaxonList2017_Master.xlsx", sheet="D2_List", col_types=col_types))
   rm(col_types)
 
+# Tests sugegsted by ecodata1
+
+  expect_true(length(darleq3_taxa$TaxonId[duplicated(darleq3_taxa$TaxonId)]) == 0)
+
+  expect_true(all(is.na(darleq3_taxa$NBSCode[duplicated(darleq3_taxa$NBSCode)])))
+
+
   require(dplyr)
   require(openxlsx)
   tmp1 <- darleq3_taxa[, c(1:5, 9:17)]

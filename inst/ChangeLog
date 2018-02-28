@@ -2,7 +2,7 @@ darleq3 Change Log
 
 version 0.8.2
 16/10/2017
-Added check for data with one column.  This is a known bug in readxl caused by certain non-Moicrosoft applications that write Excel files.  Workaround is open and save file in Excel.
+Added check for data with one column.  This is a known bug in readxl caused by certain non-Microsoft applications that write Excel files.  Workaround is open and save file in Excel.
 
 version 0.8.0
 14/09/2017
