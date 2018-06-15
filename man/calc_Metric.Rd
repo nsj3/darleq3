@@ -5,7 +5,7 @@
 \title{Calculate water quality metrics from diatom data}
 \usage{
 calc_Metric(x, metric = "TDI5LM", dictionary = darleq3::darleq3_taxa,
-  taxon_names = NULL, verbose = TRUE)
+  taxon_names = NULL, verbose = TRUE, model_data = NULL)
 }
 \arguments{
 \item{x}{data frame of diatom counts or relative abundance data}
@@ -17,6 +17,8 @@ calc_Metric(x, metric = "TDI5LM", dictionary = darleq3::darleq3_taxa,
 \item{taxon_names}{optional data frame containing taxon code in column 1 and taxon name in column 2.  Used only to supply names of missing taxa in the job summary.}
 
 \item{verbose}{logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.}
+
+\item{model_data}{list of 2 named elements: ma_coef=coefficients of major axis deshrinking regression, mono-mod= results of monotonic deshrinking GAM.  Defaults to built-in values for TDI5NGS.}
 }
 \value{
 A object of class \code{DIATOM_METRIC}, a list with the following named elements:

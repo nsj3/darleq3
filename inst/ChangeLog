@@ -1,5 +1,20 @@
 darleq3 Change Log
 
+version 0.9.1
+15/06/2018
+Phase 3 update in light of new SEPA, NRW, and NIEA datasets
+Made few minor changes to TDI5LM species indicator values
+Updated TDI5NGS indicator values using Phase 3 data
+
+version 0.8.4
+29/05/2018
+Added option to specify GAM deshrinking coefficients in calc_metric
+Fixed bug in CoC calculations leading to -ve values
+
+version 0.8.3
+25/04/2018
+Added option to truncate EQRs at 1.0
+
 version 0.8.2
 16/10/2017
 Added check for data with one column.  This is a known bug in readxl caused by certain non-Microsoft applications that write Excel files.  Workaround is open and save file in Excel.

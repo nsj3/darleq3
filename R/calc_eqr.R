@@ -2,6 +2,7 @@
 #'
 #' @param x an object of class \code{DIATOM_METRIC}, usually the output from function \code{\link{calc_Metric}}.
 #' @param header data frame containing sample and site environmental information for calculating the expected value of the metric.
+#' @param truncate_EQR logical to truncate EQRs at 1.0
 #' @param verbose logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.
 #' @return A object of class \code{DIATOM_EQR}, a list with the following named elements:
 #' \item{EQR}{data frame containing, for each sample, sample codes, water chemistry data and other columns from the header in original Excel file, metric and summary information from function \code{calc_Metric}, expected EQRs (eEQR), calculated EQRs, predicted WFD class, percentage diatoms in diagnostic ecological groups, and a flag to indicate missing or out of range environmental data.}
@@ -24,7 +25,7 @@
 #' @export calc_EQR
 #'
 
-calc_EQR <- function(x, header, verbose=TRUE) {
+calc_EQR <- function(x, header, truncate_EQR=TRUE, verbose=TRUE) {
   metric.codes <- darleq3::darleq3_data$metric.codes
   if (!inherits(x, "DIATOM_METRIC")) {
     simpleError("Input is not of class DIATOM_METRIC")
@@ -85,7 +86,8 @@ calc_EQR <- function(x, header, verbose=TRUE) {
       eTDI = 9.933 * exp(lAlk * 0.81)
     }
     EQR <- (100 - x$Metric) / (100 - eTDI) * mult_Factor
-    EQR[EQR > 1.0] <- 1.0
+    if (truncate_EQR)
+      EQR[EQR > 1.0] <- 1.0
     class <- calc_WFDClass(EQR[, 1], metric)
     if (!is.null(SiteID)) {
       mean_EQR <- calc_SiteEQR(EQR[, 1], SiteID)
@@ -107,7 +109,8 @@ calc_EQR <- function(x, header, verbose=TRUE) {
     comments[comments$missingType, 2] <- paste0(comments[comments$missingType, 2], "Missing lake Type, value set to ", ddd$defaultsLakeType)
     eTDI <- apply(env[, "lake_TYPE", drop=FALSE], 1, function(x) switch(x, HA=medians[1], MA=medians[2], LA=medians[3]))
     EQR <- (100 - x$Metric) / (100 - eTDI)
-    EQR[EQR > 1.0] <- 1.0
+    if (truncate_EQR)
+       EQR[EQR > 1.0] <- 1.0
     class <- calc_WFDClass(EQR[, 1], metric, env$lake_TYPE)
     if (!is.null(SiteID)) {
       mean_EQR <- calc_SiteEQR(EQR, SiteID, env$lake_TYPE)
@@ -147,7 +150,8 @@ calc_EQR <- function(x, header, verbose=TRUE) {
     comments[comments$maxDOC, 2] <- paste0(comments[comments$maxDOC, 2], "Ca > ", maxDOC, ", value set to ", maxDOC)
     eTDI = -5.5 + 33 * log10(env$CALCIUM) - 1.9 * env$DOC;
     EQR <- x$Metric / eTDI
-    EQR[EQR > 1.0] <- 1.0
+    if (truncate_EQR)
+       EQR[EQR > 1.0] <- 1.0
     class <- calc_WFDClass(EQR[, 1], metric)
     if (!is.null(SiteID)) {
       mean_EQR <- calc_SiteEQR(EQR, SiteID)

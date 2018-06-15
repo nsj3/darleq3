@@ -76,8 +76,8 @@ calc_Uncertainty <- function(x, metric, lake_Type=NULL) {
     nsam <- length(x$EQR)
     HG <- rep(HA_boundaries["HG"], nsam); HG[lake_Type=="MA"] <- MA_boundaries["HG"]; HG[lake_Type=="LA"] <- LA_boundaries["HG"]
     GM <- rep(HA_boundaries["GM"], nsam); GM[lake_Type=="MA"] <- MA_boundaries["GM"]; GM[lake_Type=="LA"] <- LA_boundaries["GM"]
-    MP <- rep(HA_boundaries["HG"], nsam); MP[lake_Type=="MA"] <- MA_boundaries["MP"]; MP[lake_Type=="LA"] <- LA_boundaries["MP"]
-    PB <- rep(HA_boundaries["HG"], nsam); PB[lake_Type=="MA"] <- MA_boundaries["PB"]; PB[lake_Type=="LA"] <- LA_boundaries["PB"]
+    MP <- rep(HA_boundaries["MP"], nsam); MP[lake_Type=="MA"] <- MA_boundaries["MP"]; MP[lake_Type=="LA"] <- LA_boundaries["MP"]
+    PB <- rep(HA_boundaries["PB"], nsam); PB[lake_Type=="MA"] <- MA_boundaries["PB"]; PB[lake_Type=="LA"] <- LA_boundaries["PB"]
     A0 <- ddd$CoC_LTDI["A0"]
     B1 <- ddd$CoC_LTDI["B1"]
     B2 <- ddd$CoC_LTDI["B2"]
@@ -100,7 +100,7 @@ calc_Uncertainty <- function(x, metric, lake_Type=NULL) {
   TMean <- log(EQR / (1-EQR))
   Tstdev <- stdev/(EQR * (1-EQR))
   if (substring(metric, 1, 3) == "LTD") {
-    Tstdev[Tstdev > 1.5] <- 1.5
+    Tstdev[Tstdev > 1.0] <- 1.0
   } else {
     Tstdev[Tstdev > 1.0] <- 1.0
   }

@@ -4,12 +4,15 @@
 \alias{calc_Metric_EQR}
 \title{Calculate diatom water quality metrics, EQRs and WFD class for samples, and uncertainties of site classification}
 \usage{
-calc_Metric_EQR(x, metrics = "TDI5LM", verbose = TRUE)
+calc_Metric_EQR(x, metrics = "TDI5LM", truncate_EQR = TRUE,
+  verbose = TRUE)
 }
 \arguments{
 \item{x}{list containing diatom and header (environmental) data. This will usually be the data structure imported by \code{\link{read_DARLEQ}}.}
 
 \item{metrics}{character vector of metric codes.  Currently one or more of the following: "TDI3", "TDI4", "TDI5LM" (for river LM TDI calculations), "TDI5NGS" for river NGS metric, "LTDI1", "LTDI2" for lake LM TDI metric or "DAMLM" for river diatom acidification metric.}
+
+\item{truncate_EQR}{logical to truncate EQRs at 1.0}
 
 \item{verbose}{logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.}
 }

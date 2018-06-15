@@ -2,6 +2,7 @@
 #'
 #' @param x list containing diatom and header (environmental) data. This will usually be the data structure imported by \code{\link{read_DARLEQ}}.
 #' @param  metrics character vector of metric codes.  Currently one or more of the following: "TDI3", "TDI4", "TDI5LM" (for river LM TDI calculations), "TDI5NGS" for river NGS metric, "LTDI1", "LTDI2" for lake LM TDI metric or "DAMLM" for river diatom acidification metric.
+#' @param truncate_EQR logical to truncate EQRs at 1.0
 #' @param verbose logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.
 #'
 #' @details This is a wrapper function to \code{\link{calc_Metric}} and \code{\link{calc_EQR}} that calculates multiple metrics, EQRs and WFD classes.  The output can be saved to an Excel file using function \code{\link{save_DARLEQ}}.
@@ -22,7 +23,7 @@
 #' @export calc_Metric_EQR
 #'
 
-calc_Metric_EQR <- function(x, metrics="TDI5LM", verbose=TRUE) {
+calc_Metric_EQR <- function(x, metrics="TDI5LM", truncate_EQR=TRUE, verbose=TRUE) {
   metrics2 <- darleq3::darleq3_data$metric.codes
   if (!is.null(metrics)) {
     mt <- metrics %in% metrics2
@@ -37,7 +38,7 @@ calc_Metric_EQR <- function(x, metrics="TDI5LM", verbose=TRUE) {
     x.tdi <- tryCatch(calc_Metric(x$diatom_data, metrics[i], taxon_names=x$taxon_names, verbose=FALSE), error=function(e) { e } )
     if (inherits(x.tdi, "error"))
         errMessage(x.tdi$message, verbose)
-    res[[i]] <- calc_EQR(x.tdi, x$header, verbose=FALSE)
+    res[[i]] <- calc_EQR(x.tdi, x$header, truncate_EQR=truncate_EQR, verbose=FALSE)
     res[[i]]$Job_Summary <- x.tdi$Job_Summary
     if (!is.null(x.tdi$warnings)) {
       if (is.null(res[[i]]$warnings)) {

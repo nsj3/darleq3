@@ -1,0 +1,738 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{eurosym}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={darleq3: User Guide (Version 0.8.4)},
+            pdfauthor={Steve Juggins and Martyn Kelly},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{darleq3: User Guide (Version 0.8.4)}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Steve Juggins and Martyn Kelly}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{2018-06-15}
+
+
+\begin{document}
+\maketitle
+
+\subsection{1. Introduction}\label{introduction}
+
+\texttt{darleq3} is an R package for the assessment of river and lake
+ecological status using diatom data obtained by light microscopy (LM) or
+Next Generation Sequencing (NGS). The package contains functions to
+import diatom and associated environmental data from Excel worksheets,
+perform simple data validation checks, calculate various water quality
+metrics, EQRs and Water Framework Directive (WFD) quality classes for
+samples, and classification uncertainty for sites. The package can
+calculate Trophic Diatom Index TDI5LM, TDI4 and TDI3 scores for light
+microscopy river diatom samples, TDI5NGS for NGS river diatom samples,
+Lake Trophic Diatom Index LTDI2 and LTDI1 scores for light microscopy
+lake diatom samples, and Diatom Acidification Metric (DAM) scores for
+lake and river light microscopy samples. Details of the TDI / LTDI
+metrics, algorithm and derivation of the status class boundaries for
+rivers are given in Kelly \emph{et al}. (2008) and for lakes in Bennion
+\emph{et al}. (2014). Details of the DAM acidification metric is
+described in Juggins \emph{et al}. (2016). Calculation of uncertainty of
+classification is described in Kelly \emph{et al}. 2009.
+
+\texttt{darleq3} can be run in two ways, either as an interactive shiny
+app, or a a series of R functions issues from the R console or an R
+script. The first method attempts to mimic the old DARLEQ2 software will
+be the easiest for most users. The second methods will be more
+convenient for processing multiple data sets, for automating darleq
+calculations, or including them in a longer chain of analysis.
+
+\subsection{2. Installation}\label{installation}
+
+The easiest way to install \texttt{darleq3} is from a github repository.
+To do this first install the package \texttt{devtools} with the
+following command, omitting the prompt (``\textgreater{}''):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{install.packages}\NormalTok{(}\StringTok{"devtools"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Then install \texttt{darleq3}. Note that this will also automatically
+install some additional packages on which \texttt{darleq3} depends.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{library}\NormalTok{(devtools)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{install_github}\NormalTok{(}\StringTok{"nsj3/darleq3"}\NormalTok{, }\DataTypeTok{build_vignettes=}\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{darleq3} also contains an example Excel data file. This can be
+made available in a R session with the following:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{library}\NormalTok{(darleq3)}
+\OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DARLEQ2TestData.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+The file can be opened in Excel using t he following:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\CommentTok{# note running the following lines will open the file in Excel (if installed)}
+\ErrorTok{>}\StringTok{ }\KeywordTok{shell.exec}\NormalTok{(fn)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{\texorpdfstring{3. Using the \texttt{darleq3} Shiny
+app}{3. Using the darleq3 Shiny app}}\label{using-the-darleq3-shiny-app}
+
+\texttt{darleq3} can run on a remote Shiny server or locally on a
+desktop PC running RStudio. The app will function in exactly the same
+way in both situations. To run \texttt{darleq3} on a remote shiny server
+open a web browser and point it to either:
+
+\url{https://nsj3.shinyapps.io/darleq3/}
+
+\url{http://gpsgpuserver.ncl.ac.uk:3838/darleq3/}
+
+Both these hosts have been set up for testing purposes and may change.
+There may be problems running the app on the second server listed from
+within the EA.
+
+To run the app locally, simply start RStudio, load the \texttt{darleq3}
+package and run the command \texttt{runDARLEQ()}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{library}\NormalTok{(darleq3)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{runDARLEQ}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+This should open a browser and display the DARLEQ3 shiny app.
+
+\begin{figure}
+\centering
+\includegraphics{images/darleq3shiny.png}
+\caption{darleq3 shiny app}
+\end{figure}
+
+To use the app follow these simple steps:
+
+\begin{itemize}
+\item
+  1: Click the Browse\ldots{} button to select and upload a DARLEQ
+  diatom file (see below).
+\item
+  2: Once uploaded, select a sheet and click import. A summary (number
+  of samples \& taxa) will be displayed in the Data summary box when
+  upload is complete.
+\item
+  3: Select the metric type. ``TDI3 \& 4 for LM'' will calculate TDI3
+  and TDI4 for river samples according to the DARLEQ 2 taxon list,
+  TDI5LM will calculate TDI5 for river LM diatom data, TDI for NGS will
+  calculate TDI5NGS for river NGS diatom data, ``LTDI for LM'' will
+  calculate LTDI1 and LTDI2 for lake LM data, and ``DAM for LM'' will
+  calculate the diatom acidification metric for river LM data. A summary
+  of results will appear in the Results summary box when the
+  calculations are complete.
+\item
+  4: Click Download Results to save the results in an Excel file. The
+  default name for this file will be the ``DARLEQ3\_Results\_''
+  concatenated with the original data filename, worksheet name, and
+  date.
+\end{itemize}
+
+To quit the app simple close the browser and or hit Escape in the
+RStudio Console window.
+
+\subsection{\texorpdfstring{4. Using the \texttt{darleq3} R
+package}{4. Using the darleq3 R package}}\label{using-the-darleq3-r-package}
+
+\texttt{darleq3} contains a number of functions for importing diatom
+data, calculating various sample and site-based metrics, EQRs and WFD
+quality classes, and saving the results in Excel format. The main
+functions are:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{darleq} import diatom data from an Excel file, calculate
+  metrics, EQRs and WFD quality classes, and save results in Excel
+  format
+\item
+  \texttt{read\_DARLEQ} import diatom data from an Excel file
+\item
+  \texttt{save\_DARLEQ} save metric and EQR results in an Excel file
+\item
+  \texttt{calc\_Metric\_EQR} calculate EQRS, WFD quality classes and
+  summary diagnostic measures for multiple metrics
+\item
+  \texttt{calc\_Metric} calculate various diatom water quality metrics
+\item
+  \texttt{calc\_EQR} calculate sample and site EQRs and WFD quality
+  classes
+\item
+  \texttt{runDARLEQ} run DARLEQ3 as an interactive shiny app in a web
+  browser
+\end{itemize}
+
+Type ?function\_Name at the R prompt to get help and example usage for
+these functions.
+
+The \texttt{darleq3} functions have been designed to allow the user to
+perform individual steps of the data analysis sequence individually, for
+example importing diatom data, calculating a particular metric diatom
+from LM or NGS diatom data, or calculating EQRs from a metric and site
+information. These low-level functions are useful for embedding darleq3
+in a longer data analysis chain using R. The package also includes
+``wrapper'' functions, that ``wrap'' multiple low-level functions to
+perform a complete analysis with a single function call.
+
+\subsubsection{\texorpdfstring{4.1 \texttt{darleq3} wrapper
+functions}{4.1 darleq3 wrapper functions}}\label{darleq3-wrapper-functions}
+
+The most useful wrapper function is \texttt{darleq}. This function
+imports data form an Excel file, calculates multiple metrics, EQRs and
+WFD classes and saves the results to another Excel file in one step.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DARLEQ2TestData.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{darleq}\NormalTok{(fn)}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{darleq} will, by default, import data from the first sheet in
+the Excel file, and calculate TDI3, TDI4 and TDI5LM. If the output
+filename is not given the function will generate a name by concatenating
+``DARLEQ3\_Results\_'' with the original filename, the sheet name and
+the current date.
+
+To specify the sheet name, a different metric, and a output file name:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DARLEQ2TestData.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{darleq}\NormalTok{(fn, }\DataTypeTok{sheet=}\StringTok{"Lakes LTDI Test Data"}\NormalTok{, }\DataTypeTok{metrics=}\StringTok{"LTDI2"}\NormalTok{, }\DataTypeTok{outFile=}\StringTok{"Results.xlsx"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+To calculate and save results for multiple metrics:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DARLEQ2TestData.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{darleq}\NormalTok{(fn, }\DataTypeTok{sheet=}\StringTok{"Lakes LTDI Test Data"}\NormalTok{, }\DataTypeTok{metrics=}\KeywordTok{c}\NormalTok{(}\StringTok{"LTDI1"}\NormalTok{, }\StringTok{"LTDI2"}\NormalTok{), }\DataTypeTok{outFile=}\StringTok{"Results.xlsx"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{\texorpdfstring{4.2 \texttt{darleq3} low-level
+functions}{4.2 darleq3 low-level functions}}\label{darleq3-low-level-functions}
+
+\texttt{darleq3} low-level functions are useful for calculating partial
+results or for embedding darleq3 in a longer data analysis sequence. The
+key functions are \texttt{read\_DARLEQ} to import data from a
+DARLEQ-formatted data file (see Section 6 below for guidelines on how to
+format the data correctly). \texttt{read\_DARLEQ} returns a list with
+two elements: \texttt{diatom\_data} - a data frame of the diatom count
+or relative abundance data, and \texttt{header} - a data frame of
+sample, site and environmental data from the header of the Excel file.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DARLEQ2TestData.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\NormalTok{d <-}\StringTok{ }\KeywordTok{read_DARLEQ}\NormalTok{(fn, }\StringTok{"Rivers TDI Test Data"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{head}\NormalTok{(d}\OperatorTok{$}\NormalTok{diatom_data[, }\DecValTok{1}\OperatorTok{:}\DecValTok{8}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          AC023A AC083A AC143A AC161A AC9999  AD009A   AM001A  AM004A
+## SPR001 0.000000      0      0      0      0 0.31348 0.000000 0.00000
+## AUT001 0.000000      0      0      0      0 0.00000 0.000000 0.00000
+## SPR002 0.332226      0      0      0      0 0.00000 0.332226 0.00000
+## AUT002 0.000000      0      0      0      0 0.00000 0.000000 0.00000
+## SPR003 0.000000      0      0      0      0 0.00000 0.000000 0.00000
+## AUT003 0.317460      0      0      0      0 0.00000 0.000000 0.31746
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{head}\NormalTok{(d}\OperatorTok{$}\NormalTok{header)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        SampleID SiteID SAMPLE_DATE Alkalinity   Stream                             Reach
+## SPR001   SPR001  36082  2010-04-14        242   KENNET            Hambridge Rd., Newbury
+## AUT001   AUT001  36082  2004-09-21        242   KENNET            Hambridge Rd., Newbury
+## SPR002   SPR002  34649  2004-04-02        408 LAMBOURN                        A4 Newbury
+## AUT002   AUT002  34649  2004-09-21        408 LAMBOURN                        A4 Newbury
+## SPR003   SPR003  36073  2004-04-02        213 LAMBOURN At Gauging Station, East Shefford
+## AUT003   AUT003  36073  2004-09-21        213 LAMBOURN At Gauging Station, East Shefford
+\end{verbatim}
+
+\texttt{calc\_Metric\_EQR} calculates one or more diatom metrics and the
+corresponding sample and site EQRS and WFD classes, and class
+uncertainties. The function returns a list with an element for each
+metric. Each element is itself a list containing sample EQRs, site EQRs
+and uncertainties and a job summary.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DARLEQ2TestData.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\NormalTok{d <-}\StringTok{ }\KeywordTok{read_DARLEQ}\NormalTok{(fn, }\StringTok{"Rivers TDI Test Data"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\NormalTok{results <-}\StringTok{ }\KeywordTok{calc_Metric_EQR}\NormalTok{(d, }\DataTypeTok{metrics=}\KeywordTok{c}\NormalTok{(}\StringTok{"TDI4"}\NormalTok{, }\StringTok{"TDI5LM"}\NormalTok{))}
+\OperatorTok{>}\StringTok{ }\KeywordTok{head}\NormalTok{(results}\OperatorTok{$}\NormalTok{TDI5LM}\OperatorTok{$}\NormalTok{EQR[, }\DecValTok{9}\OperatorTok{:}\DecValTok{15}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        N_TDI5LM N2_TDI5LM Max_TDI5LM   TDI5LM  eTDI5LM EQR_TDI5LM Class_TDI5LM
+## SPR001       41     12.39      16.93 55.60483 68.49447  1.0000000         High
+## AUT001       23      3.09      51.57 70.01608 68.49447  0.7613627         Good
+## SPR002       55     13.14      20.93 70.66666 69.28261  0.7639539         Good
+## AUT002       39      7.69      26.91 66.08840 69.28261  0.8831896         High
+## SPR003       39      9.37      27.30 49.94616 65.48689  1.0000000         High
+## AUT003       32      5.87      37.14 39.65652 65.48689  1.0000000         High
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{head}\NormalTok{(results}\OperatorTok{$}\NormalTok{TDI5LM}\OperatorTok{$}\NormalTok{Uncertainty)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    SiteID N  EQR WFDClass   CoCH  CoCG  CoCM  CoCP CoCB   ROM  CoCHG CoCMPB ROM_GM
+## 43  36082 2 0.88     High  79.41 19.01  1.52  0.06 0.00 20.59  98.42   1.58   1.58
+## 33  34649 2 0.82     High  58.61 38.23  3.09  0.07 0.00 41.39  96.84   3.16   3.16
+## 42  36073 2 1.00     High 100.00  0.00  0.00  0.00 0.00  0.00 100.00   0.00   0.00
+## 41  35965 2 1.00     High 100.00  0.00  0.00  0.00 0.00  0.00 100.00   0.00   0.00
+## 36  35101 1 0.48 Moderate   0.06 14.04 62.37 23.35 0.19 85.96  14.10  85.90  14.10
+## 35  35075 2 0.71     Good  14.23 71.48 14.05  0.23 0.00 28.52  85.72  14.28  14.28
+\end{verbatim}
+
+\texttt{save\_DARLEQ} saves the output from \texttt{calc\_Metric\_EQR}
+in an Excel file:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DARLEQ2TestData.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\NormalTok{d <-}\StringTok{ }\KeywordTok{read_DARLEQ}\NormalTok{(fn, }\StringTok{"Rivers TDI Test Data"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\NormalTok{results <-}\StringTok{ }\KeywordTok{calc_Metric_EQR}\NormalTok{(d, }\DataTypeTok{metrics=}\KeywordTok{c}\NormalTok{(}\StringTok{"TDI4"}\NormalTok{, }\StringTok{"TDI5LM"}\NormalTok{))}
+\OperatorTok{>}\StringTok{ }\KeywordTok{save_DARLEQ}\NormalTok{(results, }\DataTypeTok{outFile=}\StringTok{"Results.xlsx"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{calc\_Metric} calculates a single metric from a data frame of
+diatom count or relative abundance data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DARLEQ2TestData.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\NormalTok{d <-}\StringTok{ }\KeywordTok{read_DARLEQ}\NormalTok{(fn, }\StringTok{"Rivers TDI Test Data"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\NormalTok{x <-}\StringTok{ }\KeywordTok{calc_Metric}\NormalTok{(d}\OperatorTok{$}\NormalTok{diatom_data, }\DataTypeTok{metric=}\StringTok{"TDI4"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{head}\NormalTok{(x}\OperatorTok{$}\NormalTok{Metric)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            TDI4
+## SPR001 52.22581
+## AUT001 83.44051
+## SPR002 70.61036
+## AUT002 67.53959
+## SPR003 49.97693
+## AUT003 38.45844
+\end{verbatim}
+
+\texttt{calc\_EQR} calculates sample and site EQRS and WFD classes, and
+class uncertainties from a list of sample metrics.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DARLEQ2TestData.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\NormalTok{d <-}\StringTok{ }\KeywordTok{read_DARLEQ}\NormalTok{(fn, }\StringTok{"Rivers TDI Test Data"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\NormalTok{x <-}\StringTok{ }\KeywordTok{calc_Metric}\NormalTok{(d}\OperatorTok{$}\NormalTok{diatom_data, }\DataTypeTok{metric=}\StringTok{"TDI4"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\NormalTok{eqr <-}\StringTok{ }\KeywordTok{calc_EQR}\NormalTok{(x, d}\OperatorTok{$}\NormalTok{header)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{head}\NormalTok{(eqr}\OperatorTok{$}\NormalTok{EQR[, }\DecValTok{9}\OperatorTok{:}\DecValTok{15}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        N_TDI4 N2_TDI4 Max_TDI4     TDI4    eTDI4  EQR_TDI4 Class_TDI4
+## SPR001     41   12.39    16.93 52.22581 68.49447 1.0000000       High
+## AUT001     23    3.09    51.57 83.44051 68.49447 0.4204847   Moderate
+## SPR002     54   13.05    20.93 70.61036 69.28261 0.7654202       Good
+## AUT002     39    7.69    26.91 67.53959 69.28261 0.8453951       High
+## SPR003     39    9.37    27.30 49.97693 65.48689 1.0000000       High
+## AUT003     32    5.87    37.14 38.45844 65.48689 1.0000000       High
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{head}\NormalTok{(eqr}\OperatorTok{$}\NormalTok{Uncertainty)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    SiteID N  EQR WFDClass   CoCH  CoCG  CoCM  CoCP CoCB   ROM  CoCHG CoCMPB ROM_GM
+## 43  36082 2 0.71     Good  14.23 71.48 14.05  0.23 0.00 28.52  85.72  14.28  14.28
+## 33  34649 2 0.81     High  54.37 42.03  3.54  0.07 0.00 45.63  96.39   3.61   3.61
+## 42  36073 2 1.00     High 100.00  0.00  0.00  0.00 0.00  0.00 100.00   0.00   0.00
+## 41  35965 2 1.00     High 100.00  0.00  0.00  0.00 0.00  0.00 100.00   0.00   0.00
+## 36  35101 1 0.47 Moderate   0.04 11.90 61.95 25.89 0.23 88.10  11.93  88.07  11.93
+## 35  35075 2 0.71     Good  14.23 71.48 14.05  0.23 0.00 28.52  85.72  14.28  14.28
+\end{verbatim}
+
+\subsection{\texorpdfstring{5. Understanding \texttt{darleq3}
+output}{5. Understanding darleq3 output}}\label{understanding-darleq3-output}
+
+The DARLEQ shiny app and R functions produce output that is similar in
+structure and content to that produced by the DARLEQ2 program.
+Specifically, the shiny app and functions \texttt{darleq} and
+\texttt{save\_DARLEQ} save data in an Excel file with the following
+content. For each metric, the output file will contain 3 worksheets,
+named Code\_Job\_Summary, and Code\_Uncertainty (where Code is the code
+for each metric). These three sheets contain the following information:
+
+\subsubsection{5.1 Job summary}\label{job-summary}
+
+This sheet contains the input file name, worksheet name and a summary of
+the number of samples and taxa in the file. It also contains a list of
+taxa included in the file but excludes from the metric calculations
+either because they are planktic or because they are not included in the
+DARLEQ list of indicator values for that metric. The list also contains
+the number of occurrences (N), Hill's N2 effective number of occurrences
+(Hill 1973) and maximum abundance of these taxa. The list of useful in
+checking the data for coding errors to identify abundant taxa excluded
+from the metric calculations. For TDI3/4 and LTDI1/2 the output also
+contains a list of taxa with indicator values included in DARLEQ3 but
+not in DARLEQ2 software. This is useful in understanding the reasons for
+differences in metric scores between DARLEQ versions 2 and 3 for the
+same metric.
+
+\subsubsection{5.2 Sample\_Summary}\label{sample_summary}
+
+Sample Summary â\euro{}`` this sheet contains metric, EQR and quality
+class results for each sample. First, the sample information listed in
+the original input file is repeated, and then results of the analysis
+are listed as follows (where CODE is the metric Code):
+
+\begin{itemize}
+\tightlist
+\item
+  Total\_count: Sum of the counts or percentages of all taxa in a
+  sample.
+\end{itemize}
+
+Percent\_in\_CODE: Percentages of the total count of taxa that are
+matched to taxa in the master taxon list and included in the metric
+calculations. If all taxa are matched this will be the same as the
+Total\_count but will be less if, for example, planktic taxa are
+present. Comparison of these two fields will indicate if there are
+important taxa present in the sample but not included in the status
+calculations.
+
+\begin{itemize}
+\item
+  N\_CODE, N2\_CODE, Max\_CODE: Number of taxa (N), effective number of
+  taxa (N2) and maximum abundance (max) of taxa included in the metric
+  calculations.
+\item
+  CODE: value of the metric for each sample.
+\item
+  eCODE: Expected value of the metric for each sample according to
+  typology (lakes) or site-specific prediction (rivers).
+\item
+  EQR\_CODE: EQR for each sample based on predicted and observed
+  metrics.
+\item
+  Class\_CODE: Status class based on EQR.
+\end{itemize}
+
+After the metric and classification fields a series of summary fields
+are listed containing the percentage of various ecological groups of
+diatoms:
+
+\begin{itemize}
+\item
+  Motile: Percentage of the motile diatoms in the sample.
+\item
+  OrganicTolerant: Percentage of organic pollution tolerant diatoms in
+  the sample.
+\item
+  Planktic: Percentage of planktic diatoms in the sample. These are
+  excluded from the status calculations.
+\item
+  Saline: Percentage of diatoms tolerant of slightly saline waters.
+\item
+  Comments: List of any warning messages generated during calculations
+  for individual samples relating to missing or out-of-range
+  environmental values.
+\end{itemize}
+
+\subsubsection{5.3 Uncertainty}\label{uncertainty}
+
+Multiple samples from each site are combined and an uncertainty analysis
+is performed using the mean EQR and number of samples according to Kelly
+\emph{et al}. (2009):
+
+\begin{itemize}
+\item
+  SiteID: Unique site code taken from row 2 of the input data.
+\item
+  N: Number of samples for site used in calculation of mean EQR and CoC.
+\item
+  EQR: Mean EQR for each site.
+\item
+  lake\_TYPE: lake type (only for lake data)
+\item
+  WFDClass: Status class based on mean EQR.
+\item
+  CoCH - CoCB: Confidence that the site belongs to status class high,
+  good, etc.
+\item
+  RoM: Risk of misclassification for predicted class.
+\item
+  CoCHG: Confidence that the site is better than moderate class.
+\item
+  CoCMPB: Confidence that the site is moderate or worse class.
+\item
+  RoM\_GM: Rick of misclassification above / below the good / moderate
+  boundary.
+\end{itemize}
+
+\subsection{6. Input data format}\label{input-data-format}
+
+\texttt{read\_DARLEQ} and the shiny app import diatom data from an Excel
+file in either .xls or .xlsx format. An example Excel file is included
+in this package (see Section 2 on how to view it). The required data and
+layout are rather and are slightly different for river and lake samples.
+Figure 2 below shows the required format for performing TDI calculations
+for river samples.
+
+The first four header rows are mandatory and must contain the following
+information:
+
+\begin{itemize}
+\item
+  Row 1: SampleID: a short numerical or alphanumeric code to uniquely
+  identify the sample. This field cannot be empty (an empty cell
+  indicates the end of data).
+\item
+  Row 2: SiteID â\euro{}`` a short numerical or alphanumeric code to
+  uniquely identify the site. This code will be used to aggregate
+  multiple samples when calculating confidence of class for a site.
+\item
+  Row 3: SampleDate: sample date in Day/Month/Year format. Missing dates
+  are set to Spring for the purposes of classification using TDI3 and
+  samples flagged with a warning.
+\item
+  Row 4: Alkalinity: Mean annual alkalinity (or best available estimate)
+  in mg l-1 (CaCO3). Missing values are set to 100 mg l-1 for the
+  purposes of classification and samples flagged with a warning.
+  Alkalinity values outside the range of the site prediction algorithm
+  are set to the appropriate limit (6 or 150 mg l-1 for TDI3 and 5 or
+  250 mg l\^{}-1 for TDI4 and TDI5LM / TDI5NGS).
+\item
+  Rows 5+: Further option sample descriptors such as river name, reach
+  name etc. These data are not used by the program but will be
+  reproduced in the output.
+\end{itemize}
+
+Note that the second column of the header information must be left
+blank.
+
+\begin{figure}
+\centering
+\includegraphics{images/DARLEQRiverData.png}
+\caption{Example format for river diatom samples}
+\end{figure}
+
+Identifiers for each row of the sample header information should be
+listed in column 1. Diatom data then follow the header information and
+may be in count or percentage format. The first column must contain the
+taxon code in either NBS or DiatCode
+(\url{http://www.ecrc.ucl.ac.uk/?q=databases/diatcode}) format. The
+codes in this column are used to link the data to the DARLEQ3 taxon list
+and ecological information and cannot be empty (an empty cell indicates
+the end of the data). The second column must include either the taxon
+name or code (ie. a repeat of column 1).
+
+The remaining columns to the right of the taxon name contain diatom
+counts or percentages. Empty (blank) cells in the matrix will be read as
+zero. Character data in the diatom matrix will generate an error. A full
+list of diatom codes (either NBS or DiatCodes) are available in the data
+frame \texttt{darleq3\_taxa}.
+
+If the Diatom Acidification Metric (DAM) is to be calculated, the header
+must contain estimates of mean annual Calcium and DOC concentrations,
+rows named Calcium and DOC, and in ueq l-1 and mg l-1 respectively.
+Figure 3 shows an example formatted for calculation of TDI and DAM. Note
+that if only DAM scores are required the Alkalinity field may be left
+blank. Sample Date is not used for calculating DAM and may be left
+blank.
+
+\begin{figure}
+\centering
+\includegraphics{images/DARLEQDAMData.png}
+\caption{Example format for river diatom TDI and DAM samples}
+\end{figure}
+
+The required input format for lake samples is shown in Figure 4. This is
+exactly the same as for river data except that the fourth row must be
+named LAKE\_TYPE and contain a code indicating lake type according to
+the GB lake typology alkalinity classes. Marl lakes are included in the
+high alkalinity (HA) group. Peat and brackish lakes are not covered by
+the tool. Sample date for lake samples is not used in the class
+calculations and can contain missing values.
+
+\begin{figure}
+\centering
+\includegraphics{images/DARLEQLakeData.png}
+\caption{Example format for lake diatom LTDI samples}
+\end{figure}
+
+\subsection{7. Acknowledgements}\label{acknowledgements}
+
+\subsection{8. References}\label{references}
+
+Bennion, H., Kelly, M.G., Juggins, S., Yallop, M.L., Burgess, A.,
+Jamieson, J., Krokowski, J., 2014. Assessment of ecological status in UK
+lakes using benthic diatoms. \emph{Freshwater Science} \textbf{33},
+639-654.
+
+Juggins, S., Kelly, M., Allott, T., Kelly-Quinn, M., Monteith, D., 2016.
+A Water Framework Directive-compatible metric for assessing
+acidification in UK and Irish rivers using diatoms. \emph{Science of The
+Total Environment} \textbf{568}, 671-678.
+
+Kelly, M., Bennion, H., Burgess, A., Ellis, J., Juggins, S., Guthrie,
+R., Jamieson, J., Adriaenssens, V., Yallop, M., 2009. Uncertainty in
+ecological status assessments of lakes and rivers using diatoms.
+\emph{Hydrobiologia} \textbf{633}, 5-15.
+
+Kelly, M., Juggins, S., Guthrie, R., Pritchard, S., Jamieson, J.,
+Rippey, B., Hirst, H., Yallop, M., 2008. Assessment of ecological status
+in UK rivers using diatoms. \emph{Freshwater Biology} \textbf{53},
+403-422.
+
+
+\end{document}

@@ -5,6 +5,7 @@
 #' @param dictionary diatom dictionary, a data frame with diatom taxon codes and indicator values for different metrics.  Defaults to the built-in DARLEQ3 dictionary.
 #' @param taxon_names optional data frame containing taxon code in column 1 and taxon name in column 2.  Used only to supply names of missing taxa in the job summary.
 #' @param verbose logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.
+#' @param model_data list of 2 named elements: ma_coef=coefficients of major axis deshrinking regression, mono-mod= results of monotonic deshrinking GAM.  Defaults to built-in values for TDI5NGS.
 #'
 #' @details \code{calc_Metric} takes as arguments a data frame of diatom counts or relative abundances, a metric code and a "dictionary" of diatom metric indicator values. The function will link the diatom taxon codes from the column names in the diatom data to those listed in the dictionary and calculate the relevant metric, along with some useful summary statistics. Diatom data should be coded with either NBS codes or 6-character DiatCode codes. See \code{\link{darleq3_taxa}} for the current DARLEQ3 dictionary.
 #'
@@ -38,7 +39,7 @@
 #' @export calc_Metric
 #'
 
-calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, taxon_names=NULL, verbose=TRUE) {
+calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, taxon_names=NULL, verbose=TRUE, model_data=NULL) {
   wm <- function(w, x) {
     stats::weighted.mean(x, w, na.rm=TRUE)
   }
@@ -61,6 +62,13 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ta
       return(NULL)
     else
       return(ifelse(nM1 > nM2, colnames(dictionary)[1], colnames(dictionary)[2]))
+  }
+  if (is.null(model_data)) {
+    ma.coef <- darleq3::darleq3_data$ma.coef
+    mono.mod <- darleq3::darleq3_data$mono.mod
+  } else {
+    ma.coef <- model_data$ma.coef
+    mono.mod <- model_data$mono.mod
   }
   metric.codes <- darleq3::darleq3_data$metric.codes
   method <- match(metric, metric.codes)

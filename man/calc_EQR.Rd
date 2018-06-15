@@ -4,12 +4,14 @@
 \alias{calc_EQR}
 \title{Calculate EQRs and WFD status classes from diatom metric and sample environmental data}
 \usage{
-calc_EQR(x, header, verbose = TRUE)
+calc_EQR(x, header, truncate_EQR = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{x}{an object of class \code{DIATOM_METRIC}, usually the output from function \code{\link{calc_Metric}}.}
 
 \item{header}{data frame containing sample and site environmental information for calculating the expected value of the metric.}
+
+\item{truncate_EQR}{logical to truncate EQRs at 1.0}
 
 \item{verbose}{logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.}
 }
