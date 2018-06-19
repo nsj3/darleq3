@@ -100,7 +100,7 @@ calc_Uncertainty <- function(x, metric, lake_Type=NULL) {
   TMean <- log(EQR / (1-EQR))
   Tstdev <- stdev/(EQR * (1-EQR))
   if (substring(metric, 1, 3) == "LTD") {
-    Tstdev[Tstdev > 1.0] <- 1.0
+    Tstdev[Tstdev > 1.5] <- 1.5
   } else {
     Tstdev[Tstdev > 1.0] <- 1.0
   }
