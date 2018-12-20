@@ -4,7 +4,6 @@
 \name{darleq3}
 \alias{darleq3}
 \alias{darleq3-package}
-\alias{darleq3-package}
 \title{darleq3: Diatom Assessment of River and Lake Ecological Quality}
 \description{
 darleq3 is an R package for the assessment of river and lake ecological status using diatom data obtained by light microscopy (LM) or Next Generation Sequencing (NGS). The package contains functions for importing data from Excel worksheets, calculating various water quality metrics, EQRs and Water Framework Directive quality classes.
