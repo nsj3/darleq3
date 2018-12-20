@@ -29,11 +29,11 @@ darleq <- function(inFile, sheet=NULL, metrics=c("TDI3", "TDI4", "TDI5LM"), outF
   } else {
     errMessage("metrics missing with no default", verbose)
   }
-  d <- tryCatch(read_DARLEQ(inFile, sheet, FALSE), error=function(e) { e })
+  d <- tryCatch(darleq3::read_DARLEQ(inFile, sheet, FALSE), error=function(e) { e })
   if (inherits(d, "error"))
     errMessage(d$message, verbose)
 
-  res <- tryCatch(calc_Metric_EQR(d, metrics, FALSE))
+  res <- tryCatch(darleq3::calc_Metric_EQR(d, metrics, FALSE))
   if (inherits(res, "error"))
     errMessage(res$message, verbose)
 
@@ -46,7 +46,7 @@ darleq <- function(inFile, sheet=NULL, metrics=c("TDI3", "TDI4", "TDI5LM"), outF
     outFile <- paste0("DARLEQ3_Results_", fn, "_", sheet, "_", Sys.Date(), ".xlsx")
     outFile <- gsub(" ", "_", outFile)
   }
-  retval <- tryCatch(save_DARLEQ(res, outFile, fn=inFile, sheet=sheet, FALSE))
+  retval <- tryCatch(sdarleq3::ave_DARLEQ(res, outFile, fn=inFile, sheet=sheet, FALSE))
   if (inherits(retval, "error"))
     errMessage(retval$message, verbose)
 

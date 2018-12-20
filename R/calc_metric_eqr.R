@@ -35,10 +35,10 @@ calc_Metric_EQR <- function(x, metrics="TDI5LM", truncate_EQR=TRUE, verbose=TRUE
   res <- vector("list", length=length(metrics))
 
   for (i in 1:length(metrics)) {
-    x.tdi <- tryCatch(calc_Metric(x$diatom_data, metrics[i], taxon_names=x$taxon_names, verbose=FALSE), error=function(e) { e } )
+    x.tdi <- tryCatch(darleq3::calc_Metric(x$diatom_data, metrics[i], taxon_names=x$taxon_names, verbose=FALSE), error=function(e) { e } )
     if (inherits(x.tdi, "error"))
         errMessage(x.tdi$message, verbose)
-    res[[i]] <- calc_EQR(x.tdi, x$header, truncate_EQR=truncate_EQR, verbose=FALSE)
+    res[[i]] <- darleq3::calc_EQR(x.tdi, x$header, truncate_EQR=truncate_EQR, verbose=FALSE)
     res[[i]]$Job_Summary <- x.tdi$Job_Summary
     if (!is.null(x.tdi$warnings)) {
       if (is.null(res[[i]]$warnings)) {

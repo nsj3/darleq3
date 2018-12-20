@@ -147,8 +147,8 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ta
   tdi.sam <- (tdi.sam * 25) - 25
 
   if (metric == "TDI5NGS") {
-    mono.mod <- darleq3::darleq3_data$mono.mod
-    ma.coef <- darleq3::darleq3_data$ma.coef
+#    mono.mod <- darleq3::darleq3_data$mono.mod
+#    ma.coef <- darleq3::darleq3_data$ma.coef
     tdi.sam <- mgcv::Predict.matrix(mono.mod$sm, data.frame(x = tdi.sam)) %*% mono.mod$p
     tdi.sam <- (tdi.sam - ma.coef[1]) / ma.coef[2]
   }
