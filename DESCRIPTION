@@ -17,6 +17,8 @@ Imports:
     knitr,
     rmarkdown,
     R.rsp
+Suggests:
+    testthat
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
@@ -24,3 +26,4 @@ BinaryFiles: zip.exe
 RoxygenNote: 6.1.0
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr, R.rsp
+Suggests: testthat
