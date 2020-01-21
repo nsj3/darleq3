@@ -4,8 +4,7 @@
 \alias{calc_Metric_EQR}
 \title{Calculate diatom water quality metrics, EQRs and WFD class for samples, and uncertainties of site classification}
 \usage{
-calc_Metric_EQR(x, metrics = "TDI5LM", truncate_EQR = TRUE,
-  verbose = TRUE)
+calc_Metric_EQR(x, metrics = "TDI5LM", truncate_EQR = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{x}{list containing diatom and header (environmental) data. This will usually be the data structure imported by \code{\link{read_DARLEQ}}.}

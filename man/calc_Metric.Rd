@@ -4,8 +4,14 @@
 \alias{calc_Metric}
 \title{Calculate water quality metrics from diatom data}
 \usage{
-calc_Metric(x, metric = "TDI5LM", dictionary = darleq3::darleq3_taxa,
-  taxon_names = NULL, verbose = TRUE, model_data = NULL)
+calc_Metric(
+  x,
+  metric = "TDI5LM",
+  dictionary = darleq3::darleq3_taxa,
+  taxon_names = NULL,
+  verbose = TRUE,
+  model_data = NULL
+)
 }
 \arguments{
 \item{x}{data frame of diatom counts or relative abundance data}

@@ -24,18 +24,18 @@ calc_WFDClass <- function(EQR, metric, lake_Type=NA) {
   metric2 <- substring(metric, 1, 3)
   if (metric2 == "TDI") {
     boundaries <- switch(metric, TDI3=ddd$boundariesTDI3, TDI4=ddd$boundariesTDI4, TDI5LM=ddd$boundariesTDI5LM, TDI5NGS=ddd$boundariesTDI5NGS)
-    class <- cut(EQR, c(10, boundaries, 0), labels=rev(WFD.classes))
+    class <- cut(EQR, c(10, boundaries, 0), labels=rev(WFD.classes), right=FALSE)
   } else if (metric2=="LTD") {
     HA_boundaries <- switch(metric, LTDI1=ddd$boundariesLTDI1_HA, LTDI2=ddd$boundariesLTDI2_HA)
     MA_boundaries <- switch(metric, LTDI1=ddd$boundariesLTDI1_MA, LTDI2=ddd$boundariesLTDI2_MA)
     LA_boundaries <- switch(metric, LTDI1=ddd$boundariesLTDI1_LA, LTDI2=ddd$boundariesLTDI2_LA)
     class <- vector(mode="character", length=length(EQR))
-    class[lake_Type=="HA"] <- as.character(cut(EQR[lake_Type=="HA"], c(10, HA_boundaries, 0), labels=rev(WFD.classes)))
-    class[lake_Type=="MA"] <- as.character(cut(EQR[lake_Type=="MA"], c(10, MA_boundaries, 0), labels=rev(WFD.classes)))
-    class[lake_Type=="LA"] <- as.character(cut(EQR[lake_Type=="LA"], c(10, LA_boundaries, 0), labels=rev(WFD.classes)))
+    class[lake_Type=="HA"] <- as.character(cut(EQR[lake_Type=="HA"], c(10, HA_boundaries, 0), labels=rev(WFD.classes), right=FALSE))
+    class[lake_Type=="MA"] <- as.character(cut(EQR[lake_Type=="MA"], c(10, MA_boundaries, 0), labels=rev(WFD.classes), right=FALSE))
+    class[lake_Type=="LA"] <- as.character(cut(EQR[lake_Type=="LA"], c(10, LA_boundaries, 0), labels=rev(WFD.classes), right=FALSE))
   } else if (metric2=="DAM") {
     boundaries <- ddd$boundariesDAM
-    class <- cut(EQR, c(10, boundaries, 0), labels=rev(WFD.classes))
+    class <- cut(EQR, c(10, boundaries, 0), labels=rev(WFD.classes), right=FALSE)
   }
   class
 }
@@ -48,7 +48,7 @@ calc_WFDClass <- function(EQR, metric, lake_Type=NA) {
 #' @details This is an internal function and is not meant to be called directly.
 
 calc_SiteEQR <- function(EQR, SiteID, lake_Type=NULL) {
-  mean_EQR <- stats::aggregate(EQR, list(SiteID=SiteID), function(x) round(mean(x, na.rm=TRUE), 2) )
+  mean_EQR <- stats::aggregate(EQR, list(SiteID=SiteID), function(x) round(mean(x, na.rm=TRUE), 5) )
   N_EQR <- stats::aggregate(EQR, list(SiteID=SiteID), function(x) sum(!is.na(x)) )
   res <- data.frame(SiteID=N_EQR[, 1], N=N_EQR[, 2], EQR=mean_EQR[, 2])
   if (!is.null(lake_Type)) {

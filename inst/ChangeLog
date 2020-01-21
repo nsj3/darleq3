@@ -1,5 +1,9 @@
 darleq3 Change Log
 
+version 0.9.5
+21/01/2020
+Fixed bug in classification of sites exactly on boundary
+
 version 0.9.4
 20/12/2018
 Updated with new version of interpretative guide

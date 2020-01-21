@@ -4,8 +4,13 @@
 \alias{darleq}
 \title{Calculate diatom water quality metrics, EQRs and WFD class for samples, and uncertainties of site classification}
 \usage{
-darleq(inFile, sheet = NULL, metrics = c("TDI3", "TDI4", "TDI5LM"),
-  outFile = NULL, verbose = TRUE)
+darleq(
+  inFile,
+  sheet = NULL,
+  metrics = c("TDI3", "TDI4", "TDI5LM"),
+  outFile = NULL,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{inFile}{Excel file name containing diatom and sample environmental data. See \code{\link{read_DARLEQ}} for acceptible formats for these data.}
