@@ -18,17 +18,18 @@
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available
 \IfFileExists{microtype.sty}{%
-\usepackage{microtype}
+\usepackage[]{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\usepackage[margin=1in]{geometry}
-\usepackage{hyperref}
-\hypersetup{unicode=true,
-            pdftitle={darleq3: User Guide (Version 0.9.4)},
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage[unicode=true]{hyperref}
+\hypersetup{
+            pdftitle={darleq3: User Guide (Version 0.9.6)},
             pdfauthor={Steve Juggins and Martyn Kelly},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=1in]{geometry}
 \usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
@@ -38,37 +39,37 @@
 \usepackage{framed}
 \definecolor{shadecolor}{RGB}{248,248,248}
 \newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
-\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
 \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ImportTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\NormalTok}[1]{#1}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -98,38 +99,20 @@
 \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
 
-%%% Use protect on footnotes to avoid problems with footnotes in titles
-\let\rmarkdownfootnote\footnote%
-\def\footnote{\protect\rmarkdownfootnote}
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
 
-%%% Change title format to be more compact
-\usepackage{titling}
 
-% Create subtitle command for use in maketitle
-\newcommand{\subtitle}[1]{
-  \posttitle{
-    \begin{center}\large#1\end{center}
-    }
-}
-
-\setlength{\droptitle}{-2em}
-
-  \title{darleq3: User Guide (Version 0.9.4)}
-    \pretitle{\vspace{\droptitle}\centering\huge}
-  \posttitle{\par}
-    \author{Steve Juggins and Martyn Kelly}
-    \preauthor{\centering\large\emph}
-  \postauthor{\par}
-      \predate{\centering\large\emph}
-  \postdate{\par}
-    \date{2018-12-20}
-
+\title{darleq3: User Guide (Version 0.9.6)}
+\author{Steve Juggins and Martyn Kelly}
+\date{2020-02-20}
 
 \begin{document}
 \maketitle
 
-\hypertarget{introduction}{%
-\subsection{1. Introduction}\label{introduction}}
+\subsection{1. Introduction}\label{introduction}
 
 \texttt{darleq3} is an R package for the assessment of river and lake
 ecological status using diatom data obtained by light microscopy (LM) or
@@ -156,8 +139,7 @@ be the easiest for most users. The second methods will be more
 convenient for processing multiple data sets, for automating darleq
 calculations, or including them in a longer chain of analysis.
 
-\hypertarget{installation}{%
-\subsection{2. Installation}\label{installation}}
+\subsection{2. Installation}\label{installation}
 
 The easiest way to install \texttt{darleq3} is from a github repository.
 To do this first install the package \texttt{devtools} with the
@@ -189,7 +171,7 @@ made available in a R session with the following:
 \end{Highlighting}
 \end{Shaded}
 
-The file can be opened in Excel using t he following:
+The file can be opened in Excel using the following command:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -198,9 +180,19 @@ The file can be opened in Excel using t he following:
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{using-the-darleq3-shiny-app}{%
+An Excel version the DARLEQ3 taxon list can be opened with the following
+commands:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{library}\NormalTok{(darleq3)}
+\OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DarleqTaxonList2017_Master.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{shell.exec}\NormalTok{(fn)}
+\end{Highlighting}
+\end{Shaded}
+
 \subsection{\texorpdfstring{3. Using the \texttt{darleq3} Shiny
-app}{3. Using the darleq3 Shiny app}}\label{using-the-darleq3-shiny-app}}
+app}{3. Using the darleq3 Shiny app}}\label{using-the-darleq3-shiny-app}
 
 \texttt{darleq3} can run on a remote Shiny server or locally on a
 desktop PC running RStudio. The app will function in exactly the same
@@ -262,9 +254,8 @@ To use the app follow these simple steps:
 To quit the app simple close the browser and or hit Escape in the
 RStudio Console window.
 
-\hypertarget{using-the-darleq3-r-package}{%
 \subsection{\texorpdfstring{4. Using the \texttt{darleq3} R
-package}{4. Using the darleq3 R package}}\label{using-the-darleq3-r-package}}
+package}{4. Using the darleq3 R package}}\label{using-the-darleq3-r-package}
 
 \texttt{darleq3} contains a number of functions for importing diatom
 data, calculating various sample and site-based metrics, EQRs and WFD
@@ -306,9 +297,8 @@ in a longer data analysis chain using R. The package also includes
 ``wrapper'' functions, that ``wrap'' multiple low-level functions to
 perform a complete analysis with a single function call.
 
-\hypertarget{darleq3-wrapper-functions}{%
 \subsubsection{\texorpdfstring{4.1 \texttt{darleq3} wrapper
-functions}{4.1 darleq3 wrapper functions}}\label{darleq3-wrapper-functions}}
+functions}{4.1 darleq3 wrapper functions}}\label{darleq3-wrapper-functions}
 
 The most useful wrapper function is \texttt{darleq}. This function
 imports data form an Excel file, calculates multiple metrics, EQRs and
@@ -345,9 +335,8 @@ To calculate and save results for multiple metrics:
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{darleq3-low-level-functions}{%
 \subsubsection{\texorpdfstring{4.2 \texttt{darleq3} low-level
-functions}{4.2 darleq3 low-level functions}}\label{darleq3-low-level-functions}}
+functions}{4.2 darleq3 low-level functions}}\label{darleq3-low-level-functions}
 
 \texttt{darleq3} low-level functions are useful for calculating partial
 results or for embedding darleq3 in a longer data analysis sequence. The
@@ -362,6 +351,16 @@ sample, site and environmental data from the header of the Excel file.
 \begin{Highlighting}[]
 \OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DARLEQ2TestData.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
 \OperatorTok{>}\StringTok{ }\NormalTok{d <-}\StringTok{ }\KeywordTok{read_DARLEQ}\NormalTok{(fn, }\StringTok{"Rivers TDI Test Data"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## New names:
+## * `` -> ...2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \OperatorTok{>}\StringTok{ }\KeywordTok{head}\NormalTok{(d}\OperatorTok{$}\NormalTok{diatom_data[, }\DecValTok{1}\OperatorTok{:}\DecValTok{8}\NormalTok{])}
 \end{Highlighting}
 \end{Shaded}
@@ -402,6 +401,16 @@ and uncertainties and a job summary.
 \begin{Highlighting}[]
 \OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DARLEQ2TestData.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
 \OperatorTok{>}\StringTok{ }\NormalTok{d <-}\StringTok{ }\KeywordTok{read_DARLEQ}\NormalTok{(fn, }\StringTok{"Rivers TDI Test Data"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## New names:
+## * `` -> ...2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \OperatorTok{>}\StringTok{ }\NormalTok{results <-}\StringTok{ }\KeywordTok{calc_Metric_EQR}\NormalTok{(d, }\DataTypeTok{metrics=}\KeywordTok{c}\NormalTok{(}\StringTok{"TDI4"}\NormalTok{, }\StringTok{"TDI5LM"}\NormalTok{))}
 \OperatorTok{>}\StringTok{ }\KeywordTok{head}\NormalTok{(results}\OperatorTok{$}\NormalTok{TDI5LM}\OperatorTok{$}\NormalTok{EQR[, }\DecValTok{9}\OperatorTok{:}\DecValTok{15}\NormalTok{])}
 \end{Highlighting}
@@ -424,13 +433,13 @@ and uncertainties and a job summary.
 \end{Shaded}
 
 \begin{verbatim}
-##    SiteID N  EQR WFDClass   CoCH  CoCG  CoCM  CoCP CoCB   ROM  CoCHG CoCMPB ROM_GM
-## 43  36082 2 0.88     High  79.41 19.01  1.52  0.06 0.00 20.59  98.42   1.58   1.58
-## 33  34649 2 0.82     High  58.61 38.23  3.09  0.07 0.00 41.39  96.84   3.16   3.16
-## 42  36073 2 1.00     High 100.00  0.00  0.00  0.00 0.00  0.00 100.00   0.00   0.00
-## 41  35965 2 1.00     High 100.00  0.00  0.00  0.00 0.00  0.00 100.00   0.00   0.00
-## 36  35101 1 0.47 Moderate   0.04 11.90 61.95 25.89 0.23 88.10  11.93  88.07  11.93
-## 35  35075 2 0.71     Good  14.23 71.48 14.05  0.23 0.00 28.52  85.72  14.28  14.28
+##    SiteID N     EQR WFDClass   CoCH  CoCG  CoCM  CoCP CoCB   ROM  CoCHG CoCMPB ROM_GM
+## 43  36082 2 0.88068     High  79.59 18.84  1.51  0.06 0.00 20.41  98.43   1.57   1.57
+## 33  34649 2 0.82357     High  60.09 36.90  2.95  0.06 0.00 39.91  96.99   3.01   3.01
+## 42  36073 2 1.00000     High 100.00  0.00  0.00  0.00 0.00  0.00 100.00   0.00   0.00
+## 41  35965 2 1.00000     High 100.00  0.00  0.00  0.00 0.00  0.00 100.00   0.00   0.00
+## 36  35101 1 0.47302 Moderate   0.04 12.52 62.12 25.10 0.21 87.48  12.56  87.44  12.56
+## 35  35075 2 0.71214     Good  14.86 71.26 13.66  0.22 0.00 28.74  86.12  13.88  13.88
 \end{verbatim}
 
 \texttt{save\_DARLEQ} saves the output from \texttt{calc\_Metric\_EQR}
@@ -452,6 +461,16 @@ diatom count or relative abundance data.
 \begin{Highlighting}[]
 \OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DARLEQ2TestData.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
 \OperatorTok{>}\StringTok{ }\NormalTok{d <-}\StringTok{ }\KeywordTok{read_DARLEQ}\NormalTok{(fn, }\StringTok{"Rivers TDI Test Data"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## New names:
+## * `` -> ...2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \OperatorTok{>}\StringTok{ }\NormalTok{x <-}\StringTok{ }\KeywordTok{calc_Metric}\NormalTok{(d}\OperatorTok{$}\NormalTok{diatom_data, }\DataTypeTok{metric=}\StringTok{"TDI4"}\NormalTok{)}
 \OperatorTok{>}\StringTok{ }\KeywordTok{head}\NormalTok{(x}\OperatorTok{$}\NormalTok{Metric)}
 \end{Highlighting}
@@ -474,6 +493,16 @@ class uncertainties from a list of sample metrics.
 \begin{Highlighting}[]
 \OperatorTok{>}\StringTok{ }\NormalTok{fn <-}\StringTok{ }\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata/DARLEQ2TestData.xlsx"}\NormalTok{, }\DataTypeTok{package=}\StringTok{"darleq3"}\NormalTok{)}
 \OperatorTok{>}\StringTok{ }\NormalTok{d <-}\StringTok{ }\KeywordTok{read_DARLEQ}\NormalTok{(fn, }\StringTok{"Rivers TDI Test Data"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## New names:
+## * `` -> ...2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \OperatorTok{>}\StringTok{ }\NormalTok{x <-}\StringTok{ }\KeywordTok{calc_Metric}\NormalTok{(d}\OperatorTok{$}\NormalTok{diatom_data, }\DataTypeTok{metric=}\StringTok{"TDI4"}\NormalTok{)}
 \OperatorTok{>}\StringTok{ }\NormalTok{eqr <-}\StringTok{ }\KeywordTok{calc_EQR}\NormalTok{(x, d}\OperatorTok{$}\NormalTok{header)}
 \OperatorTok{>}\StringTok{ }\KeywordTok{head}\NormalTok{(eqr}\OperatorTok{$}\NormalTok{EQR[, }\DecValTok{9}\OperatorTok{:}\DecValTok{15}\NormalTok{])}
@@ -497,18 +526,17 @@ class uncertainties from a list of sample metrics.
 \end{Shaded}
 
 \begin{verbatim}
-##    SiteID N  EQR WFDClass   CoCH  CoCG  CoCM  CoCP CoCB   ROM  CoCHG CoCMPB ROM_GM
-## 43  36082 2 0.71     Good  14.23 71.48 14.05  0.23 0.00 28.52  85.72  14.28  14.28
-## 33  34649 2 0.81     High  54.37 42.03  3.54  0.07 0.00 45.63  96.39   3.61   3.61
-## 42  36073 2 1.00     High 100.00  0.00  0.00  0.00 0.00  0.00 100.00   0.00   0.00
-## 41  35965 2 1.00     High 100.00  0.00  0.00  0.00 0.00  0.00 100.00   0.00   0.00
-## 36  35101 1 0.47 Moderate   0.04 11.90 61.95 25.89 0.23 88.10  11.93  88.07  11.93
-## 35  35075 2 0.71     Good  14.23 71.48 14.05  0.23 0.00 28.52  85.72  14.28  14.28
+##    SiteID N     EQR WFDClass   CoCH  CoCG  CoCM  CoCP CoCB   ROM  CoCHG CoCMPB ROM_GM
+## 43  36082 2 0.71024     Good  14.30 71.46 14.01  0.23 0.00 28.54  85.76  14.24  14.24
+## 33  34649 2 0.80541     High  52.37 43.79  3.77  0.07 0.00 47.63  96.16   3.84   3.84
+## 42  36073 2 1.00000     High 100.00  0.00  0.00  0.00 0.00  0.00 100.00   0.00   0.00
+## 41  35965 2 1.00000     High 100.00  0.00  0.00  0.00 0.00  0.00 100.00   0.00   0.00
+## 36  35101 1 0.47083 Moderate   0.04 12.07 62.00 25.67 0.22 87.93  12.10  87.90  12.10
+## 35  35075 2 0.71391     Good  15.38 71.06 13.34  0.22 0.00 28.94  86.44  13.56  13.56
 \end{verbatim}
 
-\hypertarget{understanding-darleq3-output}{%
 \subsection{\texorpdfstring{5. Understanding \texttt{darleq3}
-output}{5. Understanding darleq3 output}}\label{understanding-darleq3-output}}
+output}{5. Understanding darleq3 output}}\label{understanding-darleq3-output}
 
 The DARLEQ shiny app and R functions produce output that is similar in
 structure and content to that produced by the DARLEQ2 program.
@@ -518,8 +546,7 @@ content. For each metric, the output file will contain 3 worksheets,
 named Code\_Job\_Summary, and Code\_Uncertainty (where Code is the code
 for each metric). These three sheets contain the following information:
 
-\hypertarget{job-summary}{%
-\subsubsection{5.1 Job summary}\label{job-summary}}
+\subsubsection{5.1 Job summary}\label{job-summary}
 
 This sheet contains the input file name, worksheet name and a summary of
 the number of samples and taxa in the file. It also contains a list of
@@ -535,10 +562,9 @@ not in DARLEQ2 software. This is useful in understanding the reasons for
 differences in metric scores between DARLEQ versions 2 and 3 for the
 same metric.
 
-\hypertarget{sample_summary}{%
-\subsubsection{5.2 Sample\_Summary}\label{sample_summary}}
+\subsubsection{5.2 Sample\_Summary}\label{sample_summary}
 
-Sample Summary â€`` this sheet contains metric, EQR and quality class
+Sample Summary -- this sheet contains metric, EQR and quality class
 results for each sample. First, the sample information listed in the
 original input file is repeated, and then results of the analysis are
 listed as follows (where CODE is the metric Code):
@@ -596,8 +622,7 @@ diatoms:
   environmental values.
 \end{itemize}
 
-\hypertarget{uncertainty}{%
-\subsubsection{5.3 Uncertainty}\label{uncertainty}}
+\subsubsection{5.3 Uncertainty}\label{uncertainty}
 
 Multiple samples from each site are combined and an uncertainty analysis
 is performed using the mean EQR and number of samples according to Kelly
@@ -628,8 +653,7 @@ is performed using the mean EQR and number of samples according to Kelly
   boundary.
 \end{itemize}
 
-\hypertarget{input-data-format}{%
-\subsection{6. Input data format}\label{input-data-format}}
+\subsection{6. Input data format}\label{input-data-format}
 
 \texttt{read\_DARLEQ} and the shiny app import diatom data from an Excel
 file in either .xls or .xlsx format. An example Excel file is included
@@ -647,7 +671,7 @@ information:
   identify the sample. This field cannot be empty (an empty cell
   indicates the end of data).
 \item
-  Row 2: SiteID â€`` a short numerical or alphanumeric code to uniquely
+  Row 2: SiteID -- a short numerical or alphanumeric code to uniquely
   identify the site. This code will be used to aggregate multiple
   samples when calculating confidence of class for a site.
 \item
@@ -720,11 +744,9 @@ calculations and can contain missing values.
 \caption{Example format for lake diatom LTDI samples}
 \end{figure}
 
-\hypertarget{acknowledgements}{%
-\subsection{7. Acknowledgements}\label{acknowledgements}}
+\subsection{7. Acknowledgements}\label{acknowledgements}
 
-\hypertarget{references}{%
-\subsection{8. References}\label{references}}
+\subsection{8. References}\label{references}
 
 Bennion, H., Kelly, M.G., Juggins, S., Yallop, M.L., Burgess, A.,
 Jamieson, J., Krokowski, J., 2014. Assessment of ecological status in UK
@@ -745,6 +767,5 @@ Kelly, M., Juggins, S., Guthrie, R., Pritchard, S., Jamieson, J.,
 Rippey, B., Hirst, H., Yallop, M., 2008. Assessment of ecological status
 in UK rivers using diatoms. \emph{Freshwater Biology} \textbf{53},
 403-422.
-
 
 \end{document}

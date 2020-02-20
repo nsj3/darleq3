@@ -60,12 +60,22 @@ library(darleq3)
 fn <- system.file("extdata/DARLEQ2TestData.xlsx", package="darleq3")
 ```
 
-The file can be opened in Excel using t he following:
+The file can be opened in Excel using the following command:
 
 ```{r Excel, eval=FALSE}
 # note running the following lines will open the file in Excel (if installed)
 shell.exec(fn)
 ```
+
+An Excel version the DARLEQ3 taxon list can be opened with the following commands:
+
+```{r Excel2, eval=FALSE}
+library(darleq3)
+fn <- system.file("extdata/DarleqTaxonList2017_Master.xlsx", package="darleq3")
+shell.exec(fn)
+```
+
+
 
 ## 3. Using the `darleq3` Shiny app
 

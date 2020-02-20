@@ -1,5 +1,10 @@
 darleq3 Change Log
 
+version 0.9.6
+20/02/2020
+Fixed bug in data with only 1 sample
+Added function to view Excel sheet
+
 version 0.9.5
 21/01/2020
 Fixed bug in classification of sites exactly on boundary

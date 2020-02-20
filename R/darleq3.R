@@ -13,7 +13,6 @@
 #'
 #' \href{../doc/interpreting_NGS_data.pdf}{Guide to interpreting TDI5 NGS data (pdf version)}
 #'
-#'
 #' @section darleq3 functions:
 #'
 #' * \code{\link{darleq}} import diatom data from an Excel file, calculate matrics, EQRs and WFD quality classes, and save results in Excel format

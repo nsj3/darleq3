@@ -20,6 +20,7 @@ file.copy("darleq3.pdf", "vignettes/darleq3.pdf", overwrite=TRUE)
 file.copy("vignettes/darleq3UserGuidePDF.pdf", "inst/shiny_app/www/darleq3UserGuidePDF.pdf", overwrite=TRUE)
 file.copy("vignettes/darleq3UserGuidePDF.html", "inst/shiny_app/www/darleq3UserGuidePDF.html", overwrite=TRUE)
 file.copy("vignettes/Interpreting_NGS_data.pdf", "inst/shiny_app/www/Interpreting_NGS_data.pdf", overwrite=TRUE)
+file.copy("inst/extdata/DarleqTaxonList2017_Master.xlsx", "inst/shiny_app/www/DarleqTaxonList2017_Master.xlsx", overwrite=TRUE)
 
 file.copy("vignettes/darleq3.pdf", "inst/doc/darleq3.pdf", overwrite=TRUE)
 file.copy("vignettes/darleq3UserGuidePDF.pdf", "inst/doc/darleq3UserGuidePDF.pdf", overwrite=TRUE)

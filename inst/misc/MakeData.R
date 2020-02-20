@@ -46,6 +46,7 @@ col_types <- c(rep("text", 10), rep("numeric", 20))
 darleq3_taxa <- as.data.frame(read_excel("\\Data\\R_Libraries\\People\\Martyn_Kelly\\Barcoding\\TaxonLists\\DarleqTaxonList2017_Master.xlsx", sheet="D3_List_Phase3", col_types=col_types))
 rm(col_types)
 
+openxlsx::write.xlsx(darleq3_taxa, "inst\\extdata\\DarleqTaxonList2017_Master.xlsx", overwrite=TRUE)
 
 load("..\\darleq3_test\\Aug30_ma.Rda")
 load("..\\darleq3_test\\Aug30_mono_mod.Rda")

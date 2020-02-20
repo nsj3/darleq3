@@ -141,7 +141,7 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
   header <- data.frame(SampleID=rownames(header), header)
 
 # Extract diatom data and remove any rows without taxon code in column 1
-  d2 <- as.data.frame(d[iStartRow:iEndRow, 1:iEndCol], stringsAsFactors=FALSE)
+  d2 <- as.data.frame(d[iStartRow:iEndRow, 1:iEndCol, drop=FALSE], stringsAsFactors=FALSE)
   haveCode <- is_empty(d2[, 1])
   if (any(haveCode))
     d2 <- d2[!haveCode, ]
@@ -152,7 +152,7 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
 # Merge duplicate rows and replace missing values with zero
   nms <- d2[, 1:2]
   colnames(nms) <- c("TaxonCode", "TaxonName")
-  d2 <- d2[, -c(1:2)]
+  d2 <- d2[, -c(1:2), drop=FALSE]
   d2[is.na(d2)] <- 0
 
 # check for errors
@@ -165,7 +165,7 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
   if (any(table(nms[, 1] > 1))) {
     d2 <- stats::aggregate(d2, list(nms[, 1]), sum)
     rownames(d2) <- d2[, 1]
-    d2 <- as.data.frame(t(d2[, -1]), stringsAsFactors=FALSE)
+    d2 <- as.data.frame(t(d2[, -1, drop=FALSE]), stringsAsFactors=FALSE)
     d2[is.na(d2)] <- 0
     mt <- match(colnames(d2), nms[,1])
     nms <- nms[mt, ]
