@@ -1,5 +1,9 @@
 darleq3 Change Log
 
+version 0.9.7
+10/08/20
+Fixed bug reading data with only 1 sample
+
 version 0.9.6
 20/02/2020
 Fixed bug in data with only 1 sample

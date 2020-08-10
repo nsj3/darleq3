@@ -79,13 +79,11 @@ shell.exec(fn)
 
 ## 3. Using the `darleq3` Shiny app
 
-`darleq3` can run on a remote Shiny server or locally on a desktop PC running RStudio.  The app will function in exactly the same way in both situations.  To run `darleq3` on a remote shiny server open a web browser and point it to either:
+`darleq3` can run on a remote Shiny server or locally on a desktop PC running RStudio.  The app will function in exactly the same way in both situations.  To run `darleq3` on a remote shiny server open a web browser and point it to:
 
 https://nsj3.shinyapps.io/darleq3/  
 
-http://gpsgpuserver.ncl.ac.uk:3838/darleq3/
-
-Both these hosts have been set up for testing purposes and may change.  There may be problems running the app on the second server listed from within the EA.  
+This host has been set up for testing purposes and may change.   
 
 To run the app locally, simply start RStudio, load the `darleq3` package and run the command `runDARLEQ()`:
 

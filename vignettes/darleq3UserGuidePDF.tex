@@ -1,34 +1,46 @@
-\documentclass[]{article}
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
-\usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
-\else % if luatex or xelatex
-  \ifxetex
-    \usepackage{mathspec}
-  \else
-    \usepackage{fontspec}
-  \fi
-  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
-% use upquote if available, for straight quotes in verbatim environments
+% Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-% use microtype if available
-\IfFileExists{microtype.sty}{%
-\usepackage[]{microtype}
-\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
-\usepackage[unicode=true]{hyperref}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-            pdftitle={darleq3: User Guide (Version 0.9.6)},
-            pdfauthor={Steve Juggins and Martyn Kelly},
-            pdfborder={0 0 0},
-            breaklinks=true}
-\urlstyle{same}  % don't use monospace font for urls
+  pdftitle={darleq3: User Guide (Version 0.9.7)},
+  pdfauthor={Steve Juggins and Martyn Kelly},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
 \usepackage[margin=1in]{geometry}
 \usepackage{color}
 \usepackage{fancyvrb}
@@ -39,37 +51,37 @@
 \usepackage{framed}
 \definecolor{shadecolor}{RGB}{248,248,248}
 \newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\ImportTok}[1]{#1}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
 \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
-\newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
 \newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -79,40 +91,24 @@
 % margins by default, and it is still possible to overwrite the defaults
 % using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-\IfFileExists{parskip.sty}{%
-\usepackage{parskip}
-}{% else
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt plus 2pt minus 1pt}
-}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{0}
-% Redefines (sub)paragraphs to behave more like sections
-\ifx\paragraph\undefined\else
-\let\oldparagraph\paragraph
-\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
-\fi
-\ifx\subparagraph\undefined\else
-\let\oldsubparagraph\subparagraph
-\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-\fi
-
-% set default figure placement to htbp
+% Set default figure placement to htbp
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 
-
-\title{darleq3: User Guide (Version 0.9.6)}
+\title{darleq3: User Guide (Version 0.9.7)}
 \author{Steve Juggins and Martyn Kelly}
-\date{2020-02-20}
+\date{2020-08-10}
 
 \begin{document}
 \maketitle
 
-\subsection{1. Introduction}\label{introduction}
+\hypertarget{introduction}{%
+\subsection{1. Introduction}\label{introduction}}
 
 \texttt{darleq3} is an R package for the assessment of river and lake
 ecological status using diatom data obtained by light microscopy (LM) or
@@ -139,7 +135,8 @@ be the easiest for most users. The second methods will be more
 convenient for processing multiple data sets, for automating darleq
 calculations, or including them in a longer chain of analysis.
 
-\subsection{2. Installation}\label{installation}
+\hypertarget{installation}{%
+\subsection{2. Installation}\label{installation}}
 
 The easiest way to install \texttt{darleq3} is from a github repository.
 To do this first install the package \texttt{devtools} with the
@@ -191,21 +188,18 @@ commands:
 \end{Highlighting}
 \end{Shaded}
 
+\hypertarget{using-the-darleq3-shiny-app}{%
 \subsection{\texorpdfstring{3. Using the \texttt{darleq3} Shiny
-app}{3. Using the darleq3 Shiny app}}\label{using-the-darleq3-shiny-app}
+app}{3. Using the darleq3 Shiny app}}\label{using-the-darleq3-shiny-app}}
 
 \texttt{darleq3} can run on a remote Shiny server or locally on a
 desktop PC running RStudio. The app will function in exactly the same
 way in both situations. To run \texttt{darleq3} on a remote shiny server
-open a web browser and point it to either:
+open a web browser and point it to:
 
 \url{https://nsj3.shinyapps.io/darleq3/}
 
-\url{http://gpsgpuserver.ncl.ac.uk:3838/darleq3/}
-
-Both these hosts have been set up for testing purposes and may change.
-There may be problems running the app on the second server listed from
-within the EA.
+This host has been set up for testing purposes and may change.
 
 To run the app locally, simply start RStudio, load the \texttt{darleq3}
 package and run the command \texttt{runDARLEQ()}:
@@ -254,8 +248,9 @@ To use the app follow these simple steps:
 To quit the app simple close the browser and or hit Escape in the
 RStudio Console window.
 
+\hypertarget{using-the-darleq3-r-package}{%
 \subsection{\texorpdfstring{4. Using the \texttt{darleq3} R
-package}{4. Using the darleq3 R package}}\label{using-the-darleq3-r-package}
+package}{4. Using the darleq3 R package}}\label{using-the-darleq3-r-package}}
 
 \texttt{darleq3} contains a number of functions for importing diatom
 data, calculating various sample and site-based metrics, EQRs and WFD
@@ -297,8 +292,9 @@ in a longer data analysis chain using R. The package also includes
 ``wrapper'' functions, that ``wrap'' multiple low-level functions to
 perform a complete analysis with a single function call.
 
+\hypertarget{darleq3-wrapper-functions}{%
 \subsubsection{\texorpdfstring{4.1 \texttt{darleq3} wrapper
-functions}{4.1 darleq3 wrapper functions}}\label{darleq3-wrapper-functions}
+functions}{4.1 darleq3 wrapper functions}}\label{darleq3-wrapper-functions}}
 
 The most useful wrapper function is \texttt{darleq}. This function
 imports data form an Excel file, calculates multiple metrics, EQRs and
@@ -335,8 +331,9 @@ To calculate and save results for multiple metrics:
 \end{Highlighting}
 \end{Shaded}
 
+\hypertarget{darleq3-low-level-functions}{%
 \subsubsection{\texorpdfstring{4.2 \texttt{darleq3} low-level
-functions}{4.2 darleq3 low-level functions}}\label{darleq3-low-level-functions}
+functions}{4.2 darleq3 low-level functions}}\label{darleq3-low-level-functions}}
 
 \texttt{darleq3} low-level functions are useful for calculating partial
 results or for embedding darleq3 in a longer data analysis sequence. The
@@ -535,8 +532,9 @@ class uncertainties from a list of sample metrics.
 ## 35  35075 2 0.71391     Good  15.38 71.06 13.34  0.22 0.00 28.94  86.44  13.56  13.56
 \end{verbatim}
 
+\hypertarget{understanding-darleq3-output}{%
 \subsection{\texorpdfstring{5. Understanding \texttt{darleq3}
-output}{5. Understanding darleq3 output}}\label{understanding-darleq3-output}
+output}{5. Understanding darleq3 output}}\label{understanding-darleq3-output}}
 
 The DARLEQ shiny app and R functions produce output that is similar in
 structure and content to that produced by the DARLEQ2 program.
@@ -546,7 +544,8 @@ content. For each metric, the output file will contain 3 worksheets,
 named Code\_Job\_Summary, and Code\_Uncertainty (where Code is the code
 for each metric). These three sheets contain the following information:
 
-\subsubsection{5.1 Job summary}\label{job-summary}
+\hypertarget{job-summary}{%
+\subsubsection{5.1 Job summary}\label{job-summary}}
 
 This sheet contains the input file name, worksheet name and a summary of
 the number of samples and taxa in the file. It also contains a list of
@@ -562,7 +561,8 @@ not in DARLEQ2 software. This is useful in understanding the reasons for
 differences in metric scores between DARLEQ versions 2 and 3 for the
 same metric.
 
-\subsubsection{5.2 Sample\_Summary}\label{sample_summary}
+\hypertarget{sample_summary}{%
+\subsubsection{5.2 Sample\_Summary}\label{sample_summary}}
 
 Sample Summary -- this sheet contains metric, EQR and quality class
 results for each sample. First, the sample information listed in the
@@ -622,7 +622,8 @@ diatoms:
   environmental values.
 \end{itemize}
 
-\subsubsection{5.3 Uncertainty}\label{uncertainty}
+\hypertarget{uncertainty}{%
+\subsubsection{5.3 Uncertainty}\label{uncertainty}}
 
 Multiple samples from each site are combined and an uncertainty analysis
 is performed using the mean EQR and number of samples according to Kelly
@@ -653,7 +654,8 @@ is performed using the mean EQR and number of samples according to Kelly
   boundary.
 \end{itemize}
 
-\subsection{6. Input data format}\label{input-data-format}
+\hypertarget{input-data-format}{%
+\subsection{6. Input data format}\label{input-data-format}}
 
 \texttt{read\_DARLEQ} and the shiny app import diatom data from an Excel
 file in either .xls or .xlsx format. An example Excel file is included
@@ -744,9 +746,11 @@ calculations and can contain missing values.
 \caption{Example format for lake diatom LTDI samples}
 \end{figure}
 
-\subsection{7. Acknowledgements}\label{acknowledgements}
+\hypertarget{acknowledgements}{%
+\subsection{7. Acknowledgements}\label{acknowledgements}}
 
-\subsection{8. References}\label{references}
+\hypertarget{references}{%
+\subsection{8. References}\label{references}}
 
 Bennion, H., Kelly, M.G., Juggins, S., Yallop, M.L., Burgess, A.,
 Jamieson, J., Krokowski, J., 2014. Assessment of ecological status in UK

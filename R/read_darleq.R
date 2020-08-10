@@ -1,3 +1,22 @@
+##
+## Copyright (c) 2019, Steve Juggins
+##
+## License GPL-2
+##
+## Permission is hereby granted to use, copy, modify and distribute the software in accordance with
+## the GPL-2 license and subject to the following condition:
+##
+## The above copyright notice and this permission notice shall be
+## included in all copies or substantial portions of the Software.
+##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+## EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+## MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+## NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+## LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+## OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+## WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+##
 #' Read DARLEQ diatom data from an Excel file
 #'
 #' @description
@@ -92,7 +111,6 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
   for (i in 1:20) {
     if (!is_empty(d[i, 2]))
         break
-
   }
 # check for TAXON_NAME entry in EA data conversion tool
   if (toupper(d[i, 2])=="TAXON_NAME")
@@ -118,7 +136,7 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
   }
   header <- header[1:iEndRowHeader, ]
   rownames(header) <- header[, 1]
-  header <- as.data.frame(t(header[, -c(1:2)]), stringsAsFactors=FALSE)
+  header <- as.data.frame(t(header[, -c(1:2), drop=FALSE]), stringsAsFactors=FALSE)
 
 #  Convert any columns with date or chemistry data to numeric
   sel <- c("ALKALINITY", "CALCIUM", "DOC")

@@ -1,3 +1,24 @@
+##
+## Copyright (c) 2019, Steve Juggins
+##
+## License GPL-2
+##
+## Permission is hereby granted to use, copy, modify and distribute the software in accordance with
+## the GPL-2 license and subject to the following condition:
+##
+## The above copyright notice and this permission notice shall be
+## included in all copies or substantial portions of the Software.
+##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+## EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+## MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+## NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+## LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+## OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+## WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+##
+
+
 #' Run DARLEQ3 as an interactive shiny app
 #'
 #' @param browser Logical to indicate if the app should open in an external browser (the default) or in R/RStudio's default shiny app window.
