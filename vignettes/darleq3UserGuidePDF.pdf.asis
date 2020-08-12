@@ -1,2 +1,5 @@
 %\VignetteIndexEntry{darleq3 User Guide PDF Version}
-%\VignetteEngine{R.rsp::asis} 
+%\VignetteEngine{R.rsp::asis}
+%\VignetteKeyword{PDF}
+%\VignetteKeyword{vignette}
+%\VignetteKeyword{package}

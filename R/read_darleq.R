@@ -92,13 +92,13 @@ read_DARLEQ <- function(file, sheet=NULL, verbose=TRUE) {
     sheets
   }
 
-# if sheet is null we just read the first workssheet
+# if sheet is null we just read the first worksheet
 # include workaround for old versions of readxl
   if (is.null(sheet)) {
-    d <- readxl::read_excel(file)
+    d <- readxl::read_excel(file, .name_repair = "minimal")
     sheet <- get_Sheets(file)[1]
   } else {
-    d <- readxl::read_excel(file, sheet=sheet)
+    d <- readxl::read_excel(file, sheet=sheet, .name_repair = "minimal")
   }
 
   if (ncol(d) == 1) {
