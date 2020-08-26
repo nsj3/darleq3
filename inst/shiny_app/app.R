@@ -18,7 +18,6 @@
 ## WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ##
 
-
 suppressPackageStartupMessages(library(shiny))
 suppressPackageStartupMessages(library(shinyjs))
 suppressPackageStartupMessages(library(shinydashboard))
@@ -55,9 +54,9 @@ D_ui <- dashboardPage(header, dashboardSidebar(disable = TRUE),
         box(verbatimTextOutput("table1"), width=900, title="Data summary", status="primary"),
         box(verbatimTextOutput("table2"), width=900, title="Results summary", status="primary"),
         box(downloadButton("downloadResults", "Download results"), width="80%"),
-        box(p(paste0("This is a test version of DARLEQ3 (Version ",
-                     utils::packageDescription("darleq3", fields="Version"), ", Date ",
-                     utils::packageDescription("darleq3", fields="Date"),")")),
+        box(p(paste0("This is DARLEQ3 Version ",
+                     utils::packageDescription("darleq3", fields="Version"), " (",
+                     utils::packageDescription("darleq3", fields="Date"), ")")),
             "Please email comments, bug reports etc to ", a("Stephen.Juggins@ncl.ac.uk", href="mailto:Stephen.Juggins@ncl.ac.uk"), width="80%"),
         helpText(p(a("darleq3 User Guide", target="_blank", href="darleq3UserGuidePDF.pdf")),
             p(a("Guide to interpreting TDI5 NGS data", target="_blank", href="Interpreting_NGS_data.pdf")),
