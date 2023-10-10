@@ -65,7 +65,7 @@ darleq <- function(inFile, sheet=NULL, metrics=c("TDI3", "TDI4", "TDI5LM"), outF
     outFile <- paste0("DARLEQ3_Results_", fn, "_", sheet, "_", Sys.Date(), ".xlsx")
     outFile <- gsub(" ", "_", outFile)
   }
-  retval <- tryCatch(darleq3::ave_DARLEQ(res, outFile, fn=inFile, sheet=sheet, FALSE))
+  retval <- tryCatch(darleq3::save_DARLEQ(res, outFile, fn=inFile, sheet=sheet, FALSE))
   if (inherits(retval, "error"))
     errMessage(retval$message, verbose)
 

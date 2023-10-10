@@ -1,5 +1,9 @@
 darleq3 Change Log
 
+version 0.9.9
+10/10/23
+Fixed bug in function darleq that prevented saving
+
 version 0.9.8
 12/08/20
 Removed zip.exe binary (openxlsx no longer needs this)
