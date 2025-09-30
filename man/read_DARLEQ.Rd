@@ -34,7 +34,7 @@ The first four header rows are mandatory and must contain the following informat
 \item Row 1: Sample identifier – a short numerical or alphanumeric code to uniquely identify the sample. This field cannot be empty (an empty cell indicates the end of data).
 \item Row 2:	Site identifier – a short numerical or alphanumeric code to uniquely identify the site. This code will be used to aggregate multiple samples when calculating confidence of class for a site.
 \item Row 3:	Sample Date in Day/Month/Year format. Missing dates are set to “Spring” for the purposes of classification using TDI3 and samples flagged with a warning.
-\item Row 4:	Mean annual alkalinity (or best available estimate) in mg l-1 (CaCO3). Missing values are set to 100 mg l-1 for the purposes of classification and samples flagged with a warning.  Alkalinity values outside the range of the site prediction algorithm are set to the appropriate limit (6 or 150 mg l-1 for TDI3 and 5 or 250 mg l-1 for TDI4 and TDI5LM / TDI5NGS).
+\item Row 4:	Mean annual alkalinity (or best available estimate) in mg l-1 (CaCO3). Missing values are set to 100 mg l-1 for the purposes of classification and samples flagged with a warning.  Alkalinity values outside the range of the site prediction algorithm are set to the appropriate limit (6 or 150 mg l-1 for TDI3 and 5 or 250 mg l-1 for TDI4, TDI5LM, TDI5NGS and TDI5.1NGS).
 \item Rows 5+: Further option sample descriptors such as river name, reach name etc. These data are not used by the program but will be reproduced in the output.
 Note that the second column of the header information must be left blank.
 }

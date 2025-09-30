@@ -1,5 +1,9 @@
 darleq3 Change Log
 
+version 1.0
+29/09/25
+Added TDI5.1NGS which updates the Darleq taxon list with new taxa added to Diat_barcode
+
 version 0.9.9
 10/10/23
 Fixed bug in function darleq that prevented saving

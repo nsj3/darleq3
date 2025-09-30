@@ -20,7 +20,7 @@
 #' Calculate diatom water quality metrics, EQRs and WFD class for samples, and uncertainties of site classification
 #'
 #' @param x list containing diatom and header (environmental) data. This will usually be the data structure imported by \code{\link{read_DARLEQ}}.
-#' @param  metrics character vector of metric codes.  Currently one or more of the following: "TDI3", "TDI4", "TDI5LM" (for river LM TDI calculations), "TDI5NGS" for river NGS metric, "LTDI1", "LTDI2" for lake LM TDI metric or "DAMLM" for river diatom acidification metric.
+#' @param  metrics character vector of metric codes.  Currently one or more of the following: "TDI3", "TDI4", "TDI5LM" (for river LM TDI calculations), "TDI5NGS" or "TDI5.1NGS" for river NGS metric, "LTDI1", "LTDI2" for lake LM TDI metric or "DAMLM" for river diatom acidification metric.
 #' @param truncate_EQR logical to truncate EQRs at 1.0
 #' @param verbose logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.
 #'

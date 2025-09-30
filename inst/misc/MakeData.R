@@ -18,6 +18,7 @@
 ## WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ##
 library(readxl)
+library(dplyr)
 
 darleq3_data <- list()
 darleq3_data$defaults <- list()
@@ -30,6 +31,8 @@ darleq3_data$defaults$minAlkTDI5LM=5
 darleq3_data$defaults$maxAlkTDI5LM=250
 darleq3_data$defaults$minAlkTDI5NGS=5
 darleq3_data$defaults$maxAlkTDI5NGS=250
+darleq3_data$defaults$minAlkTDI5.1NGS=5
+darleq3_data$defaults$maxAlkTDI5.1NGS=250
 darleq3_data$defaults$minCa = 5
 darleq3_data$defaults$maxCa = 500
 darleq3_data$defaults$minDOC = 0
@@ -41,6 +44,7 @@ darleq3_data$defaults$boundariesTDI3 <- c(HG=0.93, GM=0.78, MP=0.52, PB=0.26)
 darleq3_data$defaults$boundariesTDI4 <- c(HG=0.8, GM=0.6, MP=0.4, PB=0.2)
 darleq3_data$defaults$boundariesTDI5LM <- c(HG=0.8, GM=0.6, MP=0.4, PB=0.2)
 darleq3_data$defaults$boundariesTDI5NGS <- c(HG=0.8, GM=0.6, MP=0.4, PB=0.2)
+darleq3_data$defaults$boundariesTDI5.1NGS <- c(HG=0.8, GM=0.6, MP=0.4, PB=0.2)
 darleq3_data$defaults$boundariesLTDI1_HA <- c(HG=0.9, GM=0.66, MP=0.44, PB=0.22)
 darleq3_data$defaults$boundariesLTDI1_MA <- c(HG=0.9, GM=0.66, MP=0.44, PB=0.22)
 darleq3_data$defaults$boundariesLTDI1_LA <- c(HG=0.9, GM=0.66, MP=0.44, PB=0.22)
@@ -51,21 +55,26 @@ darleq3_data$defaults$boundariesDAM <- c(HG=0.81, GM=0.65, MP=0.44, PB=0.22)
 darleq3_data$defaults$medianTDI_LTDI1 <- c(HA=25, MA=25, LA=20)
 darleq3_data$defaults$medianTDI_LTDI2 <- c(HA=42, MA=35, LA=22)
 darleq3_data$defaults$defaultLakeType <- "MA"
-darleq3_data$defaults$TDI_Norm_Factor <- c(TDI3=1.0, TDI4=0.8, TDI5LM=0.8, TDI5NGS=0.8)
+darleq3_data$defaults$TDI_Norm_Factor <- c(TDI3=1.0, TDI4=0.8, TDI5LM=0.8, TDI5NGS=0.8, TDI5.1NGS=0.8)
 darleq3_data$defaults$CoC_LTDI <- c(A0=0.03, B1=0.273, B2=-0.253, Power=1.96)
 darleq3_data$defaults$CoC_TDI <- c(A0=0.03, B1=0.177, B2=-0.157, Power=5.73)
-darleq3_data$metric.codes <- c("TDI3", "TDI4", "TDI5LM", "TDI5NGS", "LTDI1", "LTDI2", "DAM")
+darleq3_data$metric.codes <- c("TDI3", "TDI4", "TDI5LM", "TDI5NGS", "TDI5.1NGS", "LTDI1", "LTDI2", "DAM")
 darleq3_data$metric.types <- c("TDILM", "LTDILM", "DAMLM", "TDINGS")
 
 #col_types <- c(rep("text", 9), rep("numeric", 17))
-#darleq3_taxa <- as.data.frame(read_excel("\\Data\\R_Libraries\\People\\Martyn_Kelly\\Barcoding\\TaxonLists\\DarleqTaxonList2017_Master.xlsx", sheet="D3_List", col_types=col_types))
+#darleq3_taxa <- as.data.frame(read_excel("\\Data\\R\\Martyn_Kelly\\Barcoding\\TaxonLists\\DarleqTaxonList2017_Master.xlsx", sheet="D3_List", col_types=col_types))
 #rm(col_types)
 
-col_types <- c(rep("text", 10), rep("numeric", 20))
-darleq3_taxa <- as.data.frame(read_excel("\\Data\\R_Libraries\\People\\Martyn_Kelly\\Barcoding\\TaxonLists\\DarleqTaxonList2017_Master.xlsx", sheet="D3_List_Phase3", col_types=col_types))
+col_types <- c(rep("text", 10), rep("numeric", 21))
+darleq3_taxa <- as.data.frame(read_excel("\\Data\\R\\Martyn_Kelly\\Barcoding\\TaxonLists\\DarleqTaxonList2017_Master.xlsx",
+                                         sheet="D3_List_Phase3", col_types=col_types))
 rm(col_types)
 
+diat.barcode_lookup <- as.data.frame(read_excel("\\Data\\R\\Martyn_Kelly\\Barcoding\\TaxonLists\\Diat_barcode_to_darleq_lookup_09_2025.xlsx")) %>%
+  select(Taxon_id:Planktic)
+
 openxlsx::write.xlsx(darleq3_taxa, "inst\\extdata\\DarleqTaxonList2017_Master.xlsx", overwrite=TRUE)
+openxlsx::write.xlsx(diat.barcode_lookup, "inst\\extdata\\Diat_barcode_to_darleq_lookup_09_2025.xlsx", overwrite=TRUE)
 
 load("..\\darleq3_test\\Aug30_ma.Rda")
 load("..\\darleq3_test\\Aug30_mono_mod.Rda")
@@ -104,3 +113,4 @@ if (0) {
   o <- order(tmp$NBSCode)
   write.xlsx(tmp[o, ], "../darleq3_test/merged_taxon_list.xlsx", rownames=TRUE)
 }
+

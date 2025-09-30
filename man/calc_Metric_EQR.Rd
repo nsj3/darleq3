@@ -9,7 +9,7 @@ calc_Metric_EQR(x, metrics = "TDI5LM", truncate_EQR = TRUE, verbose = TRUE)
 \arguments{
 \item{x}{list containing diatom and header (environmental) data. This will usually be the data structure imported by \code{\link{read_DARLEQ}}.}
 
-\item{metrics}{character vector of metric codes.  Currently one or more of the following: "TDI3", "TDI4", "TDI5LM" (for river LM TDI calculations), "TDI5NGS" for river NGS metric, "LTDI1", "LTDI2" for lake LM TDI metric or "DAMLM" for river diatom acidification metric.}
+\item{metrics}{character vector of metric codes.  Currently one or more of the following: "TDI3", "TDI4", "TDI5LM" (for river LM TDI calculations), "TDI5NGS" or "TDI5.1NGS" for river NGS metric, "LTDI1", "LTDI2" for lake LM TDI metric or "DAMLM" for river diatom acidification metric.}
 
 \item{truncate_EQR}{logical to truncate EQRs at 1.0}
 

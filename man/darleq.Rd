@@ -17,7 +17,7 @@ darleq(
 
 \item{sheet}{name of the worksheet in the Excel file to import.}
 
-\item{metrics}{character vector of metric codes.  Currently one or more of the following: "TDI3", "TDI4", "TDI5LM" (for river LM TDI calculations), "TDI5NGS" for river NGS metric, "LTDI1", "LTDI2" for lake LM TDI metrics or "DAMLM" for river diatom acidification metric.}
+\item{metrics}{character vector of metric codes.  Currently one or more of the following: "TDI3", "TDI4", "TDI5LM" (for river LM TDI calculations), "TDI5NGS" or "TDI5.1NGS" for river NGS metric, "LTDI1", "LTDI2" for lake LM TDI metrics or "DAMLM" for river diatom acidification metric.}
 
 \item{outFile}{name of Excel file to save results.  If not given the function will generate a name by concatenating "DARLEQ3_Results_" with the original filename, the sheet name and the current date.}
 

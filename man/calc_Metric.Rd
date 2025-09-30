@@ -16,7 +16,7 @@ calc_Metric(
 \arguments{
 \item{x}{data frame of diatom counts or relative abundance data}
 
-\item{metric}{diatom metric, one of "TDI3", "TDI4", "TDI5LM", "TDI5NGS", "LTDI1", "LTDI2", or "DAM".  Defaults to "TDI5LM".}
+\item{metric}{diatom metric, one of "TDI3", "TDI4", "TDI5LM", "TDI5NGS", "TDI5.1NGS", "LTDI1", "LTDI2", or "DAM".  Defaults to "TDI5LM".}
 
 \item{dictionary}{diatom dictionary, a data frame with diatom taxon codes and indicator values for different metrics.  Defaults to the built-in DARLEQ3 dictionary.}
 

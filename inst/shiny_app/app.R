@@ -47,7 +47,11 @@ D_ui <- dashboardPage(header, dashboardSidebar(disable = TRUE),
         box(verbatimTextOutput("message1"),
             selectInput("sheet", "Select worksheet:", ""), width=200),
         box(actionButton("importButton", "Import data"), width="80%"),
-        box(radioButtons("metric", "Select metric:", c(`TDI5 for LM`="TDI5LM", `TDI 3 & 4 for LM`="TDI34LM", `TDI5 for NGS`="TDINGS", `LTDI 1 & 2 for LM`="LTDILM", `DAM for LM`="DAMLM")), width=100),
+        box(radioButtons("metric", "Select metric:",
+                         c(`TDI5 for LM`="TDI5LM", `TDI 3 & 4 for LM`="TDI34LM",
+                           `TDI5 for NGS`="TDI5NGS", `TDI5.1 for NGS`="TDI5.1NGS",
+                           `LTDI 1 & 2 for LM`="LTDILM",
+                           `DAM for LM`="DAMLM")), width=100),
         box(actionButton("calculateButton", "Calculate!"), width="80%")
       ),
       column(width=8,
@@ -61,6 +65,7 @@ D_ui <- dashboardPage(header, dashboardSidebar(disable = TRUE),
         helpText(p(a("darleq3 User Guide", target="_blank", href="darleq3UserGuidePDF.pdf")),
             p(a("Guide to interpreting TDI5 NGS data", target="_blank", href="Interpreting_NGS_data.pdf")),
             p(a("Download darleq3 taxon list", target="_blank", href="DarleqTaxonList2017_Master.xlsx")),
+            p(a("Download Diat.barcode lookup table", target="_blank", href="Diat_barcode_to_darleq_lookup_09_2025.xlsx")),
             width="80%")
       )
     )
@@ -206,8 +211,10 @@ D_server <- function(input, output, session) {
       metrics <- c("TDI3", "TDI4")
     } else if (metric == "LTDILM") {
       metrics <- c("LTDI1", "LTDI2")
-    } else if (metric == "TDINGS") {
+    } else if (metric == "TDI5NGS") {
       metrics <- c("TDI5NGS")
+    } else if (metric == "TDI5.1NGS") {
+      metrics <- c("TDI5.1NGS")
     } else if (metric == "DAMLM") {
       metrics <- c("DAM")
     }

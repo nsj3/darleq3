@@ -20,7 +20,7 @@
 #' Calculate water quality metrics from diatom data
 #'
 #' @param x data frame of diatom counts or relative abundance data
-#' @param metric diatom metric, one of "TDI3", "TDI4", "TDI5LM", "TDI5NGS", "LTDI1", "LTDI2", or "DAM".  Defaults to "TDI5LM".
+#' @param metric diatom metric, one of "TDI3", "TDI4", "TDI5LM", "TDI5NGS", "TDI5.1NGS", "LTDI1", "LTDI2", or "DAM".  Defaults to "TDI5LM".
 #' @param dictionary diatom dictionary, a data frame with diatom taxon codes and indicator values for different metrics.  Defaults to the built-in DARLEQ3 dictionary.
 #' @param taxon_names optional data frame containing taxon code in column 1 and taxon name in column 2.  Used only to supply names of missing taxa in the job summary.
 #' @param verbose logical to indicate should function stop immediately on error (TRUE) or return a \code{simpleError} (FALSE).  Defaults to TRUE.
@@ -165,7 +165,7 @@ calc_Metric <- function(x, metric="TDI5LM", dictionary=darleq3::darleq3_taxa, ta
   tdi.sam <- apply(diat.pc2, 1, wm, x=tdi.sp)
   tdi.sam <- (tdi.sam * 25) - 25
 
-  if (metric == "TDI5NGS") {
+  if (metric == "TDI5NGS" | metric == "TDI5.1NGS") {
 #    mono.mod <- darleq3::darleq3_data$mono.mod
 #    ma.coef <- darleq3::darleq3_data$ma.coef
     tdi.sam <- mgcv::Predict.matrix(mono.mod$sm, data.frame(x = tdi.sam)) %*% mono.mod$p

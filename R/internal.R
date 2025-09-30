@@ -42,7 +42,8 @@ calc_WFDClass <- function(EQR, metric, lake_Type=NA) {
   WFD.classes <- c("High", "Good", "Moderate", "Poor", "Bad")
   metric2 <- substring(metric, 1, 3)
   if (metric2 == "TDI") {
-    boundaries <- switch(metric, TDI3=ddd$boundariesTDI3, TDI4=ddd$boundariesTDI4, TDI5LM=ddd$boundariesTDI5LM, TDI5NGS=ddd$boundariesTDI5NGS)
+    boundaries <- switch(metric, TDI3=ddd$boundariesTDI3, TDI4=ddd$boundariesTDI4, TDI5LM=ddd$boundariesTDI5LM,
+                         TDI5NGS=ddd$boundariesTDI5NGS, TDI5.1NGS=ddd$boundariesTDI5NGS)
     class <- cut(EQR, c(10, boundaries, 0), labels=rev(WFD.classes), right=FALSE)
   } else if (metric2=="LTD") {
     HA_boundaries <- switch(metric, LTDI1=ddd$boundariesLTDI1_HA, LTDI2=ddd$boundariesLTDI2_HA)
@@ -102,7 +103,8 @@ calc_Uncertainty <- function(x, metric, lake_Type=NULL) {
     B2 <- ddd$CoC_LTDI["B2"]
     Power <- ddd$CoC_LTDI["Power"]
   } else {
-    boundaries <- switch(metric, TDI3=ddd$boundariesTDI3, TDI4=ddd$boundariesTDI4, TDI5LM=ddd$boundariesTDI5LM, TDI5NGS=ddd$boundariesTDI5NGS)
+    boundaries <- switch(metric, TDI3=ddd$boundariesTDI3, TDI4=ddd$boundariesTDI4, TDI5LM=ddd$boundariesTDI5LM,
+                         TDI5NGS=ddd$boundariesTDI5NGS, TDI5.1NGS=ddd$boundariesTDI5NGS)
     HG <- boundaries["HG"]
     GM <- boundaries["GM"]
     MP <- boundaries["MP"]
